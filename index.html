@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Riley Rag</title>
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png"><link rel="icon" href="favicon.png" sizes="256x256" type="image/png"><link rel="apple-touch-icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@400;700&family=Anton&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--g1:#f1d88a;--g2:#c9a24a;--g3:#8f6c24;--gold:#d9bd73;--bg:#120a06}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font:19px/1.55 'Tinos','Times New Roman',serif;color:var(--gold);
+ background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)'/%3E%3C/svg%3E"),
+  radial-gradient(ellipse at 50% -10%,#3a2314,#1a0f08 55%,#0c0603)}
+.gilt{background:linear-gradient(120deg,var(--g1),var(--g2) 50%,var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent}
+h1,h2{margin:0}
+h1{font:400 clamp(48px,13vw,92px)/1 'UnifrakturCook',serif}
+h2,.hd{font:400 26px/1.1 'Anton',Impact,sans-serif;letter-spacing:.01em}
+header{text-align:center;padding:26px 16px 6px}
+header img{width:64px;height:64px;opacity:.95}
+.sub{letter-spacing:.14em;font-size:14px;margin:6px 0 16px;color:var(--g2)}
+.stitch{border:0;border-top:1px solid var(--g3);opacity:.5;max-width:640px;margin:10px auto}
+main{max-width:700px;margin:0 auto;padding:10px 14px 70px}
+button,input,textarea{font:inherit}
+.btn{cursor:pointer;color:var(--g1);background:transparent;border:1px solid var(--g3);border-radius:2px;padding:8px 18px;transition:background .15s,color .15s}
+.btn:hover{background:var(--g2);color:#1a0f08}
+.btn.ghost{border-color:transparent;color:var(--g2)}.btn.ghost:hover{background:#ffffff0d;color:var(--g1)}
+.btn:focus-visible,input:focus-visible,textarea:focus-visible,.rx:focus-visible{outline:2px solid var(--g1);outline-offset:2px}
+.bar{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:6px 0 22px}
+.panel{background:#0b0603cc;border:1px solid var(--g3);padding:18px;margin:0 auto 26px}
+.panel label{display:block;margin:12px 0 4px;color:var(--g2)}
+input,textarea{width:100%;padding:10px;border-radius:2px;border:1px solid #5a4020;background:#0b0603;color:var(--g1)}
+.issue{margin:0 0 56px}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0 2px 8px}
+.meta .hd{font-size:30px}
+.sheet{display:block;width:100%;border:0;padding:0;cursor:zoom-in;background:#f4ecd8;box-shadow:0 18px 40px #000c,0 0 0 1px #000}
+.sheet img{display:block;width:100%;height:auto;min-height:200px}
+.rxs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.rx{display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--g2);background:transparent;border:1px solid #5a4020;border-radius:2px;padding:5px 12px 5px 8px;font-size:16px}
+.rx:hover{border-color:var(--g2);color:var(--g1)}
+.rx svg{width:24px;height:24px}
+.rx[aria-pressed=true]{background:var(--g2);border-color:var(--g2);color:#1a0f08}
+.cm{border-left:1px solid var(--g3);padding:2px 14px;margin:10px 0}
+.cm b{color:var(--g1);font-weight:700}.cm small{opacity:.55;margin-left:8px}
+.cm .del{float:right;background:none;border:0;color:#c88;cursor:pointer}
+.err{color:#e99;min-height:1.2em}
+#lb{position:fixed;inset:0;background:#000f;z-index:9;display:none;flex-direction:column}
+#lb.on{display:flex}#lb .top{display:flex;justify-content:space-between;padding:10px 14px}
+#lb .scroll{flex:1;overflow:auto;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch}
+#lb img{width:100%;max-width:900px;display:block;margin:0 auto;background:#f4ecd8}
+</style></head>
+<body>
+<header><img src="emblem.png" alt=""><h1 class="gilt">The Riley Rag</h1><div class="sub">JUST THE HIGHLIGHTS FROM THE RILEYS ABROAD</div><hr class="stitch"></header>
+<main id="app"><p style="text-align:center">Opening the desk…</p></main>
+<div id="lb"><div class="top"><a id="lbpdf" class="btn ghost" target="_blank" rel="noopener">Download PDF</a><button class="btn" id="lbx">Close</button></div><div class="scroll"><img id="lbimg" alt="Full page of the newspaper"></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+// ====== 1. PASTE YOUR SUPABASE VALUES (Project Settings > API) ======
+const SUPABASE_URL = 'https://vikxpnxnbmhmawhnwxzl.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_0WwmJLwgxP4uSQF8TDdaOw_vrL-XU6x';
+// ====================================================================
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const $ = s => document.querySelector(s), app = $('#app');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pub = p => sb.storage.from('issues').getPublicUrl(p).data.publicUrl;
+let me = null, signup = false;
+
+// Custom reaction icons (stroke = currentColor)
+const S = 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
+const RX = {
+ approve:['I approve',`<svg viewBox="0 0 32 32" ${S}><path d="M16 3l2.4 2.2 3.2-.6 1.2 3 3 1.3-.4 3.2L27 16l-1.6 2.9.4 3.2-3 1.3-1.2 3-3.200-.6L16 28l-2.400-2.200-3.200.6-1.200-3-3-1.300.4-3.200L5 16l1.600-2.900-.4-3.200 3-1.300 1.200-3 3.200.6z"/><path d="M11 16.500l3.500 3.500 6.500-7"/></svg>`],
+ love:['Love it!',`<svg viewBox="0 0 32 32" ${S}><path d="M16 27C6 20 4 14 6.500 10A5.800 5.800 0 0 1 16 11.500 5.800 5.800 0 0 1 25.500 10C28 14 26 20 16 27z"/><path d="M9.500 12.500c1-1.500 2.500-1.800 3.500-1.200"/></svg>`],
+ more:['Tell me more',`<svg viewBox="0 0 32 32" ${S}><circle cx="14" cy="14" r="9"/><path d="M21 21l7 7"/><path d="M11.500 11.500a2.600 2.600 0 1 1 3.600 2.400c-.8.4-1.100.9-1.100 1.600M14 18.500v.5"/></svg>`],
+ object:['I object.',`<svg viewBox="0 0 32 32" ${S}><path d="M10 4h12l6 6v12l-6 6H10l-6-6V10z"/><path d="M11.500 11.500l9 9M20.500 11.500l-9 9"/></svg>`]
+};
+
+async function boot(){
+ const { data:{ session } } = await sb.auth.getSession();
+ if(!session) return authView();
+ const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
+ me = data; feedView();
+}
+sb.auth.onAuthStateChange(ev => { if(ev==='SIGNED_OUT') boot(); });
+
+function authView(){
+ app.innerHTML = `<form class="panel" id="af"><h2 class="gilt">${signup?'Join the family':'Welcome back'}</h2>
+ ${signup?'<label for="n">Your name (as the family knows you)</label><input id="n" required autocomplete="name">':''}
+ <label for="e">Email</label><input id="e" type="email" required autocomplete="email">
+ <label for="p">Password ${signup?'(6 or more characters)':''}</label><input id="p" type="password" minlength="6" required autocomplete="${signup?'new':'current'}-password">
+ <p class="err" id="er" role="alert"></p>
+ <button class="btn">${signup?'Create my account':'Sign in'}</button>
+ <button type="button" class="btn ghost" id="sw">${signup?'I already have an account':'New here? Create an account'}</button></form>`;
+ $('#sw').onclick = () => { signup=!signup; authView(); };
+ $('#af').onsubmit = async e => {
+  e.preventDefault(); const email=$('#e').value.trim(), password=$('#p').value;
+  const r = signup ? await sb.auth.signUp({email,password,options:{data:{name:$('#n').value.trim()}}}) : await sb.auth.signInWithPassword({email,password});
+  if(r.error) return $('#er').textContent = r.error.message;
+  if(signup && !r.data.session) return $('#er').textContent = 'Account created. Please sign in.';
+  boot();
+ };
+}
+
+async function feedView(){
+ app.innerHTML = `<div class="bar"><span>Hello, ${esc(me.name)}</span><button class="btn ghost" id="so">Sign out</button>
+ ${me.is_editor?'<button class="btn" id="pb">Publish new issue</button><button class="btn ghost" id="mb">Members</button>':''}</div><div id="tools"></div><div id="feed">Loading issues…</div>`;
+ $('#so').onclick = () => sb.auth.signOut();
+ if(me.is_editor){ $('#pb').onclick = publishForm; $('#mb').onclick = members; }
+ const [i,c,r] = await Promise.all([
+  sb.from('issues').select('*').order('issue_date',{ascending:false}).order('number',{ascending:false}),
+  sb.from('comments').select('*,profiles(name)').order('created_at'),
+  sb.from('reactions').select('*')]);
+ if(i.error) return $('#feed').textContent = i.error.message;
+ $('#feed').innerHTML = i.data.length ? '' : '<p style="text-align:center">No issues yet. The press is warming up.</p>';
+ i.data.forEach(is => $('#feed').append(issueEl(is, c.data||[], r.data||[])));
+}
+
+function issueEl(is, cs, rs){
+ const el = document.createElement('article'); el.className='issue';
+ const d = new Date(is.issue_date+'T00:00').toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
+ el.innerHTML = `<div class="meta"><b class="gilt hd">Issue № ${is.number}</b><span>${d}</span></div>
+ ${is.tagline?`<div class="meta" style="font-style:italic;color:var(--g1)">${esc(is.tagline)}</div>`:''}
+ <button class="sheet" aria-label="Open issue ${is.number} full size"><img loading="lazy" src="${pub(is.img_path)}" alt="Issue ${is.number} of The Riley Rag"></button>
+ <div class="rxs"></div><div class="cms"></div>
+ <form><label for="c${is.id}">Leave a comment</label><textarea id="c${is.id}" rows="2" maxlength="1000" required></textarea><p class="err"></p><button class="btn">Post comment</button></form>`;
+ el.querySelector('.sheet').onclick = () => { $('#lbimg').src = pub(is.img_path); $('#lbpdf').href = pub(is.pdf_path); $('#lb').classList.add('on'); };
+ const rx = el.querySelector('.rxs');
+ Object.entries(RX).forEach(([k,[label,svg]]) => {
+  const mine = rs.some(x => x.issue_id===is.id && x.kind===k && x.user_id===me.id);
+  const n = rs.filter(x => x.issue_id===is.id && x.kind===k).length;
+  const b = document.createElement('button'); b.className='rx'; b.setAttribute('aria-pressed',mine);
+  b.innerHTML = `${svg}<span>${label}${n?` · ${n}`:''}</span>`;
+  b.onclick = async () => {
+   const q = mine ? sb.from('reactions').delete().match({issue_id:is.id,user_id:me.id,kind:k}) : sb.from('reactions').insert({issue_id:is.id,kind:k});
+   const {error} = await q; error ? alert(error.message) : feedView();
+  };
+  rx.append(b);
+ });
+ const box = el.querySelector('.cms');
+ cs.filter(x => x.issue_id===is.id).forEach(x => {
+  const c = document.createElement('div'); c.className='cm';
+  c.innerHTML = `${me.is_editor?'<button class="del" aria-label="Delete comment">Delete</button>':''}<b>${esc(x.profiles?.name||'Someone')}</b><small>${new Date(x.created_at).toLocaleDateString()}</small><div>${esc(x.body)}</div>`;
+  if(me.is_editor) c.querySelector('.del').onclick = async () => { if(confirm('Delete this comment?')){ await sb.from('comments').delete().eq('id',x.id); feedView(); } };
+  box.append(c);
+ });
+ el.querySelector('form').onsubmit = async e => {
+  e.preventDefault(); const t = el.querySelector('textarea').value.trim();
+  const {error} = await sb.from('comments').insert({issue_id:is.id,body:t});
+  error ? el.querySelector('.err').textContent = error.message : feedView();
+ };
+ return el;
+}
+
+function publishForm(){
+ $('#tools').innerHTML = `<form class="panel" id="pf"><h2 class="gilt">Publish a new issue</h2>
+ <label for="pn">Issue number</label><input id="pn" type="number" min="1" required>
+ <label for="pd">Date</label><input id="pd" type="date" required>
+ <label for="pt">Tagline</label><input id="pt" maxlength="120">
+ <label for="pp">Newspaper PDF (one page)</label><input id="pp" type="file" accept="application/pdf" required>
+ <p class="err" id="pe" role="alert"></p><button class="btn">Publish</button> <button type="button" class="btn ghost" id="pc">Cancel</button></form>`;
+ $('#pd').valueAsDate = new Date(); $('#pc').onclick = () => $('#tools').innerHTML = '';
+ $('#pf').onsubmit = async e => {
+  e.preventDefault(); const err = $('#pe'); err.textContent = 'Publishing…';
+  try{
+   const file = $('#pp').files[0];
+   const pdf = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise;
+   const pg = await pdf.getPage(1), vp = pg.getViewport({scale: 1600/pg.getViewport({scale:1}).width});
+   const cv = document.createElement('canvas'); cv.width = vp.width; cv.height = vp.height;
+   await pg.render({canvasContext: cv.getContext('2d'), viewport: vp}).promise;
+   const img = await new Promise(r => cv.toBlob(r,'image/jpeg',.85));
+   const id = crypto.randomUUID(), pdfPath = `${id}.pdf`, imgPath = `${id}.jpg`;
+   let u = await sb.storage.from('issues').upload(pdfPath, file, {contentType:'application/pdf'}); if(u.error) throw u.error;
+   u = await sb.storage.from('issues').upload(imgPath, img, {contentType:'image/jpeg'}); if(u.error) throw u.error;
+   const {error} = await sb.from('issues').insert({number:+$('#pn').value, issue_date:$('#pd').value, tagline:$('#pt').value.trim()||null, pdf_path:pdfPath, img_path:imgPath});
+   if(error) throw error; feedView();
+  }catch(x){ err.textContent = x.message || String(x); }
+ };
+}
+
+async function members(){
+ const {data} = await sb.from('profiles').select('*').order('created_at');
+ $('#tools').innerHTML = `<div class="panel"><h2 class="gilt">Members (${data.length})</h2>${data.map(m=>`<div class="cm">${esc(m.name)}${m.is_editor?' (editor)':''}</div>`).join('')}<button class="btn ghost" id="mc">Close</button></div>`;
+ $('#mc').onclick = () => $('#tools').innerHTML = '';
+}
+$('#lbx').onclick = () => $('#lb').classList.remove('on');
+boot();
+</script></body></html>
