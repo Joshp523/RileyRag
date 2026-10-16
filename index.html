@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#120a06">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>The Riley Rag</title>
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png"><link rel="icon" href="favicon.png" sizes="256x256" type="image/png"><link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -9,8 +13,9 @@
 <style>
 :root{--g1:#f1d88a;--g2:#c9a24a;--g3:#8f6c24;--gold:#d9bd73;--bg:#120a06}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;font:19px/1.55 'Tinos','Times New Roman',serif;color:var(--gold);
- background:
+html{background:#120a06;color-scheme:dark;min-height:100%}
+body{margin:0;min-height:100vh;font:19px/1.55 'Tinos','Times New Roman',serif;color:var(--gold);padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+body::before{content:'';position:fixed;inset:0;z-index:-1;background:
   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)'/%3E%3C/svg%3E"),
   radial-gradient(ellipse at 50% -10%,#3a2314,#1a0f08 55%,#0c0603)}
 .gilt{background:linear-gradient(120deg,var(--g1),var(--g2) 50%,var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -46,7 +51,7 @@ input,textarea{width:100%;padding:10px;border-radius:2px;border:1px solid #5a402
 .cm b{color:var(--g1);font-weight:700}.cm small{opacity:.55;margin-left:8px}
 .cm .del{float:right;background:none;border:0;color:#c88;cursor:pointer}
 .err{color:#e99;min-height:1.2em}
-#lb{position:fixed;inset:0;background:#000f;z-index:9;display:none;flex-direction:column}
+#lb{padding-top:env(safe-area-inset-top);position:fixed;inset:0;background:#000f;z-index:9;display:none;flex-direction:column}
 #lb.on{display:flex}#lb .top{display:flex;justify-content:space-between;padding:10px 14px}
 #lb .scroll{flex:1;overflow:auto;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch}
 #lb img{width:100%;max-width:900px;display:block;margin:0 auto;background:#f4ecd8}
