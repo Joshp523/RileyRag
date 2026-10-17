@@ -21,7 +21,7 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;background:
 .gilt{background:linear-gradient(120deg,var(--g1),var(--g2) 50%,var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent}
 h1,h2{margin:0}
 h1{font:400 clamp(48px,13vw,92px)/1 'UnifrakturCook',serif}
-h2,.hd{font:400 26px/1.1 'Anton',Impact,sans-serif;letter-spacing:.01em}
+h2,.hd{font:400 26px/1.1 'Tinos','Times New Roman',serif;font-variant:small-caps;letter-spacing:.08em}
 header{text-align:center;padding:14px 12px 2px}
 header .emb{width:50px;height:50px;opacity:.95}
 h1 img{width:min(94%,620px);height:auto}
@@ -62,17 +62,18 @@ input,textarea{width:100%;padding:10px;border-radius:2px;border:1px solid #5a402
 #lb img{width:100%;max-width:900px;display:block;margin:0 auto;background:#f4ecd8}
 [hidden]{display:none!important}
 nav{display:flex;justify-content:center;gap:clamp(14px,6vw,36px);margin:4px 0 10px}
-nav a{font:400 clamp(15px,4.3vw,19px) 'Anton',Impact,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--g3);text-decoration:none;padding:6px 2px;border-bottom:2px solid transparent}
+nav a{font:400 clamp(16px,4.6vw,20px) 'Tinos','Times New Roman',serif;font-variant:small-caps;letter-spacing:.08em;color:var(--g3);text-decoration:none;padding:6px 2px;border-bottom:2px solid transparent}
 nav a:hover{color:var(--g2)}nav a[aria-current=page]{color:var(--g1);border-color:var(--g2)}
-.ph{font-size:36px;text-align:center;margin:4px 0 14px}
+.ph{font-size:38px;text-align:center;margin:4px 0 14px}
 .pre{white-space:pre-wrap;background:#0b0603;border:1px solid #3a2a16;padding:12px;margin:8px 0 14px;font:inherit;font-size:16px}
 .cm div,.cm p{white-space:pre-wrap;margin:6px 0}.cm textarea{margin-top:8px}
 .bd{display:grid;gap:6px;margin:16px 0}.row{display:flex;gap:6px;justify-content:center}
 .t{width:min(50px,calc((100vw - 64px)/var(--n)));aspect-ratio:1;display:grid;place-items:center;font:400 clamp(16px,5vw,26px) 'Anton',sans-serif;text-transform:uppercase;border:1px solid #5a4020;color:var(--g1)}
-.t.g{background:var(--g2);color:#1a0f08;border-color:var(--g2)}.t.y{background:#7a4a2a;border-color:#a8703e}.t.b{background:#1c120b;color:#7a6840;border-color:#2a1c10}
+.t.g{background:#5f7f4d;color:#f4efd8;border-color:#7a9a64}.t.y{background:var(--g2);color:#1a0f08;border-color:var(--g1)}.t.b{background:#1c120b;color:#7a6840;border-color:#2a1c10}
 .gf{display:flex;gap:8px}.kb{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:14px 0}
 .k{min-width:26px;text-align:center;font:400 15px 'Anton',sans-serif;text-transform:uppercase;padding:4px 2px;border:1px solid #3a2a16;color:var(--g2)}
-.k.g{background:var(--g2);color:#1a0f08}.k.y{background:#7a4a2a;color:var(--g1)}.k.b{opacity:.3}
+.k.g{background:#5f7f4d;color:#f4efd8}.k.y{background:var(--g2);color:#1a0f08}.k.b{opacity:.3}
+.lbt{width:100%;border-collapse:collapse}.lbt td{padding:7px 4px;border-bottom:1px solid #3a2a16}.lbt .r{width:2em;color:var(--g3)}.lbt .n{text-align:right;color:var(--g1)}
 </style></head>
 <body>
 <header><img class="emb" src="emblem.png" alt=""><h1><img src="masthead.png" alt="The Riley Rag"></h1><nav id="nav" hidden><a href="#highlights">Highlights</a><a href="#games">Games</a><a href="#peter">Ask Peter</a></nav><hr class="stitch"></header>
@@ -233,9 +234,16 @@ async function wordForm(){
  $('#tools').innerHTML = `<form class="panel" id="wf"><label for="nw">Set a new word (4 to 8 letters)${data?.[0]?`. Current word: <b>${esc(data[0].word)}</b>`:''}</label><input id="nw" pattern="[A-Za-z]{4,8}" maxlength="8" required autocomplete="off"><p class="err" id="we"></p><button class="btn">Set the word</button></form>`;
  $('#wf').onsubmit = async e => { e.preventDefault(); const {error} = await sb.from('wordlers').insert({word:$('#nw').value.toLowerCase()}); error ? $('#we').textContent = error.message : gamesView(); };
 }
+async function board(){
+ const {data, error} = await sb.rpc('riled_leaderboard'), box = $('#lbd'); if(!box) return;
+ if(error) return box.innerHTML = '';
+ box.innerHTML = `<h2 class="gilt" style="margin:34px 0 6px">Leaderboard</h2><p style="font-size:15px;opacity:.75;margin:0 0 8px">Average tries across every game played. A missed word counts as 7.</p>`
+  + (data.length ? `<table class="lbt">${data.map((r,i) => `<tr><td class="r">${i+1}.</td><td>${esc(r.name)}</td><td class="n">${Number(r.avg_tries).toFixed(2)}</td><td class="n" style="color:var(--g3)">${r.games} ${r.games===1?'game':'games'}</td></tr>`).join('')}</table>` : '<p>No finished games yet. Be the first on the board!</p>');
+}
 async function gamesView(){
- app.innerHTML = `<h2 class="hd gilt ph">Wordler</h2><div id="tools"></div><div id="gm">Loading…</div>`;
+ app.innerHTML = `<h2 class="hd gilt ph">Riled Up</h2><div id="tools"></div><div id="gm">Loading…</div><div id="lbd"></div>`;
  if(me.is_editor) wordForm();
+ board();
  const {data:cur} = await sb.rpc('wordler_current'), pz = cur?.[0], gm = $('#gm');
  if(!pz) return gm.innerHTML = '<p style="text-align:center">No word has been set yet. Check back soon!</p>';
  const {data:gs} = await sb.from('wordler_guesses').select('guess,pattern').eq('puzzle_id',pz.id).order('id');
@@ -262,7 +270,7 @@ async function gamesView(){
   if(typed.length !== pz.len) return $('#ge').textContent = `Enter ${pz.len} letters.`;
   const {data, error} = await sb.rpc('wordler_guess',{pid:pz.id, g:typed});
   if(error) return $('#ge').textContent = error.message;
-  guesses.push({guess:typed.toLowerCase(), pattern:data}); typed = ''; $('#gi').value = ''; draw();
+  guesses.push({guess:typed.toLowerCase(), pattern:data}); typed = ''; $('#gi').value = ''; await draw(); if(over()) board();
  };
  draw();
 }
