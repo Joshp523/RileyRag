@@ -17,7 +17,10 @@ Open `index.html` and replace `SUPABASE_URL` and `SUPABASE_ANON_KEY` near the to
 ## 4. Make yourself the editor
 Open your site and create your account. Then run the last line of `schema.sql` in the SQL Editor (with your email). Refresh the site; you'll see **Publish new issue** and **Members**.
 
-## 5. Publish
+## 5. Games, Ask Peter and emails (new)
+Run `update2.sql` once in the SQL Editor. Then use the Games tab to set the first Wordler word.
+
+## 6. Publish
 Enter number, date, tagline, pick the PDF, and press **Publish**. Then email the link to your list.
 
 ## Keeping the free project awake

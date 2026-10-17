@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>The Riley Rag</title>
-<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png"><link rel="icon" href="favicon.png" sizes="256x256" type="image/png"><link rel="apple-touch-icon" href="favicon.png">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png"><link rel="icon" href="favicon.png" sizes="256x256" type="image/png"><link rel="apple-touch-icon" href="favicon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Riley Rag">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@400;700&family=Anton&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
@@ -22,10 +22,15 @@ body::before{content:'';position:fixed;inset:0;z-index:-1;background:
 h1,h2{margin:0}
 h1{font:400 clamp(48px,13vw,92px)/1 'UnifrakturCook',serif}
 h2,.hd{font:400 26px/1.1 'Anton',Impact,sans-serif;letter-spacing:.01em}
-header{text-align:center;padding:26px 16px 6px}
-header .emb{width:64px;height:64px;opacity:.95}
+header{text-align:center;padding:14px 12px 2px}
+header .emb{width:50px;height:50px;opacity:.95}
 h1 img{width:min(94%,620px);height:auto}
-.sub{letter-spacing:.14em;font-size:14px;margin:6px 0 16px;color:var(--g2)}
+.sub{letter-spacing:.09em;font-size:clamp(8px,2.5vw,13px);white-space:nowrap;margin:2px 0 8px;color:var(--g2)}
+.hi{text-align:center;margin:0 0 14px;color:var(--g1);font-style:italic;max-height:40px;overflow:hidden;transition:opacity 1s,max-height 1s}.hi.off{opacity:0;max-height:0;margin:0}
+.foot{text-align:center;margin-top:30px;padding-top:16px;border-top:1px solid #3a2a16}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+textarea{display:block;margin-bottom:8px}
+#hint{max-width:700px;margin:8px auto 0;padding:0 14px}#hint .panel{margin:0 0 10px}#hint ol{margin:8px 0 14px;padding-left:22px}#hint li{margin:4px 0}#hint h2{font-size:22px}
 .stitch{border:0;border-top:1px solid var(--g3);opacity:.5;max-width:640px;margin:10px auto}
 main{max-width:700px;margin:0 auto;padding:10px 14px 70px}
 button,input,textarea{font:inherit}
@@ -42,22 +47,36 @@ input,textarea{width:100%;padding:10px;border-radius:2px;border:1px solid #5a402
 .meta .hd{font-size:30px}
 .sheet{display:block;width:100%;border:0;padding:0;cursor:zoom-in;background:#f4ecd8;box-shadow:0 18px 40px #000c,0 0 0 1px #000}
 .sheet img{display:block;width:100%;height:auto;min-height:200px}
-.rxs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
-.rx{display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--g2);background:transparent;border:1px solid #5a4020;border-radius:2px;padding:5px 12px 5px 8px;font-size:16px}
-.rx:hover{border-color:var(--g2);color:var(--g1)}
-.rx svg{width:24px;height:24px}
-.rx[aria-pressed=true]{background:var(--g2);border-color:var(--g2);color:#1a0f08}
+.rxs{display:flex;gap:26px;flex-wrap:wrap;margin:14px 2px 6px}
+.rx{display:flex;align-items:center;gap:7px;cursor:pointer;color:var(--g3);background:none;border:0;padding:4px 2px;font-size:18px}
+.rx:hover{color:var(--g2)}
+.rx svg{width:28px;height:28px}
+.rx[aria-pressed=true]{color:var(--g1)}.rx[aria-pressed=true] svg{stroke-width:2.4}.rx[aria-pressed=true] .f{fill:currentColor}
 .cm{border-left:1px solid var(--g3);padding:2px 14px;margin:10px 0}
 .cm b{color:var(--g1);font-weight:700}.cm small{opacity:.55;margin-left:8px}
 .cm .del{float:right;background:none;border:0;color:#c88;cursor:pointer}
-.err{color:#e99;min-height:1.2em}
+.err{color:#e99;margin:6px 0 0}
 #lb{padding-top:env(safe-area-inset-top);position:fixed;inset:0;background:#000f;z-index:9;display:none;flex-direction:column}
 #lb.on{display:flex}#lb .top{display:flex;justify-content:space-between;padding:10px 14px}
 #lb .scroll{flex:1;overflow:auto;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch}
 #lb img{width:100%;max-width:900px;display:block;margin:0 auto;background:#f4ecd8}
+[hidden]{display:none!important}
+nav{display:flex;justify-content:center;gap:clamp(14px,6vw,36px);margin:4px 0 10px}
+nav a{font:400 clamp(15px,4.3vw,19px) 'Anton',Impact,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--g3);text-decoration:none;padding:6px 2px;border-bottom:2px solid transparent}
+nav a:hover{color:var(--g2)}nav a[aria-current=page]{color:var(--g1);border-color:var(--g2)}
+.ph{font-size:36px;text-align:center;margin:4px 0 14px}
+.pre{white-space:pre-wrap;background:#0b0603;border:1px solid #3a2a16;padding:12px;margin:8px 0 14px;font:inherit;font-size:16px}
+.cm div,.cm p{white-space:pre-wrap;margin:6px 0}.cm textarea{margin-top:8px}
+.bd{display:grid;gap:6px;margin:16px 0}.row{display:flex;gap:6px;justify-content:center}
+.t{width:min(50px,calc((100vw - 64px)/var(--n)));aspect-ratio:1;display:grid;place-items:center;font:400 clamp(16px,5vw,26px) 'Anton',sans-serif;text-transform:uppercase;border:1px solid #5a4020;color:var(--g1)}
+.t.g{background:var(--g2);color:#1a0f08;border-color:var(--g2)}.t.y{background:#7a4a2a;border-color:#a8703e}.t.b{background:#1c120b;color:#7a6840;border-color:#2a1c10}
+.gf{display:flex;gap:8px}.kb{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:14px 0}
+.k{min-width:26px;text-align:center;font:400 15px 'Anton',sans-serif;text-transform:uppercase;padding:4px 2px;border:1px solid #3a2a16;color:var(--g2)}
+.k.g{background:var(--g2);color:#1a0f08}.k.y{background:#7a4a2a;color:var(--g1)}.k.b{opacity:.3}
 </style></head>
 <body>
-<header><img class="emb" src="emblem.png" alt=""><h1><img src="masthead.png" alt="The Riley Rag"></h1><div class="sub">JUST THE HIGHLIGHTS FROM THE RILEYS ABROAD</div><hr class="stitch"></header>
+<header><img class="emb" src="emblem.png" alt=""><h1><img src="masthead.png" alt="The Riley Rag"></h1><nav id="nav" hidden><a href="#highlights">Highlights</a><a href="#games">Games</a><a href="#peter">Ask Peter</a></nav><hr class="stitch"></header>
+<aside id="hint" hidden></aside>
 <main id="app"><p style="text-align:center">Opening the desk…</p></main>
 <div id="lb"><div class="top"><a id="lbpdf" class="btn ghost" target="_blank" rel="noopener">Download PDF</a><button class="btn" id="lbx">Close</button></div><div class="scroll"><img id="lbimg" alt="Full page of the newspaper"></div></div>
 
@@ -73,24 +92,24 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 const $ = s => document.querySelector(s), app = $('#app');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pub = p => sb.storage.from('issues').getPublicUrl(p).data.publicUrl;
-let me = null, signup = false;
+let me = null, signup = false, greeted = false;
 
 // Custom reaction icons (stroke = currentColor)
 const S = 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
 const RX = {
- approve:['I approve',`<svg viewBox="0 0 32 32" ${S}><path d="M16 3l2.4 2.2 3.2-.6 1.2 3 3 1.3-.4 3.2L27 16l-1.6 2.9.4 3.2-3 1.3-1.2 3-3.200-.6L16 28l-2.400-2.200-3.200.6-1.200-3-3-1.300.4-3.200L5 16l1.600-2.900-.4-3.200 3-1.300 1.200-3 3.200.6z"/><path d="M11 16.500l3.500 3.500 6.500-7"/></svg>`],
- love:['Love it!',`<svg viewBox="0 0 32 32" ${S}><path d="M16 27C6 20 4 14 6.500 10A5.800 5.800 0 0 1 16 11.500 5.800 5.800 0 0 1 25.500 10C28 14 26 20 16 27z"/><path d="M9.500 12.500c1-1.500 2.500-1.800 3.500-1.200"/></svg>`],
- more:['Tell me more',`<svg viewBox="0 0 32 32" ${S}><circle cx="14" cy="14" r="9"/><path d="M21 21l7 7"/><path d="M11.500 11.500a2.600 2.600 0 1 1 3.600 2.400c-.8.4-1.100.9-1.100 1.600M14 18.500v.5"/></svg>`],
- object:['I object.',`<svg viewBox="0 0 32 32" ${S}><path d="M10 4h12l6 6v12l-6 6H10l-6-6V10z"/><path d="M11.500 11.500l9 9M20.500 11.500l-9 9"/></svg>`]
+ love:['Love it',`<svg viewBox="0 0 32 32" ${S}><path class="f" d="M16 27C6 20 4 14 6.5 10A5.8 5.8 0 0 1 16 11.5 5.8 5.8 0 0 1 25.5 10C28 14 26 20 16 27z"/></svg>`],
+ more:['Tell me more',`<svg viewBox="0 0 24 24" ${S}><path d="M8 8.6a4 4 0 1 1 5.6 3.6c-1.200.7-1.600 1.400-1.600 2.600"/><path d="M12 19v.2"/></svg>`],
+ object:['I object',`<svg viewBox="0 0 24 24" ${S}><path d="M17 14V2"/><path class="f" d="M9 18.1 10 14H4.2a2 2 0 0 1-1.900-2.600l2.300-8A2 2 0 0 1 6.500 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.800a2 2 0 0 0-1.800 1.100L12 22a3.100 3.100 0 0 1-3-3.900z"/></svg>`]
 };
 
 async function boot(){
  const { data:{ session } } = await sb.auth.getSession();
- if(!session) return authView();
+ if(!session){ $('#nav').hidden = true; return authView(); }
  const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
- me = data; feedView();
+ me = data; $('#nav').hidden = false; route();
 }
-sb.auth.onAuthStateChange(ev => { if(ev==='SIGNED_OUT') boot(); });
+sb.auth.onAuthStateChange(ev => { if(ev==='SIGNED_OUT'){ me = null; boot(); } });
+addEventListener('hashchange', () => { if(me) route(); });
 
 function authView(){
  app.innerHTML = `<form class="panel" id="af"><h2 class="gilt">${signup?'Join the family':'Welcome back'}</h2>
@@ -105,16 +124,18 @@ function authView(){
   e.preventDefault(); const email=$('#e').value.trim(), password=$('#p').value;
   const r = signup ? await sb.auth.signUp({email,password,options:{data:{name:$('#n').value.trim()}}}) : await sb.auth.signInWithPassword({email,password});
   if(r.error) return $('#er').textContent = r.error.message;
-  if(signup && !r.data.session) return $('#er').textContent = 'Account created. Please sign in.';
+  if(signup && !r.data.session){ const t = await sb.auth.signInWithPassword({email,password});
+   if(t.error) return $('#er').textContent = 'Almost there! If you received a confirmation email, tap its link and then sign in. If you already have an account, choose “I already have an account.”'; }
   boot();
  };
 }
 
 async function feedView(){
- app.innerHTML = `<div class="bar"><span>Hello, ${esc(me.name)}</span><button class="btn ghost" id="so">Sign out</button>
- ${me.is_editor?'<button class="btn" id="pb">Publish new issue</button><button class="btn ghost" id="mb">Members</button>':''}</div><div id="tools"></div><div id="feed">Loading issues…</div>`;
+ const hello = !greeted; greeted = true;
+ app.innerHTML = `${hello?`<p class="hi" id="hi">Welcome, ${esc(me.name)}</p>`:''}${me.is_editor?'<div class="bar"><button class="btn" id="pb">Publish new issue</button><button class="btn ghost" id="eb">Email draft</button><button class="btn ghost" id="mb">Members</button></div>':''}<div id="tools"></div><div id="feed">Loading issues…</div><div class="foot"><button class="btn ghost" id="so">Sign out</button></div>`;
+ if(hello) setTimeout(() => $('#hi')?.classList.add('off'), 3500);
  $('#so').onclick = () => sb.auth.signOut();
- if(me.is_editor){ $('#pb').onclick = publishForm; $('#mb').onclick = members; }
+ if(me.is_editor){ $('#pb').onclick = publishForm; $('#mb').onclick = members; $('#eb').onclick = () => emailDraft(); }
  const [i,c,r] = await Promise.all([
   sb.from('issues').select('*').order('issue_date',{ascending:false}).order('number',{ascending:false}),
   sb.from('comments').select('*,profiles(name)').order('created_at'),
@@ -127,18 +148,16 @@ async function feedView(){
 function issueEl(is, cs, rs){
  const el = document.createElement('article'); el.className='issue';
  const d = new Date(is.issue_date+'T00:00').toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
- el.innerHTML = `<div class="meta"><b class="gilt hd">Issue № ${is.number}</b><span>${d}</span></div>
- ${is.tagline?`<div class="meta" style="font-style:italic;color:var(--g1)">${esc(is.tagline)}</div>`:''}
- <button class="sheet" aria-label="Open issue ${is.number} full size"><img loading="lazy" src="${pub(is.img_path)}" alt="Issue ${is.number} of The Riley Rag"></button>
+ el.innerHTML = `<button class="sheet" aria-label="Open issue ${is.number} full size"><img loading="lazy" src="${pub(is.img_path)}" alt="The Riley Rag, Issue ${is.number}, ${d}"></button>
  <div class="rxs"></div><div class="cms"></div>
- <form><label for="c${is.id}">Leave a comment</label><textarea id="c${is.id}" rows="2" maxlength="1000" required></textarea><p class="err"></p><button class="btn">Post comment</button></form>`;
+ <form><label class="sr" for="c${is.id}">Leave a comment</label><textarea id="c${is.id}" rows="2" maxlength="1000" placeholder="Leave a comment…" required></textarea><button class="btn">Post comment</button><p class="err"></p></form>`;
  el.querySelector('.sheet').onclick = () => { $('#lbimg').src = pub(is.img_path); $('#lbpdf').href = pub(is.pdf_path); $('#lb').classList.add('on'); };
  const rx = el.querySelector('.rxs');
  Object.entries(RX).forEach(([k,[label,svg]]) => {
   const mine = rs.some(x => x.issue_id===is.id && x.kind===k && x.user_id===me.id);
   const n = rs.filter(x => x.issue_id===is.id && x.kind===k).length;
   const b = document.createElement('button'); b.className='rx'; b.setAttribute('aria-pressed',mine);
-  b.innerHTML = `${svg}<span>${label}${n?` · ${n}`:''}</span>`;
+  b.setAttribute('aria-label',label+(n?`, ${n}`:''));b.title=label;b.innerHTML = `${svg}${n?`<span>${n}</span>`:''}`;
   b.onclick = async () => {
    const q = mine ? sb.from('reactions').delete().match({issue_id:is.id,user_id:me.id,kind:k}) : sb.from('reactions').insert({issue_id:is.id,kind:k});
    const {error} = await q; error ? alert(error.message) : feedView();
@@ -181,7 +200,7 @@ function publishForm(){
    let u = await sb.storage.from('issues').upload(pdfPath, file, {contentType:'application/pdf'}); if(u.error) throw u.error;
    u = await sb.storage.from('issues').upload(imgPath, img, {contentType:'image/jpeg'}); if(u.error) throw u.error;
    const {error} = await sb.from('issues').insert({number:+$('#pn').value, issue_date:$('#pd').value, tagline:$('#pt').value.trim()||null, pdf_path:pdfPath, img_path:imgPath});
-   if(error) throw error; feedView();
+   if(error) throw error; const nn = +$('#pn').value, tt = $('#pt').value.trim(); await feedView(); emailDraft({number:nn, tagline:tt});
   }catch(x){ err.textContent = x.message || String(x); }
  };
 }
@@ -191,6 +210,93 @@ async function members(){
  $('#tools').innerHTML = `<div class="panel"><h2 class="gilt">Members (${data.length})</h2>${data.map(m=>`<div class="cm">${esc(m.name)}${m.is_editor?' (editor)':''}</div>`).join('')}<button class="btn ghost" id="mc">Close</button></div>`;
  $('#mc').onclick = () => $('#tools').innerHTML = '';
 }
+function route(){
+ const h = location.hash || '#highlights';
+ document.querySelectorAll('#nav a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href')===h ? 'page' : 'false'));
+ ({'#games':gamesView,'#peter':peterView}[h] || feedView)(); scrollTo(0,0);
+}
+async function emailDraft(is){
+ if(!is){ const {data} = await sb.from('issues').select('number,tagline').order('issue_date',{ascending:false}).order('number',{ascending:false}).limit(1); is = data?.[0]; if(!is) return; }
+ const {data:em, error} = await sb.rpc('member_emails');
+ if(error) return $('#tools').innerHTML = `<p class="err">${esc(error.message)}</p>`;
+ const subj = `The Riley Rag № ${is.number} is out!`, tg = (is.tagline||'').replace(/[.\s]+$/,'');
+ const body = `Hello family and friends,\n\nA new edition of The Riley Rag just hit the presses: Issue № ${is.number}${tg?`, ${tg}`:''}.\n\nRead it here: https://joshp523.github.io/RileyRag/\n\nWhile you’re there, tap a reaction or leave a comment. We love hearing from you!\n\nWith love from Brussels,\nThe Rileys`;
+ const bcc = em.join(',');
+ $('#tools').innerHTML = `<div class="panel"><h2 class="gilt">Email the family</h2><p>${em.length} recipients, all in Bcc.</p><b>${esc(subj)}</b><pre class="pre">${esc(body)}</pre>
+ <a class="btn" href="mailto:?bcc=${encodeURIComponent(bcc).replace(/%2C/g,',')}&subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}">Open in my email app</a>
+ <button class="btn ghost" id="c1">Copy recipients</button><button class="btn ghost" id="c2">Copy message</button><button class="btn ghost" id="c3">Close</button></div>`;
+ const cp = (id, t) => $(id).onclick = async () => { try{ await navigator.clipboard.writeText(t); $(id).textContent = 'Copied'; }catch(e){ prompt('Copy this:', t); } };
+ cp('#c1', bcc); cp('#c2', body); $('#c3').onclick = () => $('#tools').innerHTML = '';
+}
+async function wordForm(){
+ const {data} = await sb.from('wordlers').select('word').order('id',{ascending:false}).limit(1);
+ $('#tools').innerHTML = `<form class="panel" id="wf"><label for="nw">Set a new word (4 to 8 letters)${data?.[0]?`. Current word: <b>${esc(data[0].word)}</b>`:''}</label><input id="nw" pattern="[A-Za-z]{4,8}" maxlength="8" required autocomplete="off"><p class="err" id="we"></p><button class="btn">Set the word</button></form>`;
+ $('#wf').onsubmit = async e => { e.preventDefault(); const {error} = await sb.from('wordlers').insert({word:$('#nw').value.toLowerCase()}); error ? $('#we').textContent = error.message : gamesView(); };
+}
+async function gamesView(){
+ app.innerHTML = `<h2 class="hd gilt ph">Wordler</h2><div id="tools"></div><div id="gm">Loading…</div>`;
+ if(me.is_editor) wordForm();
+ const {data:cur} = await sb.rpc('wordler_current'), pz = cur?.[0], gm = $('#gm');
+ if(!pz) return gm.innerHTML = '<p style="text-align:center">No word has been set yet. Check back soon!</p>';
+ const {data:gs} = await sb.from('wordler_guesses').select('guess,pattern').eq('puzzle_id',pz.id).order('id');
+ let guesses = gs || [], typed = '';
+ const solved = () => guesses.some(g => /^g+$/.test(g.pattern)), over = () => solved() || guesses.length >= 6;
+ gm.innerHTML = `<p style="text-align:center">Guess the ${pz.len}-letter word in six tries.</p><div class="bd" id="bd" style="--n:${pz.len}"></div>
+ <form class="gf" id="gf"><input id="gi" maxlength="${pz.len}" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Your guess"><button class="btn">Guess</button></form><p class="err" id="ge"></p><div class="kb" id="kb"></div><p id="gend" style="text-align:center"></p>`;
+ async function draw(){
+  let h = '';
+  for(let i=0;i<6;i++){
+   const g = guesses[i], cur = i===guesses.length && !over();
+   h += '<div class="row">' + Array.from({length:pz.len},(_,j) => g ? `<div class="t ${g.pattern[j]}">${g.guess[j]}</div>` : `<div class="t">${cur?(typed[j]||''):''}</div>`).join('') + '</div>';
+  }
+  $('#bd').innerHTML = h;
+  const best = {}; guesses.forEach(g => [...g.guess].forEach((c,j) => { const p = g.pattern[j]; if(p==='g'||(p==='y'&&best[c]!=='g')||!best[c]) best[c] = p; }));
+  $('#kb').innerHTML = 'abcdefghijklmnopqrstuvwxyz'.split('').map(c => `<span class="k ${best[c]||''}">${c}</span>`).join('');
+  $('#gf').hidden = over();
+  if(solved()) $('#gend').textContent = `Solved in ${guesses.length}! Check back for the next word.`;
+  else if(over()){ const {data} = await sb.rpc('wordler_answer',{pid:pz.id}); $('#gend').textContent = `The word was “${data}”. Better luck next time!`; }
+ }
+ $('#gi').oninput = e => { typed = e.target.value.replace(/[^a-z]/gi,'').slice(0,pz.len); e.target.value = typed; draw(); };
+ $('#gf').onsubmit = async e => {
+  e.preventDefault(); $('#ge').textContent = '';
+  if(typed.length !== pz.len) return $('#ge').textContent = `Enter ${pz.len} letters.`;
+  const {data, error} = await sb.rpc('wordler_guess',{pid:pz.id, g:typed});
+  if(error) return $('#ge').textContent = error.message;
+  guesses.push({guess:typed.toLowerCase(), pattern:data}); typed = ''; $('#gi').value = ''; draw();
+ };
+ draw();
+}
+async function peterView(){
+ app.innerHTML = `<h2 class="hd gilt ph">Ask Peter</h2><p style="text-align:center;font-style:italic">Write in to our advice columnist. Peter replies in his own time.</p>
+ <form class="panel" id="qf"><textarea id="qt" rows="3" maxlength="800" placeholder="Dear Peter…" aria-label="Your question for Peter" required></textarea><button class="btn">Send to Peter</button><p class="err" id="qe"></p></form><div id="ql">Loading…</div>`;
+ $('#qf').onsubmit = async e => { e.preventDefault(); const {error} = await sb.from('advice').insert({question:$('#qt').value.trim()}); error ? $('#qe').textContent = error.message : peterView(); };
+ const {data, error} = await sb.from('advice').select('*,profiles(name)').order('created_at',{ascending:false});
+ if(error) return $('#ql').textContent = error.message;
+ $('#ql').innerHTML = data.length ? '' : '<p style="text-align:center">No letters yet. Be the first to write in!</p>';
+ data.forEach(q => {
+  const nm = q.profiles?.name || 'A reader', d = document.createElement('div'); d.className = 'cm';
+  d.innerHTML = `<div><i>Dear Peter,\n${esc(q.question)}\nSincerely, ${esc(nm)}</i></div>` + (q.answer ? `<p>Dear ${esc(nm)},\n${esc(q.answer)}</p>`
+   : me.is_editor ? `<textarea rows="3" placeholder="Peter’s reply" aria-label="Peter’s reply"></textarea><button class="btn pa">Publish reply</button><button class="btn ghost pd">Delete</button>`
+   : `<p><small>Waiting for Peter’s reply…</small></p>`);
+  if(me.is_editor && !q.answer){
+   d.querySelector('.pa').onclick = async () => { const a = d.querySelector('textarea').value.trim(); if(a){ await sb.from('advice').update({answer:a, answered_at:new Date().toISOString()}).eq('id',q.id); peterView(); } };
+   d.querySelector('.pd').onclick = async () => { if(confirm('Delete this letter?')){ await sb.from('advice').delete().eq('id',q.id); peterView(); } };
+  }
+  $('#ql').append(d);
+ });
+}
+function installHint(){
+ let done = false; try{ done = localStorage.getItem('hintDone'); }catch(e){}
+ const ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1), and = /Android/i.test(ua);
+ const home = navigator.standalone || matchMedia('(display-mode: standalone)').matches;
+ if(done || home || !(ios||and)) return;
+ const steps = ios ? ['Open this page in <b>Safari</b>. (If you came from an email and see no Safari bar, tap the compass or “Open in Safari.”)','Tap the <b>Share</b> button, the square with an arrow pointing up.','Scroll down and tap <b>Add to Home Screen</b>.','Tap <b>Add</b>. The Rag now sits with your other apps.']
+  : ['Open this page in <b>Chrome</b>.','Tap the <b>⋮</b> menu in the top-right corner.','Tap <b>Add to Home screen</b> (or <b>Install app</b>).','Tap <b>Add</b>. The Rag now sits with your other apps.'];
+ const h = $('#hint'); h.hidden = false;
+ h.innerHTML = `<div class="panel"><h2 class="gilt">Keep the Rag on your home screen</h2><ol>${steps.map(x=>`<li>${x}</li>`).join('')}</ol><button class="btn" id="hd">Got it</button></div>`;
+ $('#hd').onclick = () => { h.hidden = true; try{ localStorage.setItem('hintDone','1'); }catch(e){} };
+}
 $('#lbx').onclick = () => $('#lb').classList.remove('on');
+installHint();
 boot();
 </script></body></html>
