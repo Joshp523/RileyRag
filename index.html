@@ -74,6 +74,7 @@ nav a:hover{color:var(--g2)}nav a[aria-current=page]{color:var(--g1);border-colo
 .k{min-width:26px;text-align:center;font:400 15px 'Anton',sans-serif;text-transform:uppercase;padding:4px 2px;border:1px solid #3a2a16;color:var(--g2)}
 .k.g{background:#5f7f4d;color:#f4efd8}.k.y{background:var(--g2);color:#1a0f08}.k.b{opacity:.3}
 .lbt{width:100%;border-collapse:collapse}.lbt td{padding:7px 4px;border-bottom:1px solid #3a2a16}.lbt .r{width:2em;color:var(--g3)}.lbt .n{text-align:right;color:var(--g1)}
+.pv{background:#0b0603;border:1px solid #3a2a16;padding:12px 14px;margin:8px 0 14px;font-size:16px}.pv p{margin:0 0 10px}.pv p:last-child{margin:0}.pv a{color:#8fb4ff}
 </style></head>
 <body>
 <header><img class="emb" src="emblem.png" alt=""><h1><img src="masthead.png" alt="The Riley Rag"></h1><nav id="nav" hidden><a href="#highlights">Highlights</a><a href="#games">Games</a><a href="#peter">Ask Peter</a></nav><hr class="stitch"></header>
@@ -222,12 +223,19 @@ async function emailDraft(is){
  if(error) return $('#tools').innerHTML = `<p class="err">${esc(error.message)}</p>`;
  const subj = `The Riley Rag № ${is.number} is out!`, tg = (is.tagline||'').replace(/[.\s]+$/,'');
  const body = `Hello family and friends,\n\nA new edition of The Riley Rag just hit the presses: Issue № ${is.number}${tg?`, ${tg}`:''}.\n\nRead it here: https://joshp523.github.io/RileyRag/\n\nWhile you’re there, tap a reaction or leave a comment. We love hearing from you!\n\nWith love from Brussels,\nThe Rileys`;
- const bcc = em.join(',');
- $('#tools').innerHTML = `<div class="panel"><h2 class="gilt">Email the family</h2><p>${em.length} recipients, all in Bcc.</p><b>${esc(subj)}</b><pre class="pre">${esc(body)}</pre>
- <a class="btn" href="mailto:?bcc=${encodeURIComponent(bcc).replace(/%2C/g,',')}&subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}">Open in my email app</a>
- <button class="btn ghost" id="c1">Copy recipients</button><button class="btn ghost" id="c2">Copy message</button><button class="btn ghost" id="c3">Close</button></div>`;
- const cp = (id, t) => $(id).onclick = async () => { try{ await navigator.clipboard.writeText(t); $(id).textContent = 'Copied'; }catch(e){ prompt('Copy this:', t); } };
- cp('#c1', bcc); cp('#c2', body); $('#c3').onclick = () => $('#tools').innerHTML = '';
+ const bcc = em.join(','), U = 'https://joshp523.github.io/RileyRag/';
+ const html = `<p>Hello family and friends,</p><p>A new edition of The Riley Rag just hit the presses: Issue № ${is.number}${tg?`, ${esc(tg)}`:''}.</p><p>Read it here: <a href="${U}">The Riley Rag</a></p><p>While you’re there, tap a reaction or leave a comment. We love hearing from you!</p><p>With love from Brussels,<br>The Rileys</p>`;
+ const crlf = t => encodeURIComponent(t.replace(/\n/g,'\r\n'));
+ $('#tools').innerHTML = `<div class="panel"><h2 class="gilt">Email the family</h2><p>${em.length} recipients, all in Bcc.</p><b>${esc(subj)}</b><div class="pv">${html}</div>
+ <p style="font-size:15px;opacity:.8">Best results: tap <b>Open in my email app</b>, then <b>Copy formatted message</b> and paste it into the body. The link will show up blue.</p>
+ <a class="btn" href="mailto:?bcc=${encodeURIComponent(bcc).replace(/%2C/g,',')}&subject=${encodeURIComponent(subj)}&body=${crlf(body)}">Open in my email app</a>
+ <button class="btn" id="c2">Copy formatted message</button><button class="btn ghost" id="c1">Copy recipients</button><button class="btn ghost" id="c3">Close</button></div>`;
+ $('#c1').onclick = async () => { try{ await navigator.clipboard.writeText(bcc); $('#c1').textContent = 'Copied'; }catch(e){ prompt('Copy this:', bcc); } };
+ $('#c2').onclick = async () => {
+  try{ await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}), 'text/plain':new Blob([body],{type:'text/plain'})})]); $('#c2').textContent = 'Copied! Now paste it into your email'; }
+  catch(e){ try{ await navigator.clipboard.writeText(body); $('#c2').textContent = 'Copied as plain text'; }catch(x){ prompt('Copy this:', body); } }
+ };
+ $('#c3').onclick = () => $('#tools').innerHTML = '';
 }
 async function wordForm(){
  const {data} = await sb.from('wordlers').select('word').order('id',{ascending:false}).limit(1);
