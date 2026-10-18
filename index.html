@@ -156,28 +156,39 @@ function issueEl(is, cs, rs){
  <form><label class="sr" for="c${is.id}">Leave a comment</label><textarea id="c${is.id}" rows="2" maxlength="1000" placeholder="Leave a comment…" required></textarea><button class="btn">Post comment</button><p class="err"></p></form>`;
  el.querySelector('.sheet').onclick = () => { $('#lbimg').src = pub(is.img_path); $('#lbpdf').href = pub(is.pdf_path); $('#lb').classList.add('on'); };
  const rx = el.querySelector('.rxs');
- Object.entries(RX).forEach(([k,[label,svg]]) => {
-  const mine = rs.some(x => x.issue_id===is.id && x.kind===k && x.user_id===me.id);
-  const n = rs.filter(x => x.issue_id===is.id && x.kind===k).length;
-  const b = document.createElement('button'); b.className='rx'; b.setAttribute('aria-pressed',mine);
-  b.setAttribute('aria-label',label+(n?`, ${n}`:''));b.title=label;b.innerHTML = `${svg}${n?`<span>${n}</span>`:''}`;
-  b.onclick = async () => {
-   const q = mine ? sb.from('reactions').delete().match({issue_id:is.id,user_id:me.id,kind:k}) : sb.from('reactions').insert({issue_id:is.id,kind:k});
-   const {error} = await q; error ? alert(error.message) : feedView();
-  };
-  rx.append(b);
- });
+ const drawRx = () => {
+  rx.innerHTML = '';
+  Object.entries(RX).forEach(([k,[label,svg]]) => {
+   const mine = rs.some(x => x.issue_id===is.id && x.kind===k && x.user_id===me.id);
+   const n = rs.filter(x => x.issue_id===is.id && x.kind===k).length;
+   const b = document.createElement('button'); b.className='rx'; b.setAttribute('aria-pressed',mine);
+   b.setAttribute('aria-label',label+(n?`, ${n}`:'')); b.title = label;
+   b.innerHTML = `${svg}${n?`<span>${n}</span>`:''}`;
+   b.onclick = async () => {
+    b.disabled = true;
+    const {error} = mine ? await sb.from('reactions').delete().match({issue_id:is.id,user_id:me.id,kind:k}) : await sb.from('reactions').insert({issue_id:is.id,kind:k});
+    if(error){ b.disabled = false; return alert(error.message); }
+    if(mine){ const i = rs.findIndex(x => x.issue_id===is.id && x.kind===k && x.user_id===me.id); if(i>-1) rs.splice(i,1); }
+    else rs.push({issue_id:is.id, user_id:me.id, kind:k});
+    drawRx(); [...rx.children].find(c => c.title===label)?.focus({preventScroll:true});
+   };
+   rx.append(b);
+  });
+ };
+ drawRx();
  const box = el.querySelector('.cms');
- cs.filter(x => x.issue_id===is.id).forEach(x => {
+ const addComment = x => {
   const c = document.createElement('div'); c.className='cm';
   c.innerHTML = `${me.is_editor?'<button class="del" aria-label="Delete comment">Delete</button>':''}<b>${esc(x.profiles?.name||'Someone')}</b><small>${new Date(x.created_at).toLocaleDateString()}</small><div>${esc(x.body)}</div>`;
-  if(me.is_editor) c.querySelector('.del').onclick = async () => { if(confirm('Delete this comment?')){ await sb.from('comments').delete().eq('id',x.id); feedView(); } };
+  if(me.is_editor) c.querySelector('.del').onclick = async () => { if(confirm('Delete this comment?')){ const {error} = await sb.from('comments').delete().eq('id',x.id); if(error) alert(error.message); else c.remove(); } };
   box.append(c);
- });
+ };
+ cs.filter(x => x.issue_id===is.id).forEach(addComment);
  el.querySelector('form').onsubmit = async e => {
-  e.preventDefault(); const t = el.querySelector('textarea').value.trim();
-  const {error} = await sb.from('comments').insert({issue_id:is.id,body:t});
-  error ? el.querySelector('.err').textContent = error.message : feedView();
+  e.preventDefault(); const ta = el.querySelector('textarea'), er = el.querySelector('.err'); er.textContent = '';
+  const {data, error} = await sb.from('comments').insert({issue_id:is.id, body:ta.value.trim()}).select('*,profiles(name)').single();
+  if(error) return er.textContent = error.message;
+  ta.value = ''; addComment(data);
  };
  return el;
 }
