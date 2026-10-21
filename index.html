@@ -76,6 +76,8 @@ nav a:hover{color:var(--g2)}nav a[aria-current=page]{color:var(--g1);border-colo
 .lbt{width:100%;border-collapse:collapse}.lbt td{padding:7px 4px;border-bottom:1px solid #3a2a16}.lbt .r{width:2em;color:var(--g3)}.lbt .n{text-align:right;color:var(--g1)}
 .pv{background:#0b0603;border:1px solid #3a2a16;padding:12px 14px;margin:8px 0 14px;font-size:16px}.pv p{margin:0 0 10px}.pv p:last-child{margin:0}.pv a{color:#8fb4ff}
 .bar.ed{flex-wrap:nowrap;gap:4px}.bar.ed .btn{white-space:nowrap;padding:8px clamp(6px,2.2vw,16px);font-size:clamp(12px,3.8vw,18px)}
+a.btn{display:inline-block;text-decoration:none}.charter{white-space:pre-wrap;font-size:19px;line-height:1.7;margin:0 0 18px}
+.charter a{color:var(--g1);text-decoration:underline;text-underline-offset:3px;word-break:break-all}
 </style></head>
 <body>
 <header><img class="emb" src="emblem.png" alt=""><h1><img src="masthead.png" alt="The Riley Rag"></h1><nav id="nav" hidden><a href="#highlights">Highlights</a><a href="#games">Games</a><a href="#peter">Ask Peter</a><a href="#recipes">Recipes</a></nav><hr class="stitch"></header>
@@ -138,7 +140,7 @@ function authView(){
 
 async function feedView(){
  const hello = !greeted; greeted = true;
- app.innerHTML = `${hello?`<p class="hi" id="hi">Welcome, ${esc(me.name)}</p>`:''}${me.is_editor?'<div class="bar ed"><button class="btn" id="pb">Publish new issue</button><button class="btn ghost" id="eb">Email draft</button><button class="btn ghost" id="mb">Members</button></div>':''}<div id="tools"></div><div id="feed">Loading issues…</div><div class="foot"><button class="btn ghost" id="so">Sign out</button></div>`;
+ app.innerHTML = `${hello?`<p class="hi" id="hi">Welcome, ${esc(me.name)}</p>`:''}${me.is_editor?'<div class="bar ed"><button class="btn" id="pb">Publish new issue</button><button class="btn ghost" id="eb">Email draft</button><button class="btn ghost" id="mb">Members</button></div>':''}<div id="tools"></div><div id="feed">Loading issues…</div><div class="foot"><a class="btn ghost" href="#charter">Charter</a><br><button class="btn ghost" id="so">Sign out</button></div>`;
  if(hello) setTimeout(() => $('#hi')?.classList.add('off'), 3500);
  $('#so').onclick = () => sb.auth.signOut();
  if(me.is_editor){ $('#pb').onclick = publishForm; $('#mb').onclick = members; $('#eb').onclick = () => emailDraft(); }
@@ -236,7 +238,7 @@ async function members(){
 function route(){
  const h = location.hash || '#highlights';
  document.querySelectorAll('#nav a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href')===h ? 'page' : 'false'));
- ({'#games':gamesView,'#peter':peterView,'#recipes':recipesView}[h] || feedView)(); scrollTo(0,0);
+ ({'#games':gamesView,'#peter':peterView,'#recipes':recipesView,'#charter':charterView}[h] || feedView)(); scrollTo(0,0);
 }
 async function emailDraft(is){
  if(!is){ const {data} = await sb.from('issues').select('number,tagline').order('issue_date',{ascending:false}).order('number',{ascending:false}).limit(1); is = data?.[0]; if(!is) return; }
@@ -372,6 +374,33 @@ function recoveryView(){
   if(error) return $('#nr').textContent = error.message;
   recovering = false; history.replaceState(null,'',location.pathname); boot();
  };
+}
+function linkify(t){   // t is already HTML-escaped; turns http(s):// and www. addresses into tappable links
+ return t.replace(/(https?:\/\/|www\.)[^\s<>"']+/g, m => {
+  const tail = (m.match(/(&quot;|&#39;|&gt;|&lt;|[.,;:!?)\]])+$/) || [''])[0], url = m.slice(0, m.length - tail.length);
+  return `<a href="${url.startsWith('www.') ? 'https://' + url : url}" target="_blank" rel="noopener noreferrer">${url}</a>${tail}`;
+ });
+}
+async function charterView(){
+ app.innerHTML = `<h2 class="hd gilt ph">Charter</h2><div id="cb">Loading…</div>`;
+ const {data, error} = await sb.from('site_pages').select('body').eq('key','charter').maybeSingle();
+ if(error) return $('#cb').textContent = error.message;
+ let body = data?.body || '';
+ const show = () => {
+  $('#cb').innerHTML = `<p class="charter">${body ? linkify(esc(body)) : '<i>Nothing here yet.</i>'}</p>${me.is_editor?'<div class="bar"><button class="btn" id="ce">Edit</button></div>':''}`;
+  if(me.is_editor) $('#ce').onclick = edit;
+ };
+ const edit = () => {
+  $('#cb').innerHTML = `<form class="panel" id="cf"><label class="sr" for="ct">Charter text</label><textarea id="ct" rows="10" maxlength="5000"></textarea><p class="err" id="cr" role="alert"></p><button class="btn">Save</button> <button type="button" class="btn ghost" id="cc">Cancel</button></form>`;
+  $('#ct').value = body; $('#cc').onclick = show;
+  $('#cf').onsubmit = async e => {
+   e.preventDefault(); const t = $('#ct').value.trim();
+   const {error} = await sb.from('site_pages').upsert({key:'charter', body:t, updated_at:new Date().toISOString()});
+   if(error) return $('#cr').textContent = error.message;
+   body = t; show();
+  };
+ };
+ show();
 }
 function installHint(){
  let done = false; try{ done = localStorage.getItem('hintDone'); }catch(e){}
