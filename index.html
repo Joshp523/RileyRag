@@ -90,12 +90,13 @@ nav a:hover{color:var(--g2)}nav a[aria-current=page]{color:var(--g1);border-colo
 const SUPABASE_URL = 'https://vikxpnxnbmhmawhnwxzl.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_0WwmJLwgxP4uSQF8TDdaOw_vrL-XU6x';
 // ====================================================================
+const recoveryAtLoad = /type=recovery/.test(location.hash);
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 const $ = s => document.querySelector(s), app = $('#app');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pub = p => sb.storage.from('issues').getPublicUrl(p).data.publicUrl;
-let me = null, signup = false, greeted = false;
+let me = null, signup = false, greeted = false, recovering = recoveryAtLoad;
 
 // Custom reaction icons (stroke = currentColor)
 const S = 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
@@ -108,10 +109,11 @@ const RX = {
 async function boot(){
  const { data:{ session } } = await sb.auth.getSession();
  if(!session){ $('#nav').hidden = true; return authView(); }
+ if(recovering) return recoveryView();
  const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
  me = data; $('#nav').hidden = false; route();
 }
-sb.auth.onAuthStateChange(ev => { if(ev==='SIGNED_OUT'){ me = null; boot(); } });
+sb.auth.onAuthStateChange(ev => { if(ev==='PASSWORD_RECOVERY'){ recovering = true; recoveryView(); } if(ev==='SIGNED_OUT'){ me = null; boot(); } });
 addEventListener('hashchange', () => { if(me) route(); });
 
 function authView(){
@@ -121,8 +123,9 @@ function authView(){
  <label for="p">Password ${signup?'(6 or more characters)':''}</label><input id="p" type="password" minlength="6" required autocomplete="${signup?'new':'current'}-password">
  <p class="err" id="er" role="alert"></p>
  <button class="btn">${signup?'Create my account':'Sign in'}</button>
- <button type="button" class="btn ghost" id="sw">${signup?'I already have an account':'New here? Create an account'}</button></form>`;
+ <button type="button" class="btn ghost" id="sw">${signup?'I already have an account':'New here? Create an account'}</button>${signup?'':'<button type="button" class="btn ghost" id="fg">Forgot your password?</button>'}</form>`;
  $('#sw').onclick = () => { signup=!signup; authView(); };
+ if(!signup) $('#fg').onclick = forgotView;
  $('#af').onsubmit = async e => {
   e.preventDefault(); const email=$('#e').value.trim(), password=$('#p').value;
   const r = signup ? await sb.auth.signUp({email,password,options:{data:{name:$('#n').value.trim()}}}) : await sb.auth.signInWithPassword({email,password});
@@ -220,9 +223,15 @@ function publishForm(){
 }
 
 async function members(){
- const {data} = await sb.from('profiles').select('*').order('created_at');
- $('#tools').innerHTML = `<div class="panel"><h2 class="gilt">Members (${data.length})</h2>${data.map(m=>`<div class="cm">${esc(m.name)}${m.is_editor?' (editor)':''}</div>`).join('')}<button class="btn ghost" id="mc">Close</button></div>`;
+ const {data, error} = await sb.rpc('member_list');
+ if(error) return $('#tools').innerHTML = `<p class="err">${esc(error.message)}</p>`;
+ $('#tools').innerHTML = `<div class="panel"><h2 class="gilt">Members (${data.length})</h2>${data.map(m => `<div class="cm"><b>${esc(m.name)}</b>${m.is_editor?' (editor)':''}<br><small style="margin:0">${esc(m.email)}</small>${m.is_editor?'':`<button class="del" data-id="${m.id}">Remove</button>`}</div>`).join('')}<button class="btn ghost" id="mc">Close</button></div>`;
  $('#mc').onclick = () => $('#tools').innerHTML = '';
+ document.querySelectorAll('#tools .del').forEach(b => b.onclick = async () => {
+  const nm = b.closest('.cm').querySelector('b').textContent;
+  if(!confirm(`Remove ${nm}? This also deletes their comments, reactions, game scores and Ask Peter letters. They can sign up again with the same email.`)) return;
+  const {error} = await sb.rpc('delete_member',{uid:b.dataset.id}); error ? alert(error.message) : members();
+ });
 }
 function route(){
  const h = location.hash || '#highlights';
@@ -344,6 +353,25 @@ async function recipesView(){
   if(me.is_editor) el.querySelector('.rd').onclick = async () => { if(confirm('Delete this recipe card?')){ await sb.from('recipes').delete().eq('id',r.id); recipesView(); } };
   $('#rf').append(el);
  });
+}
+function forgotView(){
+ app.innerHTML = `<form class="panel" id="ff"><h2 class="gilt">Reset your password</h2><p>Enter your email and we’ll send you a link to choose a new one.</p><label for="fe">Email</label><input id="fe" type="email" required autocomplete="email"><p class="err" id="fr" role="alert"></p><button class="btn">Email me a reset link</button><button type="button" class="btn ghost" id="fb">Back to sign in</button></form>`;
+ $('#fb').onclick = authView;
+ $('#ff').onsubmit = async e => {
+  e.preventDefault(); const r = $('#fr'); r.style.color = 'var(--g1)'; r.textContent = 'Sending…';
+  const {error} = await sb.auth.resetPasswordForEmail($('#fe').value.trim(), {redirectTo: location.origin + location.pathname});
+  if(error){ r.style.color = ''; return r.textContent = error.message; }
+  r.textContent = 'If that email has an account, a reset link is on its way. Check your spam folder too.';
+ };
+}
+function recoveryView(){
+ $('#nav').hidden = true;
+ app.innerHTML = `<form class="panel" id="nf"><h2 class="gilt">Choose a new password</h2><label for="np">New password (6 or more characters)</label><input id="np" type="password" minlength="6" required autocomplete="new-password"><p class="err" id="nr" role="alert"></p><button class="btn">Save and continue</button></form>`;
+ $('#nf').onsubmit = async e => {
+  e.preventDefault(); const {error} = await sb.auth.updateUser({password:$('#np').value});
+  if(error) return $('#nr').textContent = error.message;
+  recovering = false; history.replaceState(null,'',location.pathname); boot();
+ };
 }
 function installHint(){
  let done = false; try{ done = localStorage.getItem('hintDone'); }catch(e){}
