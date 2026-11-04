@@ -61,8 +61,8 @@ input,textarea{width:100%;padding:10px;border-radius:2px;border:1px solid #5a402
 #lb .scroll{flex:1;overflow:auto;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch}
 #lb img{width:100%;max-width:900px;display:block;margin:0 auto;background:#f4ecd8}
 [hidden]{display:none!important}
-nav{display:flex;flex-wrap:nowrap;white-space:nowrap;justify-content:center;gap:clamp(8px,3.2vw,28px);margin:4px 0 10px}
-nav a{font:400 clamp(14px,4.3vw,22px) 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.05em;color:var(--g3);text-decoration:none;padding:6px 2px;border-bottom:2px solid transparent}
+nav{display:flex;flex-wrap:nowrap;white-space:nowrap;justify-content:center;gap:clamp(6px,2.6vw,28px);margin:4px 0 10px}
+nav a{font:400 clamp(12px,4.1vw,22px) 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.05em;color:var(--g3);text-decoration:none;padding:6px 2px;border-bottom:2px solid transparent}
 nav a:hover{color:var(--g2)}nav a[aria-current=page]{color:var(--g1);border-color:var(--g2)}
 .ph{font-size:44px;text-align:center;margin:4px 0 14px}
 .pre{white-space:pre-wrap;background:#0b0603;border:1px solid #3a2a16;padding:12px;margin:8px 0 14px;font:inherit;font-size:16px}
@@ -80,11 +80,12 @@ a.btn{display:inline-block;text-decoration:none}.charter{white-space:pre-wrap;fo
 .apps{display:flex;justify-content:center;gap:clamp(28px,10vw,64px);margin:6px 0 30px}
 .app{display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;color:var(--g1);font:400 21px 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.06em;transition:transform .15s}
 .app img{width:clamp(84px,26vw,112px);height:auto;aspect-ratio:1;filter:drop-shadow(0 8px 14px #000c)}
+.apps.more{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 12px;max-width:420px;margin:14px auto 30px}.apps.more .app{text-align:center;line-height:1.15}.app.soon{opacity:.75}.app.soon small{display:block;font:italic 15px 'Tinos',serif;font-variant:normal;letter-spacing:0;color:var(--g2);margin-top:-4px}
 .app:hover,.app:focus-visible{transform:translateY(-3px)}.app:focus-visible{outline:2px solid var(--g1);outline-offset:6px;border-radius:12px}
 .charter a{color:var(--g1);text-decoration:underline;text-underline-offset:3px;word-break:break-all}
 </style></head>
 <body>
-<header><img class="emb" src="emblem.png" alt=""><h1><img src="masthead.png" alt="The Riley Rag"></h1><nav id="nav" hidden><a href="#highlights">Highlights</a><a href="#games">Games</a><a href="#peter">Ask Peter</a><a href="#recipes">Recipes</a></nav><hr class="stitch"></header>
+<header><img class="emb" src="emblem.png" alt=""><h1><img src="masthead.png" alt="The Riley Rag"></h1><nav id="nav" hidden><a href="#highlights">Highlights</a><a href="#games">Games</a><a href="#peter">Ask Peter</a><a href="#recipes">Recipes</a><a href="#charter">Us</a></nav><hr class="stitch"></header>
 <aside id="hint" hidden></aside>
 <main id="app"><p style="text-align:center">Opening the desk…</p></main>
 <div id="lb"><div class="top"><a id="lbpdf" class="btn ghost" target="_blank" rel="noopener">Download PDF</a><button class="btn" id="lbx">Close</button></div><div class="scroll"><img id="lbimg" alt="Full page of the newspaper"></div></div>
@@ -146,10 +147,10 @@ function authView(){
 
 async function feedView(){
  const hello = !greeted; greeted = true;
- app.innerHTML = `${hello?`<p class="hi" id="hi">Welcome, ${esc(me.name)}</p>`:''}${me.is_editor?'<div class="bar ed"><button class="btn" id="pb">Publish new issue</button><button class="btn ghost" id="eb">Email draft</button><button class="btn ghost" id="mb">Members</button></div>':''}<div id="tools"></div><div id="feed">Loading issues…</div><div class="foot"><a class="btn ghost" href="#charter">Charter</a><br><button class="btn ghost" id="so">Sign out</button></div>`;
+ app.innerHTML = `${hello?`<p class="hi" id="hi">Welcome, ${esc(me.name)}</p>`:''}${me.is_editor?'<div class="bar ed"><button class="btn" id="pb">Publish new issue</button><button class="btn ghost" id="eb">Email draft</button><button class="btn ghost" id="mb">Members</button></div>':''}<div id="tools"></div><div id="feed">Loading issues…</div><div class="foot"><button class="btn ghost" id="so">Sign out</button></div>`;
  if(hello) setTimeout(() => $('#hi')?.classList.add('off'), 3500);
  $('#so').onclick = () => sb.auth.signOut();
- if(me.is_editor){ $('#pb').onclick = publishForm; $('#mb').onclick = members; $('#eb').onclick = () => emailDraft(); }
+ if(me.is_editor){ $('#pb').onclick = publishForm; $('#mb').onclick = () => $('#mp') ? closeMembers() : members(); $('#eb').onclick = () => emailDraft(); memberCount(); }
  const [i,c,r] = await Promise.all([
   sb.from('issues').select('*').order('issue_date',{ascending:false}).order('number',{ascending:false}),
   sb.from('comments').select('*,profiles(name)').order('created_at'),
@@ -230,11 +231,15 @@ function publishForm(){
  };
 }
 
+function memberLabel(n){ const b = $('#mb'); if(b) b.textContent = `Members (${n})`; }
+async function memberCount(){ const {data} = await sb.rpc('member_list'); if(data) memberLabel(data.length); }
+function closeMembers(){ $('#tools').innerHTML = ''; }
 async function members(){
  const {data, error} = await sb.rpc('member_list');
  if(error) return $('#tools').innerHTML = `<p class="err">${esc(error.message)}</p>`;
- $('#tools').innerHTML = `<div class="panel"><h2 class="gilt">Members (${data.length})</h2>${data.map(m => `<div class="cm"><b>${esc(m.name)}</b>${m.is_editor?' (editor)':''}<br><small style="margin:0">${esc(m.email)}</small>${m.is_editor?'':`<button class="del" data-id="${m.id}">Remove</button>`}</div>`).join('')}<button class="btn ghost" id="mc">Close</button></div>`;
- $('#mc').onclick = () => $('#tools').innerHTML = '';
+ memberLabel(data.length);
+ $('#tools').innerHTML = `<div class="panel" id="mp"><h2 class="gilt">Members (${data.length})</h2>${data.map(m => `<div class="cm"><b>${esc(m.name)}</b>${m.is_editor?' (editor)':''}<br><small style="margin:0">${esc(m.email)}</small>${m.is_editor?'':`<button class="del" data-id="${m.id}">Remove</button>`}</div>`).join('')}<button class="btn ghost" id="mc">Close</button></div>`;
+ $('#mc').onclick = closeMembers;
  document.querySelectorAll('#tools .del').forEach(b => b.onclick = async () => {
   const nm = b.closest('.cm').querySelector('b').textContent;
   if(!confirm(`Remove ${nm}? This also deletes their comments, reactions, game scores and Ask Peter letters. They can sign up again with the same email.`)) return;
@@ -381,6 +386,22 @@ function recoveryView(){
   recovering = false; history.replaceState(null,'',location.pathname); boot();
  };
 }
+const GALLERY = 'https://photos.app.goo.gl/6F13zuFyThHE7W2AA';   // shared Google Photos album; phones with the Google Photos app open it there
+const MORE_APPS = [
+ ['Russian Verbs','https://joshp523.github.io/russian/','app-russian.png'],
+ ['Riley Rangers','https://joshp523.github.io/Rangers-app/','app-rangers.png'],
+ ['Habits: Josh','https://joshp523.github.io/daily-discipline/','app-habits-josh.png'],
+ ['Habits: Meishe','https://joshp523.github.io/Habit-tracker-app-Meishe/','app-habits-meishe.png'],
+ ['Habits: Grandma','https://joshp523.github.io/wendys-app/','app-habits-grandma.png'],
+ ['Writing','https://joshp523.github.io/writing-app/','app-writing.png'],
+ ['Mushroom classifier','','app-mushroom.png']];
+function aboutExtras(){
+ return `<div class="bar" style="margin-top:26px"><a class="btn" href="${GALLERY}" target="_blank" rel="noopener">Photo gallery</a></div>
+ <h2 class="hd gilt ph" style="margin-top:34px">Other apps by Josh Riley</h2>
+ <div class="apps more">${MORE_APPS.map(([n,u,img]) => u
+  ? `<a class="app" href="${u}"><img src="${img}" alt="">${esc(n)}</a>`
+  : `<div class="app soon"><img src="${img}" alt="">${esc(n)}<small>coming soon!</small></div>`).join('')}</div>`;
+}
 function linkify(t){   // t is already HTML-escaped; turns http(s):// and www. addresses into tappable links
  return t.replace(/(https?:\/\/|www\.)[^\s<>"']+/g, m => {
   const tail = (m.match(/(&quot;|&#39;|&gt;|&lt;|[.,;:!?)\]])+$/) || [''])[0], url = m.slice(0, m.length - tail.length);
@@ -388,7 +409,7 @@ function linkify(t){   // t is already HTML-escaped; turns http(s):// and www. a
  });
 }
 async function charterView(){
- app.innerHTML = `<h2 class="hd gilt ph">Charter</h2><div id="cb">Loading…</div>`;
+ app.innerHTML = `<h2 class="hd gilt ph">Charter</h2><div id="cb">Loading…</div><div id="ex"></div>`;
  const {data, error} = await sb.from('site_pages').select('body').eq('key','charter').maybeSingle();
  if(error) return $('#cb').textContent = error.message;
  let body = data?.body || '';
@@ -396,6 +417,7 @@ async function charterView(){
   $('#cb').innerHTML = `<p class="charter">${body ? linkify(esc(body)) : '<i>Nothing here yet.</i>'}</p>${me.is_editor?'<div class="bar"><button class="btn" id="ce">Edit</button></div>':''}`;
   if(me.is_editor) $('#ce').onclick = edit;
  };
+ $('#ex').innerHTML = aboutExtras();
  const edit = () => {
   $('#cb').innerHTML = `<form class="panel" id="cf"><label class="sr" for="ct">Charter text</label><textarea id="ct" rows="10" maxlength="5000"></textarea><p class="err" id="cr" role="alert"></p><button class="btn">Save</button> <button type="button" class="btn ghost" id="cc">Cancel</button></form>`;
   $('#ct').value = body; $('#cc').onclick = show;

@@ -1,27 +1,35 @@
-# The Riley Rag: setup (about 20 minutes)
+<p align="center"><img src="icon-192.png" width="110" alt=""></p>
 
-## 1. Create the Supabase project
-1. Sign up at supabase.com, then **New project** (free plan). Save the database password somewhere.
-2. **SQL Editor > New query**: paste all of `schema.sql` and **Run**.
-3. **Authentication > Providers > Email**: turn **off** "Confirm email" so grandma can sign up without waiting on an email.
-4. **Project Settings > API**: copy the **Project URL** and the **anon public** key.
+<h1 align="center">The Riley Rag</h1>
+<p align="center"><em>The family newspaper, delivered to everyone's phone.</em></p>
+<p align="center"><a href="https://joshp523.github.io/RileyRag/"><b>▶ Open the app</b></a></p>
 
-## 2. Connect the app
-Open `index.html` and replace `SUPABASE_URL` and `SUPABASE_ANON_KEY` near the top of the script. (The anon key is meant to be public; the security rules in `schema.sql` protect your data.)
+<p align="center"><img src="readme-showcase.jpg" alt="The Riley Rag on a phone"></p>
 
-## 3. Host on GitHub Pages
-1. Create a GitHub repo, upload `index.html` and `favicon.png, favicon-32.png and emblem.png`.
-2. **Settings > Pages > Deploy from branch > main / root**. Your link will be `https://USERNAME.github.io/REPO/`.
-3. In Supabase, **Authentication > URL Configuration**: set **Site URL** to that link.
+The Riley Rag is a private newspaper for the Riley family and friends. Every edition lands in one place, and everyone can react, comment, play, and write in, from Brussels to wherever Grandma is reading.
 
-## 4. Make yourself the editor
-Open your site and create your account. Then run the last line of `schema.sql` in the SQL Editor (with your email). Refresh the site; you'll see **Publish new issue** and **Members**.
+## What's inside
 
-## 5. Games, Ask Peter and emails (new)
-Run `update2.sql` once in the SQL Editor. Then use the Games tab to set the first Wordler word.
+- **Highlights:** every issue, newest first. Tap to read, leave a comment, or react with one of five hand-drawn stickers (*Love it*, *Silly!*, *Tell me more*, *So sleepy*, *I object*).
+- **Games:** *Riled Up*, a daily guess-the-word game with a family leaderboard, plus links to QuipRash and Word Games.
+- **Ask Peter:** write to the family's advice columnist. He replies in his own time.
+- **Recipes:** the family recipe cards, kept in one tidy box.
+- **Us:** the family charter, the shared photo gallery, and the other apps in the Riley collection.
 
-## 6. Publish
-Enter number, date, tagline, pick the PDF, and press **Publish**. Then email the link to your list.
+<table><tr><td align="center" valign="top"><img src="readme-screen-1.jpg" width="230" alt="Games and the leaderboard"><br><sub>Games and the leaderboard</sub></td><td align="center" valign="top"><img src="readme-screen-2.jpg" width="230" alt="Ask Peter"><br><sub>Ask Peter</sub></td><td align="center" valign="top"><img src="readme-screen-3.jpg" width="230" alt="Us: charter, gallery and apps"><br><sub>Us: charter, gallery and apps</sub></td></tr></table>
+## Why it's worth a look
 
-## Keeping the free project awake
-Free projects pause after about a week with no activity. Weekly publishing keeps yours active; if it ever pauses, press **Restore** in the Supabase dashboard.
+- **Cool:** It's a real broadsheet, with blackletter masthead, gilt lettering and leather, that lives in your pocket.
+- **Innovative:** Most family news gets lost in group chats. The Rag turns it into an *edition*: something to look forward to, save, and talk back to.
+- **Impressive:** Members, comments, reactions, a daily word game, an advice column, recipes and an email-the-family button, all in one private app that Josh built and runs himself for free.
+- **Useful:** One link for the whole family. Nobody needs to install anything, and Grandma can join in as easily as the grandkids.
+
+---
+
+### On your phone
+Open the link in Safari (iPhone/iPad) or Chrome (Android), then choose **Share → Add to Home Screen**. It gets its own icon and opens full-screen, just like an app from the store.
+
+### More apps by Josh Riley
+[QuipRash](https://joshp523.github.io/Quip-game-app/) · [Word Games](https://joshp523.github.io/Word-Games/) · [Russian Verbs](https://joshp523.github.io/russian/) · [Riley Rangers](https://joshp523.github.io/Rangers-app/) · [Habits: Josh](https://joshp523.github.io/daily-discipline/) · [Habits: Meishe](https://joshp523.github.io/Habit-tracker-app-Meishe/) · [Habits: Grandma](https://joshp523.github.io/wendys-app/) · [Writing](https://joshp523.github.io/writing-app/)
+
+<sub>Built by Josh Riley. Setup notes for whoever maintains it are in [SETUP.md](SETUP.md).</sub>
