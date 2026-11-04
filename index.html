@@ -77,6 +77,10 @@ nav a:hover{color:var(--g2)}nav a[aria-current=page]{color:var(--g1);border-colo
 .pv{background:#0b0603;border:1px solid #3a2a16;padding:12px 14px;margin:8px 0 14px;font-size:16px}.pv p{margin:0 0 10px}.pv p:last-child{margin:0}.pv a{color:#8fb4ff}
 .bar.ed{flex-wrap:nowrap;gap:4px}.bar.ed .btn{white-space:nowrap;padding:8px clamp(6px,2.2vw,16px);font-size:clamp(12px,3.8vw,18px)}
 a.btn{display:inline-block;text-decoration:none}.charter{white-space:pre-wrap;font-size:19px;line-height:1.7;margin:0 0 18px}
+.apps{display:flex;justify-content:center;gap:clamp(28px,10vw,64px);margin:6px 0 30px}
+.app{display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;color:var(--g1);font:400 21px 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.06em;transition:transform .15s}
+.app img{width:clamp(84px,26vw,112px);height:auto;aspect-ratio:1;filter:drop-shadow(0 8px 14px #000c)}
+.app:hover,.app:focus-visible{transform:translateY(-3px)}.app:focus-visible{outline:2px solid var(--g1);outline-offset:6px;border-radius:12px}
 .charter a{color:var(--g1);text-decoration:underline;text-underline-offset:3px;word-break:break-all}
 </style></head>
 <body>
@@ -274,7 +278,7 @@ async function board(){
   + (data.length ? `<table class="lbt">${data.map((r,i) => `<tr><td class="r">${i+1}.</td><td>${esc(r.name)}</td><td class="n">${Number(r.avg_tries).toFixed(2)}</td><td class="n" style="color:var(--g3)">${r.games} ${r.games===1?'game':'games'}</td></tr>`).join('')}</table>` : '<p>No finished games yet. Be the first on the board!</p>');
 }
 async function gamesView(){
- app.innerHTML = `<h2 class="hd gilt ph">Riled Up</h2><div id="tools"></div><div id="gm">Loading…</div><div id="lbd"></div>`;
+ app.innerHTML = `<div class="apps"><a class="app" href="https://joshp523.github.io/Quip-game-app/"><img src="app-quiprash.png" alt="">QuipRash</a><a class="app" href="https://joshp523.github.io/Word-Games/"><img src="app-wordgames.png" alt="">Word Games</a></div><h2 class="hd gilt ph">Riled Up</h2><div id="tools"></div><div id="gm">Loading…</div><div id="lbd"></div>`;
  if(me.is_editor) wordForm();
  board();
  const {data:cur} = await sb.rpc('wordler_current'), pz = cur?.[0], gm = $('#gm');
