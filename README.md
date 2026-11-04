@@ -1,4 +1,4 @@
-<p align="center"><img src="icon-192.png" width="110" alt=""></p>
+<p align="center"><img src="icon-512.png" width="110" alt=""></p>
 
 <h1 align="center">The Riley Rag</h1>
 <p align="center"><em>The family newspaper, delivered to everyone's phone.</em></p>
