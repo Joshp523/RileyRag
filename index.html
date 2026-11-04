@@ -93,7 +93,8 @@ const SUPABASE_URL = 'https://vikxpnxnbmhmawhnwxzl.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_0WwmJLwgxP4uSQF8TDdaOw_vrL-XU6x';
 // ====================================================================
 const recoveryAtLoad = /type=recovery/.test(location.hash);
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Own sign-in slot: other apps on joshp523.github.io use this Supabase project too, and must not overwrite the Rag's login.
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { storageKey: 'riley-rag-auth' } });
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 const $ = s => document.querySelector(s), app = $('#app');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -112,7 +113,8 @@ async function boot(){
  const { data:{ session } } = await sb.auth.getSession();
  if(!session){ $('#nav').hidden = true; return authView(); }
  if(recovering) return recoveryView();
- const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
+ const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
+ if(!data){ await sb.auth.signOut({ scope:'local' }); $('#nav').hidden = true; return authView(); } // signed in, but not as a Rag member
  me = data; $('#nav').hidden = false; route();
 }
 sb.auth.onAuthStateChange(ev => { if(ev==='PASSWORD_RECOVERY'){ recovering = true; recoveryView(); } if(ev==='SIGNED_OUT'){ me = null; boot(); } });
