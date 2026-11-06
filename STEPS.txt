@@ -1,0 +1,16 @@
+RILEY RAG — what's new
+• New-issue alerts: when an editor publishes an issue, every member who opted in gets a phone notification.
+• A friendly "Keep the Rag on your phone" guide pops up for visitors on phones (once a week at most), with
+  picture-steps for iPhone, a one-tap button on Android, and a "copy link → open in Safari" fix for people who
+  opened the link inside Facebook, Gmail, etc. There's also a "Put the Rag on your phone" button on the sign-in page,
+  and an "On your phone" section on the Us page (add to home screen, alerts on/off).
+• Fixed: the Rag's offline helper (sw.js) never actually started; it does now, and new uploads always show up fresh.
+• Brown-and-gold icons (the repo still had the green Rangers ones).
+
+STEPS (same Supabase project as Word Games — the alert keys are already there)
+1. GitHub → RileyRag repo → Upload files: index.html, sw.js, icon-512.png, icon-192.png, apple-touch-icon.png. Commit.
+2. Supabase → SQL Editor → paste rr_push.sql → Run.
+3. Supabase → Edge Functions → Deploy a new function → Via Editor → name it  rr-notify  → paste rr-notify-index.ts → Deploy.
+   Leave "Verify JWT" ON for this one (only signed-in editors can trigger it).
+Try it: open the Rag from your home screen, Us → Turn on new-issue alerts. Then publish an issue from another account;
+the editor who publishes doesn't get their own alert.

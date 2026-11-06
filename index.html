@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>The Riley Rag</title>
-<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png"><link rel="icon" href="favicon.png" sizes="256x256" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Riley Rag">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png"><link rel="icon" href="favicon.png" sizes="256x256" type="image/png"><link rel="apple-touch-icon" href="favicon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Riley Rag">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@400;700&family=Anton&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
@@ -83,6 +83,24 @@ a.btn{display:inline-block;text-decoration:none}.charter{white-space:pre-wrap;fo
 .apps.more{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 12px;max-width:420px;margin:14px auto 30px}.apps.more .app{text-align:center;line-height:1.15}.app.soon{opacity:.75}.app.soon small{display:block;font:italic 15px 'Tinos',serif;font-variant:normal;letter-spacing:0;color:var(--g2);margin-top:-4px}
 .app:hover,.app:focus-visible{transform:translateY(-3px)}.app:focus-visible{outline:2px solid var(--g1);outline-offset:6px;border-radius:12px}
 .charter a{color:var(--g1);text-decoration:underline;text-underline-offset:3px;word-break:break-all}
+
+/* phone prompts: add to home screen, new-issue alerts */
+#sheet{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center}
+#sheet .bk{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;transition:opacity .3s}
+#sheet .sh{position:relative;width:min(100% - 20px,460px);margin:0 0 max(10px,env(safe-area-inset-bottom));padding:22px 20px 16px;background:#1c110a;border:1px solid var(--g3);box-shadow:0 -10px 40px rgba(0,0,0,.6);transform:translateY(30px);opacity:0;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .3s;max-height:90vh;overflow:auto}
+#sheet.on .bk{opacity:1}#sheet.on .sh{transform:none;opacity:1}
+#sheet h2{margin:0 0 6px;font:400 26px/1.15 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.06em}
+#sheet p{margin:6px 0 12px;font-size:18px;line-height:1.45}
+.steps{list-style:none;margin:12px 0 16px;padding:0;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid #3a2a16;font-size:18px;line-height:1.35}
+.steps li:first-child{border-top:0}
+.steps li::before{content:counter(s);flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--g2);color:var(--g1);display:grid;place-items:center;font-size:16px}
+.steps svg{flex:none;width:30px;height:30px;color:var(--g1);margin-left:auto}
+.sh .btns{display:flex;flex-direction:column;gap:8px}.sh .btns .btn{width:100%;padding:12px;font-size:18px;text-align:center}
+.sh .btn.solid,.btn.solid{background:linear-gradient(120deg,var(--g1),var(--g2));color:#1c110a;border-color:transparent;font-weight:700}
+.ph-panel{text-align:center;margin-top:30px}.ph-panel p{margin:4px 0 12px}
+.getapp{display:block;margin:18px auto 0;font-size:17px}
+@media (prefers-reduced-motion:reduce){#sheet .sh,#sheet .bk{transition:none}}
 </style></head>
 <body>
 <header><img class="emb" src="emblem.png" alt=""><h1><img src="masthead.png" alt="The Riley Rag"></h1><nav id="nav" hidden><a href="#highlights">Highlights</a><a href="#games">Games</a><a href="#peter">Ask Peter</a><a href="#recipes">Recipes</a><a href="#charter">Us</a></nav><hr class="stitch"></header>
@@ -106,6 +124,81 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 const pub = p => sb.storage.from('issues').getPublicUrl(p).data.publicUrl;
 let me = null, signup = false, greeted = false, recovering = recoveryAtLoad;
 
+// ====== Phones: add to home screen + new-issue alerts ======
+const VAPID_PUBLIC_KEY = 'BNRong9iomykb8ezl4BbbuNyNzjkCB5Rhm8wJXmezro4y1-ni-9B7Ro0QqLZGmh8YVh_ed8wRwgyyKCMFgVYDjg'; // same key as Word Games
+const UA = navigator.userAgent, IOS = /iPhone|iPad|iPod/.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1), PHONE = IOS || /Android/i.test(UA);
+const IN_APP = /FBAN|FBAV|Instagram|Line\/|GSA\/|Snapchat|LinkedInApp|Twitter/i.test(UA);   // Facebook, Instagram, Google app, etc.
+const IOS_OK = IOS && !IN_APP && (/Safari\//.test(UA) || /CriOS|EdgiOS|FxiOS/.test(UA));   // browsers that can add to the iPhone home screen
+const STANDALONE = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const CAN_PUSH = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+let BIP = null; addEventListener('beforeinstallprompt', e => { e.preventDefault(); BIP = e; });
+const snoozed = k => +(localStorage.getItem('rr_snooze_'+k) || 0) > Date.now(), snooze = (k, d) => localStorage.setItem('rr_snooze_'+k, Date.now() + d*864e5);
+const ICO = {
+ share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M7 10H5v11h14V10h-2"/></svg>',
+ plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>',
+ dots:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>',
+ home:'<img src="icon-192.png" alt="" style="width:30px;height:30px;border-radius:7px;margin-left:auto">',
+ compass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>'};
+function sheet(h){ closeSheet(); const d = document.createElement('div'); d.id = 'sheet';
+ d.innerHTML = `<div class="bk" data-x></div><div class="sh" role="dialog" aria-modal="true">${h}</div>`; document.body.append(d);
+ d.addEventListener('click', e => { if(e.target.closest('[data-x]')) closeSheet(); }); requestAnimationFrame(() => d.classList.add('on')); return d; }
+const closeSheet = () => $('#sheet')?.remove();
+
+function installSheet(){
+ let how;
+ if(IOS && !IOS_OK) how = `<p>This page is open inside another app, which can’t save it. Open it in Safari first:</p>
+  <ol class="steps"><li><span>Tap <b>Copy link</b> below.</span></li><li><span>Open <b>Safari</b> and paste it in the address bar.</span></li><li><span>Then come back to these steps.</span></li></ol>
+  <div class="btns"><button class="btn solid" id="cpl">Copy link</button><button class="btn ghost" data-x>Not now</button></div>`;
+ else if(IOS) how = `<ol class="steps"><li><span>Tap the <b>Share</b> button${/CriOS|EdgiOS|FxiOS/.test(UA)?' at the top, next to the address':' at the bottom of the screen'}.</span>${ICO.share}</li>
+  <li><span>Scroll down and tap <b>Add to Home Screen</b>.</span>${ICO.plus}</li><li><span>Tap <b>Add</b>. The Rag appears on your home screen.</span>${ICO.home}</li></ol>
+  <div class="btns"><button class="btn ghost" data-x>Got it</button></div>`;
+ else if(BIP) how = `<p>One tap and it sits on your home screen, next to your other apps.</p><div class="btns"><button class="btn solid" id="ins">Add to home screen</button><button class="btn ghost" data-x>Not now</button></div>`;
+ else how = `<ol class="steps"><li><span>Tap the <b>menu</b> button at the top right.</span>${ICO.dots}</li><li><span>Tap <b>Add to Home screen</b> or <b>Install app</b>.</span>${ICO.plus}</li><li><span>Tap <b>Add</b>.</span>${ICO.home}</li></ol><div class="btns"><button class="btn ghost" data-x>Got it</button></div>`;
+ const d = sheet(`<h2 class="gilt">Keep the Rag on your phone</h2><p>Save it to your home screen and it opens like an app, full screen, with one tap.${me?' You can also get a note when a new issue comes out.':''}</p>${how}`);
+ d.querySelector('#ins')?.addEventListener('click', async () => { BIP.prompt(); await BIP.userChoice; BIP = null; closeSheet(); });
+ d.querySelector('#cpl')?.addEventListener('click', async e => { try{ await navigator.clipboard.writeText(location.href.split('#')[0]); e.target.textContent = 'Copied!'; }catch(x){ prompt('Copy this link:', location.href.split('#')[0]); } });
+}
+async function pushSub(){ if(!CAN_PUSH()) return null; const r = await navigator.serviceWorker.getRegistration(); return r && r.pushManager.getSubscription(); }
+async function alertsOn(){
+ try{
+  const reg = await navigator.serviceWorker.register('sw.js'); await navigator.serviceWorker.ready;
+  if(await Notification.requestPermission() !== 'granted') return 'Your phone said no to alerts. You can allow them later in Settings → Notifications → Riley Rag.';
+  const u = VAPID_PUBLIC_KEY.replace(/-/g,'+').replace(/_/g,'/'), raw = atob(u + '='.repeat((4 - u.length % 4) % 4));
+  const sub = await reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:Uint8Array.from(raw, c => c.charCodeAt(0))}), j = sub.toJSON();
+  const { error } = await sb.from('rr_push_subs').upsert({endpoint:j.endpoint, user_id:me.id, sub:j}, {onConflict:'endpoint'});
+  return error ? error.message : null;
+ }catch(x){ return x.message || 'Could not turn on alerts.'; }
+}
+async function alertsOff(){ const s = await pushSub(); if(s){ await sb.from('rr_push_subs').delete().eq('endpoint', s.endpoint); await s.unsubscribe(); } }
+function alertsSheet(){
+ const d = sheet(`<h2 class="gilt">Hear about new issues</h2><p>We’ll send one short note to this phone whenever a new Riley Rag comes out. Nothing else, ever.</p><p class="err" id="ae" role="alert"></p><div class="btns"><button class="btn solid" id="aon">Yes, tell me</button><button class="btn ghost" id="anot">Not now</button></div>`);
+ d.querySelector('#anot').onclick = () => { snooze('alerts', 14); closeSheet(); };
+ d.querySelector('#aon').onclick = async e => { e.target.disabled = true; e.target.textContent = 'One moment…'; const er = await alertsOn();
+  if(er){ $('#ae').textContent = er; e.target.hidden = true; snooze('alerts', 30); }
+  else { d.querySelector('.sh').innerHTML = '<h2 class="gilt">You’re on the list</h2><p>The next issue will tap you on the shoulder.</p><div class="btns"><button class="btn ghost" data-x>Lovely</button></div>'; if(location.hash==='#charter') charterView(); } };
+}
+async function nudge(){   // gentle, once in a while, phones only
+ if(!PHONE || $('#sheet')) return;
+ if(!STANDALONE()){ if(!snoozed('install')){ snooze('install', 7); installSheet(); } return; }
+ if(!me || !CAN_PUSH() || Notification.permission === 'denied' || await pushSub()) return;
+ if(Notification.permission === 'granted'){ await alertsOn(); return; }   // allowed before: switch on quietly
+ if(!snoozed('alerts')) alertsSheet();
+}
+async function phonePanel(){   // "On your phone" section on the Us page
+ const el = $('#phn'); if(!el) return;
+ const sub = await pushSub(), parts = [];
+ if(!STANDALONE()) parts.push(`<p>${PHONE?'Save the Rag to your home screen and it opens like an app.':'On your phone, you can save the Rag to your home screen so it opens like an app.'}</p>${PHONE?'<button class="btn solid" id="gap">Add to home screen</button>':''}`);
+ if(CAN_PUSH() && (STANDALONE() || !IOS)) parts.push(sub ? `<p>New-issue alerts are <b>on</b> for this ${PHONE?'phone':'device'}.</p><button class="btn ghost" id="aof">Turn alerts off</button>`
+  : Notification.permission === 'denied' ? '<p>Alerts are blocked. To allow them: Settings → Notifications → Riley Rag.</p>'
+  : '<p>Get a short note whenever a new issue comes out.</p><button class="btn solid" id="aop">Turn on new-issue alerts</button>');
+ else if(IOS) parts.push('<p>Once the Rag is on your home screen, open it from there to turn on new-issue alerts.</p>');
+ el.innerHTML = parts.length ? `<h2 class="hd gilt ph">On your phone</h2>${parts.join('')}` : '';
+ $('#gap') && ($('#gap').onclick = installSheet);
+ $('#aop') && ($('#aop').onclick = alertsSheet);
+ $('#aof') && ($('#aof').onclick = async () => { await alertsOff(); phonePanel(); });
+}
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
+
 // Custom reaction icons (stroke = currentColor)
 const S = 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
 const stk = k => `<img src="stickers/${k}.png" alt="" width="46" height="46">`;
@@ -116,11 +209,11 @@ const RX = {
 
 async function boot(){
  const { data:{ session } } = await sb.auth.getSession();
- if(!session){ $('#nav').hidden = true; return authView(); }
+ if(!session){ $('#nav').hidden = true; setTimeout(nudge, 2500); return authView(); }
  if(recovering) return recoveryView();
  const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
  if(!data){ await sb.auth.signOut({ scope:'local' }); $('#nav').hidden = true; return authView(); } // signed in, but not as a Rag member
- me = data; $('#nav').hidden = false; route();
+ me = data; $('#nav').hidden = false; route(); setTimeout(nudge, 2500);
 }
 sb.auth.onAuthStateChange(ev => { if(ev==='PASSWORD_RECOVERY'){ recovering = true; recoveryView(); } if(ev==='SIGNED_OUT'){ me = null; boot(); } });
 addEventListener('hashchange', () => { if(me) route(); });
@@ -132,7 +225,8 @@ function authView(){
  <label for="p">Password ${signup?'(6 or more characters)':''}</label><input id="p" type="password" minlength="6" required autocomplete="${signup?'new':'current'}-password">
  <p class="err" id="er" role="alert"></p>
  <button class="btn">${signup?'Create my account':'Sign in'}</button>
- <button type="button" class="btn ghost" id="sw">${signup?'I already have an account':'New here? Create an account'}</button>${signup?'':'<button type="button" class="btn ghost" id="fg">Forgot your password?</button>'}</form>`;
+ <button type="button" class="btn ghost" id="sw">${signup?'I already have an account':'New here? Create an account'}</button>${signup?'':'<button type="button" class="btn ghost" id="fg">Forgot your password?</button>'}</form>${PHONE&&!STANDALONE()?'<button class="btn ghost getapp" id="ga">📲 Put the Rag on your phone</button>':''}`;
+ $('#ga') && ($('#ga').onclick = installSheet);
  $('#sw').onclick = () => { signup=!signup; authView(); };
  if(!signup) $('#fg').onclick = forgotView;
  $('#af').onsubmit = async e => {
@@ -226,7 +320,9 @@ function publishForm(){
    let u = await sb.storage.from('issues').upload(pdfPath, file, {contentType:'application/pdf'}); if(u.error) throw u.error;
    u = await sb.storage.from('issues').upload(imgPath, img, {contentType:'image/jpeg'}); if(u.error) throw u.error;
    const {error} = await sb.from('issues').insert({number:+$('#pn').value, issue_date:$('#pd').value, tagline:$('#pt').value.trim()||null, pdf_path:pdfPath, img_path:imgPath});
-   if(error) throw error; const nn = +$('#pn').value, tt = $('#pt').value.trim(); await feedView(); emailDraft({number:nn, tagline:tt});
+   if(error) throw error; const nn = +$('#pn').value, tt = $('#pt').value.trim();
+   sb.functions.invoke('rr-notify', {body:{number:nn}}).catch(() => {});   // new-issue alerts to everyone else
+   await feedView(); emailDraft({number:nn, tagline:tt});
   }catch(x){ err.textContent = x.message || String(x); }
  };
 }
@@ -391,11 +487,13 @@ const MORE_APPS = [
  ['Russian Verbs','https://joshp523.github.io/russian/','app-russian.png'],
  ['Riley Rangers','https://joshp523.github.io/Rangers-app/','app-rangers.png'],
  ['Habits: Josh','https://joshp523.github.io/daily-discipline/','app-habits-josh.png'],
+ ['Habits: Meishe','https://joshp523.github.io/Habit-tracker-app-Meishe/','app-habits-meishe.png'],
  ['Habits: Grandma','https://joshp523.github.io/wendys-app/','app-habits-grandma.png'],
  ['Writing','https://joshp523.github.io/writing-app/','app-writing.png'],
  ['Mushroom classifier','','app-mushroom.png']];
 function aboutExtras(){
  return `<div class="bar" style="margin-top:26px"><a class="btn" href="${GALLERY}" target="_blank" rel="noopener">Photo gallery</a></div>
+ <div class="ph-panel" id="phn"></div>
  <h2 class="hd gilt ph" style="margin-top:34px">Other apps by Josh Riley</h2>
  <div class="apps more">${MORE_APPS.map(([n,u,img]) => u
   ? `<a class="app" href="${u}"><img src="${img}" alt="">${esc(n)}</a>`
@@ -416,7 +514,7 @@ async function charterView(){
   $('#cb').innerHTML = `<p class="charter">${body ? linkify(esc(body)) : '<i>Nothing here yet.</i>'}</p>${me.is_editor?'<div class="bar"><button class="btn" id="ce">Edit</button></div>':''}`;
   if(me.is_editor) $('#ce').onclick = edit;
  };
- $('#ex').innerHTML = aboutExtras();
+ $('#ex').innerHTML = aboutExtras(); phonePanel();
  const edit = () => {
   $('#cb').innerHTML = `<form class="panel" id="cf"><label class="sr" for="ct">Charter text</label><textarea id="ct" rows="10" maxlength="5000"></textarea><p class="err" id="cr" role="alert"></p><button class="btn">Save</button> <button type="button" class="btn ghost" id="cc">Cancel</button></form>`;
   $('#ct').value = body; $('#cc').onclick = show;
@@ -429,18 +527,6 @@ async function charterView(){
  };
  show();
 }
-function installHint(){
- let done = false; try{ done = localStorage.getItem('hintDone'); }catch(e){}
- const ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1), and = /Android/i.test(ua);
- const home = navigator.standalone || matchMedia('(display-mode: standalone)').matches;
- if(done || home || !(ios||and)) return;
- const steps = ios ? ['Open this page in <b>Safari</b>. (If you came from an email and see no Safari bar, tap the compass or “Open in Safari.”)','Tap the <b>Share</b> button, the square with an arrow pointing up.','Scroll down and tap <b>Add to Home Screen</b>.','Tap <b>Add</b>. The Rag now sits with your other apps.']
-  : ['Open this page in <b>Chrome</b>.','Tap the <b>⋮</b> menu in the top-right corner.','Tap <b>Add to Home screen</b> (or <b>Install app</b>).','Tap <b>Add</b>. The Rag now sits with your other apps.'];
- const h = $('#hint'); h.hidden = false;
- h.innerHTML = `<div class="panel"><h2 class="gilt">Keep the Rag on your home screen</h2><ol>${steps.map(x=>`<li>${x}</li>`).join('')}</ol><button class="btn" id="hd">No thanks, continue to website</button></div>`;
- $('#hd').onclick = () => { h.hidden = true; try{ localStorage.setItem('hintDone','1'); }catch(e){} };
-}
 $('#lbx').onclick = () => $('#lb').classList.remove('on');
-installHint();
 boot();
 </script></body></html>
