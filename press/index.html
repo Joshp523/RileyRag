@@ -82,7 +82,8 @@ body.write .live .blk.sel{outline:3px solid #2f7cf6;outline-offset:2px}
 body.write .live .blk.ed{outline:1.5px dashed #2f7cf6;outline-offset:3px;overflow:visible}
 body.write .live .blk.ed .tx{overflow:visible}
 .ovl{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
-.ovl b{position:absolute;transform:translate(-50%,0);background:var(--red);color:#fff;font:700 11px/1 -apple-system,sans-serif;padding:4px 8px;border-radius:20px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.ovl b{position:absolute;pointer-events:auto;cursor:pointer;transform:translate(-50%,0);background:var(--red);color:#fff;font:700 11px/1 -apple-system,sans-serif;padding:4px 8px;border-radius:20px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.ovl b i{font-style:normal;opacity:.85;margin-left:4px}
 .ovl s{position:absolute;height:0;border-bottom:2px dashed var(--red)}
 .gridov{position:absolute;left:9.5px;top:141px;width:768px;height:976px;pointer-events:none;display:none;background-image:repeating-linear-gradient(90deg,rgba(47,124,246,.07) 0 52px,transparent 52px 64px);background-position:6px 0}
 body.arr .gridov{display:block}
@@ -377,11 +378,26 @@ function render(){
  $('#isn').textContent='№ '+I.n;
  selOverlay();overflow();
  if(!DRAG)bar()}
+// "too long": measure where the last visible line really ends (empty lines and spacing at the end don't count)
+const hashH=h=>{let x=0;h=h||'';for(let i=0;i<h.length;i++)x=(x*31+h.charCodeAt(i))|0;return x};
+function overBy(t){const top=t.getBoundingClientRect().top,w=document.createTreeWalker(t,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT),nodes=[];let n;
+ while(n=w.nextNode())if((n.nodeType==3&&/\S/.test(n.data))||n.nodeName=='IMG')nodes.push(n);
+ if(!nodes.length)return{px:0,lh:18};const last=nodes[nodes.length-1],el=last.nodeType==3?last.parentElement:last,cs=getComputedStyle(el.nodeName=='IMG'?el.parentElement:el);
+ let lh=parseFloat(cs.lineHeight);if(!lh)lh=parseFloat(cs.fontSize)*1.15;let bottom;
+ if(last.nodeType==3){const r=document.createRange();r.selectNodeContents(last);const rs=[...r.getClientRects()].filter(q=>q.width>0);const q=rs[rs.length-1]||r.getBoundingClientRect();bottom=(q.top+q.height/2-top)/S+lh/2}
+ else bottom=(last.getBoundingClientRect().bottom-top)/S;
+ return{px:bottom,lh}}
 function overflow(){if(!SH||!I||I.pdf)return;let h='';
- for(const e of SH.querySelectorAll('.blk.s')){const t=e.querySelector('.tx'),b=I.b[e.dataset.id];if(!b)continue;const B=box(b),extra=t.scrollHeight-B.h;
-  if(extra>2){const lh=parseFloat(getComputedStyle(t.lastElementChild||t).lineHeight)||18,n=Math.max(1,Math.ceil(extra/lh));
-   const k=1/S;h+=`<s style="left:${B.l}px;top:${B.t+B.h-1}px;width:${B.w}px"></s><b style="left:${B.l+B.w/2}px;top:${B.t+B.h+3}px;transform:translate(-50%,0) scale(${Math.max(1,k*.8)});transform-origin:50% 0">${n} line${n>1?'s':''} too long</b>`}}
+ for(const e of SH.querySelectorAll('.blk.s')){const t=e.querySelector('.tx'),b=I.b[e.dataset.id];if(!b)continue;const B=box(b);
+  if(t.scrollHeight<=B.h+1)continue;               // nothing below the box at all
+  const o=overBy(t),extra=o.px-B.h;if(extra<=1.5)continue;  // only trailing blank lines spill over
+  if(b.dz===hashH(b.html))continue;                // dismissed for this exact text
+  const n=Math.max(1,Math.ceil((extra-1.5)/o.lh)),k=1/S,sc=Math.max(1,k*.8),tagTop=B.t+B.h+3+24*sc>PH-4?B.t+B.h-4-24*sc:B.t+B.h+3;
+  h+=`<s style="left:${B.l}px;top:${B.t+B.h-1}px;width:${B.w}px"></s><b data-ov="${b.id}" style="left:${B.l+B.w/2}px;top:${tagTop}px;transform:translate(-50%,0) scale(${sc});transform-origin:50% 0">${n} line${n>1?'s':''} too long <i>✕</i></b>`}
  SH.querySelector('.ovl').innerHTML=h}
+// tap the red tag to hide it for this story (it comes back if the story changes)
+document.addEventListener('pointerdown',e=>{const t=e.target.closest&&e.target.closest('.ovl b[data-ov]');if(!t||!I)return;e.preventDefault();e.stopPropagation();const b=I.b[t.dataset.ov];if(!b)return;
+ if(ED&&ED.parentNode.dataset.id===b.id)edited(ED);b.dz=hashH(b.html);b.t=now();changed();overflow();toast('Warning hidden for this story',['Undo',()=>{delete b.dz;b.t=now();changed();overflow()}])},true);
 
 // ---------- scale and zoom ----------
 function heights(){return{top:$('#hd').offsetHeight,bot:($('#fmt').hidden?$('#bb').offsetHeight:0)}}
