@@ -239,9 +239,10 @@ body.kb #fmt{padding-bottom:0}
 <div id="printhost"></div>
 
 <script src="lib/supabase.js"></script>
-<script src="../config.js"></script>
 <script>
 'use strict';
+// The Riley Rag's own Supabase project (the same one the Rag app signs in to)
+const RAG={url:'https://vikxpnxnbmhmawhnwxzl.supabase.co',key:'sb_publishable_0WwmJLwgxP4uSQF8TDdaOw_vrL-XU6x'};
 // ---------- page geometry (A4 at 96 px per inch) ----------
 const PW=794,PH=1123,COLS=12,ROWS=52,GX=9.5,GY=141,CU=64,RH=976/52,HG=12,VG=10;
 const TIMES="'Times New Roman',Tinos,Times,serif",ANTON='Anton,Impact,sans-serif';
@@ -281,7 +282,7 @@ const blocks=()=>Object.values(I.b);
 let DBP=null;
 const idb=()=>DBP||(DBP=new Promise((res,rej)=>{const r=indexedDB.open('ragpress',1);r.onupgradeneeded=()=>{const d=r.result;d.createObjectStore('docs',{keyPath:'id'});d.createObjectStore('imgs',{keyPath:'id'})};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}));
 const ost=(st,mode,fn)=>idb().then(db=>new Promise((res,rej)=>{const t=db.transaction(st,mode),q=fn(t.objectStore(st));t.oncomplete=()=>res(q&&q.result);t.onerror=t.onabort=()=>rej(t.error)}));
-const dbGet=(st,k)=>ost(st,'readonly',s=>s.get(k)),dbPut=(st,v)=>ost(st,'readwrite',s=>s.put(v)),dbAll=st=>ost(st,'readonly',s=>s.getAll());
+const dbGet=(st,k)=>ost(st,'readonly',s=>s.get(k)),dbPut=(st,v)=>ost(st,'readwrite',s=>s.put(v)),dbAll=st=>ost(st,'readonly',s=>s.getAll()),dbDel=(st,k)=>ost(st,'readwrite',s=>s.delete(k));
 let saveT=null,pushT=null;
 function saveSoon(){clearTimeout(saveT);saveT=setTimeout(saveNow,150)}
 function saveNow(){clearTimeout(saveT);if(!I)return;DOCS[I.id]=I;try{localStorage.setItem('rp_cur',I.id)}catch(e){}dbPut('docs',JSON.parse(JSON.stringify(I))).catch(()=>toast('Couldn’t save on this device. Export a copy to be safe.'))}
@@ -311,7 +312,7 @@ async function ingest(file){
 const loading={};
 async function loadImg(id,ext='jpg'){if(IMG[id]||loading[id])return;loading[id]=1;
  try{let r=await dbGet('imgs',id);
-  if(!r&&window.RR_CONFIG){const x=await fetch(`${RR_CONFIG.url}/storage/v1/object/public/issues/drafts/${id}.${ext}`);if(x.ok){r={id,blob:await x.blob(),up:1};await dbPut('imgs',r)}}
+  if(!r&&RAG){const x=await fetch(`${RAG.url}/storage/v1/object/public/issues/drafts/${id}.${ext}`);if(x.ok){r={id,blob:await x.blob(),up:1};await dbPut('imgs',r)}}
   if(r){IMG[id]=URL.createObjectURL(r.blob);BLOB[id]=r.blob;render()}}catch(e){}finally{delete loading[id]}}
 const BLOB={};
 // rotation: the photo is turned inside a larger upright canvas; crops live in that canvas
@@ -716,11 +717,19 @@ function details(){const d=I;const p=sheet(`<h3>Issue details<button class="x">�
  p.querySelectorAll('input,textarea').forEach(x=>x.oninput=up);p.querySelector('#d-ok').onclick=close}
 
 // ---------- issues ----------
-const live=()=>Object.values(DOCS).filter(d=>!d.gone).sort((a,b)=>b.n-a.n||b.t-a.t);
+const isEd=()=>!!(ME&&ME.ed);
+const live=()=>Object.values(DOCS).filter(d=>!d.gone&&(isEd()||!d._sync)).sort((a,b)=>b.n-a.n||b.t-a.t);
+// drop shared drafts from this device when the person here isn't a Rag editor
+function purgeShared(){let gone=false;for(const d of Object.values(DOCS))if(d._sync){delete DOCS[d.id];dbDel('docs',d.id).catch(()=>{});gone=true}
+ if(gone&&I&&!DOCS[I.id]){const n=live()[0];openDoc(n?n.id:makeDoc('classic').id)}}
+const hasContent=d=>!!d.pdf||Object.values(d.b).some(b=>b.im||hasTextHTML(b.html));
+let askedShare=false;
+function offerShare(){const P=Object.values(DOCS).filter(d=>d.play&&!d.gone&&hasContent(d));if(!isEd()||askedShare||!P.length)return;askedShare=true;
+ ask(`You made ${P.length} issue${P.length>1?'s':''} on this phone before signing in as an editor. Share ${P.length>1?'them':'it'} with the other editors as drafts?`,'Share',()=>{for(const d of P){delete d.play;d.t=now();dbPut('docs',JSON.parse(JSON.stringify(d)));dirty.add(d.id)}sync();toast('Shared with the other editors')})}
 function ago(t){const s=(now()-t)/1000;return s<60?'just now':s<3600?Math.round(s/60)+' min ago':s<86400?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()}
 function issues(){if(ED)ED.blur();const L=live();
- const p=sheet(`<h3>Issues<button class="x">✕</button></h3><button class="btn pri big" id="i-new">＋ New issue</button>
- <ul class="ilist">${L.map(d=>`<li data-id="${d.id}" class="${d.id==I.id?'cur':''}"><span class="n">№ ${esc(d.n)}</span><span class="m"><b>${d.pdf?'<span class="tag">PDF</span> ':''}${esc(d.theme||(d.pdf?d.pdf.name:'No theme yet'))}</b><small>${longDate(d.date).toLowerCase()} · edited ${ago(d.t)}</small></span><button class="del" aria-label="Delete issue">${ICON.trash}</button></li>`).join('')}</ul>
+ const p=sheet(`<h3>Issues<button class="x">✕</button></h3>${isEd()?'':'<p class="note pubx" style="margin:0 0 12px">You’re exploring in practice mode: anything you make stays on this phone. Real drafts are only visible to Rag editors once they sign in.</p>'}<button class="btn pri big" id="i-new">＋ New issue</button>
+ <ul class="ilist">${L.map(d=>`<li data-id="${d.id}" class="${d.id==I.id?'cur':''}"><span class="n">№ ${esc(d.n)}</span><span class="m"><b>${d.play&&isEd()?'<span class="tag">Practice</span> ':''}${d.pdf?'<span class="tag">PDF</span> ':''}${esc(d.theme||(d.pdf?d.pdf.name:'No theme yet'))}</b><small>${longDate(d.date).toLowerCase()} · edited ${ago(d.t)}</small></span><button class="del" aria-label="Delete issue">${ICON.trash}</button></li>`).join('')}</ul>
  <div id="pin"></div><div class="acct" id="acct"></div>`);
  p.querySelector('#i-new').onclick=newIssue;
  p.querySelectorAll('li').forEach(li=>{li.onclick=e=>{const id=li.dataset.id;if(e.target.closest('.del')){const d=DOCS[id];ask(`Delete Issue № ${d.n}${d.theme?' ('+d.theme+')':''}? This can’t be undone.`,'Delete',()=>{d.gone=now();d.t=now();dbPut('docs',d);syncSoon(id);if(id==I.id){const n=live()[0];n?openDoc(n.id):openDoc(makeDoc('classic').id)}toast('Issue deleted')});return}close();openDoc(id)}});
@@ -733,7 +742,7 @@ try{if(/[?&]home=1/.test(location.search))localStorage.setItem('rp_home','1')}ca
 function openDoc(id){if(ED)ED.blur();I=DOCS[id];if(I.pdf&&MODE!='w'){MODE='w';document.body.className='write';$('#mw').classList.add('on');$('#ma').classList.remove('on')}U=[];R=[];SEL=null;SH=null;updUndo();try{localStorage.setItem('rp_cur',id)}catch(e){}render();fit()}
 function makeDoc(lay,from){const L=live(),last=from||L[0],t=now();let date=iso(new Date());
  if(last&&last.date){const p=pd(last.date),nd=new Date(p.y,p.m-1,p.d+7);if(nd>new Date())date=iso(nd)}
- const d={id:uid(),v:1,t,mt:t,n:last?(Math.max(...L.map(x=>+x.n||0))+1):7,date,theme:'',addr:last?last.addr:'Boulevard de\nl’Empereur,\nBrussels',by:last?last.by:'J. & M. Riley',b:{},del:{},gone:0};
+ const d={id:uid(),v:1,t,mt:t,...(isEd()?{}:{play:1}),n:last?(Math.max(...L.map(x=>+x.n||0))+1):7,date,theme:'',addr:last?last.addr:'Boulevard de\nl’Empereur,\nBrussels',by:last?last.by:'J. & M. Riley',b:{},del:{},gone:0};
  if(lay=='copy'&&last){for(const b of Object.values(last.b)){const id=uid();d.b[id]={...b,id,t,im:null,html:b.k=='s'?blankLike(b.html):''}}}
  else d.b=mkBlocks(LAYOUTS[lay].b,t);
  DOCS[d.id]=d;dbPut('docs',d);syncSoon(d.id);return d}
@@ -805,7 +814,7 @@ function pubBtn(el){
   el.querySelector('#pl').onsubmit=async e=>{e.preventDefault();const x=el.querySelector('#pl-x');x.textContent='Signing in…';const{error}=await sb.auth.signInWithPassword({email:el.querySelector('#pl-e').value.trim(),password:el.querySelector('#pl-p').value});if(error){x.textContent=error.message;return}await who();pubBtn(el);sync()};return}
  if(!ME.ed){el.innerHTML=`<div class="pubx"><b>Publish to The Riley Rag</b><p class="note">You’re signed in as ${esc(ME.name)}${ME.email&&ME.email!==ME.name?' ('+esc(ME.email)+')':''}, but this account isn’t showing as a Rag editor.${ME.err?' Details: '+esc(ME.err):''}</p><div class="row"><button class="btn" id="pl-c">Check again</button><button class="btn" id="pl-o">Use another account</button></div></div>`;
   el.querySelector('#pl-c').onclick=async()=>{el.querySelector('#pl-c').textContent='Checking…';await who();pubBtn(el);if(ME&&ME.ed)sync()};
-  el.querySelector('#pl-o').onclick=async()=>{await sb.auth.signOut({scope:'local'});ME=null;localStorage.removeItem('rp_me');dot('');pubBtn(el)};return}
+  el.querySelector('#pl-o').onclick=async()=>{await sb.auth.signOut({scope:'local'});ME=null;localStorage.removeItem('rp_me');dot('');purgeShared();pubBtn(el)};return}
  el.innerHTML=`<button class="btn pri big" style="margin-top:12px" id="x-go">Publish to The Riley Rag</button><p class="note" style="margin-top:6px">Signed in as ${esc(ME.name)} (editor).</p>`;
  el.querySelector('#x-go').onclick=()=>ask(`Publish Issue № ${I.n}${I.theme?' ('+I.theme+')':''} to The Riley Rag? Everyone gets the new-issue alert.`,'Publish',publish)}
 async function publish(){busy('Printing Issue № '+I.n+'…');
@@ -819,7 +828,7 @@ async function publish(){busy('Printing Issue № '+I.n+'…');
 
 // ---------- cloud drafts (shared between editors) ----------
 let sb=null,ME=null;try{ME=JSON.parse(localStorage.getItem('rp_me')||'null')}catch(e){}
-try{if(window.supabase&&window.RR_CONFIG)sb=supabase.createClient(RR_CONFIG.url,RR_CONFIG.key,{auth:{storageKey:'riley-rag-auth',persistSession:true,autoRefreshToken:true}})}catch(e){}
+try{if(window.supabase&&RAG)sb=supabase.createClient(RAG.url,RAG.key,{auth:{storageKey:'riley-rag-auth',persistSession:true,autoRefreshToken:true}})}catch(e){}
 const canSync=()=>sb&&ME&&ME.ed&&navigator.onLine;
 function dot(s){const d=$('#sdot');d.className='dot'+(s?' '+s:'');d.title={ok:'Shared',wait:'Saving…'}[s]||'On this device only'}
 async function who(){if(!sb)return;
@@ -830,23 +839,24 @@ async function who(){if(!sb)return;
    if(pr.data){name=pr.data.name||name;ed=!!pr.data.is_editor}else err=pr.error?pr.error.message:'No Riley Rag member profile for this account.';
    if(!ed){const rp=await sb.rpc('is_editor');if(!rp.error&&rp.data===true)ed=true;else if(rp.error&&!err)err=rp.error.message}
    if(ed===null&&ME&&ME.id===u.id)ed=ME.ed;
-   ME={id:u.id,name,email:u.email,ed:!!ed,err:ed?'':err}}
+   ME={id:u.id,name,email:u.email,ed:!!ed,err:ed?'':err,known:!!pr.data||ed===true}}
   localStorage.setItem('rp_me',JSON.stringify(ME))}catch(e){if(ME)ME.err=e.message||String(e)}
- dot(canSync()?'ok':'')}
+ dot(canSync()?'ok':'');
+ if(!ME||(ME.known&&!ME.ed))purgeShared();else if(ME.ed)offerShare();if(I)render()}
 function merge(a,b){if(!a)return b;if(!b)return a;const m=(a.mt||0)>=(b.mt||0)?a:b,o={...m,b:{},del:{...a.del}};
  for(const k in b.del)o.del[k]=Math.max(o.del[k]||0,b.del[k]);
  for(const id of new Set([...Object.keys(a.b),...Object.keys(b.b)])){const x=a.b[id],y=b.b[id],w=!x?y:!y?x:(y.t>x.t?y:x);if(o.del[id]&&o.del[id]>=w.t)continue;o.b[id]=w}
  o.t=Math.max(a.t||0,b.t||0);o.gone=Math.max(a.gone||0,b.gone||0);o.pub=Math.max(a.pub||0,b.pub||0)||undefined;o._sync=a._sync||b._sync;return o}
 const strip=d=>{const o={...d};delete o._sync;return o};
 const dirty=new Set();let syncT=null,syncing=false;
-function syncSoon(id){dirty.add(id||(I&&I.id));if(!canSync())return;dot('wait');clearTimeout(syncT);syncT=setTimeout(sync,1800)}
+function syncSoon(id){id=id||(I&&I.id);if(DOCS[id]&&DOCS[id].play)return;dirty.add(id);if(!canSync())return;dot('wait');clearTimeout(syncT);syncT=setTimeout(sync,1800)}
 function adopt(d){const isCur=I&&I.id===d.id;if(isCur&&ED)edited(ED);const m=isCur?merge(I,d):merge(DOCS[d.id],d);m._sync=d._sync;DOCS[d.id]=m;dbPut('docs',JSON.parse(JSON.stringify(m)));if(isCur){I=m;render()}}
 async function sync(){if(!canSync()||syncing)return;syncing=true;dot('wait');
  try{const{data:list,error}=await sb.from('rag_drafts').select('id,updated_at');if(error)throw error;const srv={};for(const r of list)srv[r.id]=r.updated_at;
   for(const r of list){const loc=DOCS[r.id];if(loc&&loc._sync===r.updated_at)continue;const{data}=await sb.from('rag_drafts').select('doc,updated_at').eq('id',r.id).single();if(!data)continue;const d={...data.doc,_sync:data.updated_at};
    const before=loc?JSON.stringify(strip(loc)):'';adopt(d);if(loc&&JSON.stringify(strip(DOCS[r.id]))!==JSON.stringify(strip(d)))dirty.add(r.id)}
-  for(const id in DOCS)if(!srv[id])dirty.add(id);
-  for(const id of [...dirty]){const d=DOCS[id];dirty.delete(id);if(!d)continue;const{data,error}=await sb.from('rag_drafts').upsert({id,doc:strip(d),updated_at:new Date().toISOString(),updated_by:ME.id}).select('updated_at').single();if(error){dirty.add(id);throw error}
+  for(const id in DOCS)if(!srv[id]&&!DOCS[id].play)dirty.add(id);
+  for(const id of [...dirty]){const d=DOCS[id];dirty.delete(id);if(!d||d.play)continue;const{data,error}=await sb.from('rag_drafts').upsert({id,doc:strip(d),updated_at:new Date().toISOString(),updated_by:ME.id}).select('updated_at').single();if(error){dirty.add(id);throw error}
    const cur=DOCS[id];cur._sync=data.updated_at;dbPut('docs',JSON.parse(JSON.stringify(cur)))}
   await upImgs();dot(dirty.size?'wait':'ok');
   if(!I||I.gone){const n=live()[0];if(n)openDoc(n.id)}}
@@ -859,7 +869,7 @@ function acct(){const el=$('#acct');if(!el)return;
  if(!ME){el.innerHTML=`<p class="note">Sign in with your Riley Rag account to share drafts with each other and publish straight to the Rag.</p><form id="lg"><input id="lg-e" type="email" autocomplete="username" placeholder="Email" required><input id="lg-p" type="password" autocomplete="current-password" placeholder="Password" required style="margin-top:8px"><p class="err" id="lg-x"></p><button class="btn pri big">Sign in</button></form>`;
   el.querySelector('#lg').onsubmit=async e=>{e.preventDefault();const x=el.querySelector('#lg-x');x.textContent='Signing in…';const{error}=await sb.auth.signInWithPassword({email:el.querySelector('#lg-e').value.trim(),password:el.querySelector('#lg-p').value});if(error){x.textContent=error.message;return}await who();acct();sync()};return}
  el.innerHTML=`<p class="note">Signed in as <b>${esc(ME.name)}</b>. ${ME.ed?'Drafts are shared with the other editors, and you can publish.':'Only Riley Rag editors can share drafts and publish.'}</p><button class="btn" id="lg-o">Sign out</button>`;
- el.querySelector('#lg-o').onclick=async()=>{await sb.auth.signOut();ME=null;localStorage.removeItem('rp_me');dot('');acct()}}
+ el.querySelector('#lg-o').onclick=async()=>{await sb.auth.signOut();ME=null;localStorage.removeItem('rp_me');dot('');purgeShared();acct()}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState=='visible')sync();else saveNow()});
 addEventListener('online',()=>sync());setInterval(()=>{if(document.visibilityState=='visible')sync()},20000);
 addEventListener('pagehide',saveNow);
@@ -867,7 +877,7 @@ addEventListener('pagehide',saveNow);
 // ---------- start ----------
 (async()=>{try{for(const d of await dbAll('docs'))DOCS[d.id]=d}catch(e){toast('This browser won’t let the app save. Export copies as you go.')}
  let cid=null;try{cid=localStorage.getItem('rp_cur')}catch(e){}
- if(!cid||!DOCS[cid]||DOCS[cid].gone)cid=(live()[0]||{}).id;
+ if(!cid||!live().includes(DOCS[cid]))cid=(live()[0]||{}).id;
  if(!cid)cid=makeDoc('classic').id;
  openDoc(cid);dot(canSync()?'ok':'');
  await who();sync();
