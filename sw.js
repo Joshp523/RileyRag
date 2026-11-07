@@ -1,6 +1,6 @@
 // The Riley Rag service worker: lets the home-screen app open quickly and receive new-issue alerts.
 // Pages always come fresh from the network when there is one, so new uploads show up without bumping anything.
-const V='rr-v7',ASSETS=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','apple-touch-icon.png','emblem.png','masthead.png','favicon.png'];
+const V='rr-v8',ASSETS=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','apple-touch-icon.png','emblem.png','masthead.png','favicon.png'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(V).then(c=>Promise.all(ASSETS.map(a=>c.add(a).catch(()=>{})))).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!=V).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{const r=e.request;

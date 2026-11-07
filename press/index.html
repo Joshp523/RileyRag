@@ -62,15 +62,17 @@ body.arr #pg{touch-action:none;-webkit-user-select:none;user-select:none}
 .sheet .ibar span:nth-child(2){flex:2;text-align:center;text-transform:uppercase}
 .sheet .ibar span:nth-child(3){text-align:right}
 .sheet .blk{position:absolute;overflow:hidden}
+.sheet .blk.fl{z-index:2}
 .sheet .tx{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;font-size:16px;line-height:1.15;text-align:justify;white-space:pre-wrap;overflow-wrap:break-word;outline:none;color:#000}
 .sheet .tx div{min-height:1px}
+.sheet .tx img.em{display:inline;height:.92em;width:auto;vertical-align:-.12em;margin-left:.1em}
 .sheet .blk.p img{position:absolute;max-width:none;display:block}
 .sheet .lns i{position:absolute;background:#000;display:block}
 
 /* live-only page bits */
 .live .tx[contenteditable=true]{cursor:text}
-.live .empty .tx div[data-ph]{position:relative}
-.live .empty .tx div[data-ph]::before{content:attr(data-ph);position:absolute;left:0;top:0;right:0;opacity:.42;pointer-events:none;white-space:nowrap;overflow:hidden}
+.live .tx div.e[data-ph]{position:relative}
+.live .tx div.e[data-ph]::before{content:attr(data-ph);position:absolute;left:0;top:0;right:0;opacity:.42;pointer-events:none;white-space:nowrap;overflow:hidden}
 .live .blk.p .ph{position:absolute;left:0;top:0;right:0;bottom:0;background:#eef1f5;border:2px dashed #b4bccb;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font:600 15px/1.2 -apple-system,sans-serif;color:#6b778a;text-align:center}
 .live .blk.p .ph svg{width:34px;height:34px;stroke:currentColor;fill:none;stroke-width:1.6}
 .live .meta{cursor:pointer}
@@ -87,10 +89,12 @@ body.arr .gridov{display:block}
 body.arr .live .blk{outline:1.5px dashed #8fa6c8;outline-offset:-1px;background:rgba(47,124,246,.05)}
 body.arr .live .blk .tx{pointer-events:none}
 body.arr .live .blk.bad{outline:2px solid var(--red)}
+body.arr .live .blk.fl{outline-color:#9b51e0;background:rgba(155,81,224,.06)}
+body.write .live .blk.p.sel{touch-action:none;cursor:move}
 body.arr .live .blk.mv{opacity:.55;z-index:3}
 .selov{position:absolute;border:2.5px solid #2f7cf6;pointer-events:none;z-index:5;--k:1}
 .selov b{position:absolute;width:calc(30px*var(--k));height:calc(30px*var(--k));margin:calc(-15px*var(--k)) 0 0 calc(-15px*var(--k));border-radius:50%;background:#2f7cf6;border:calc(3px*var(--k)) solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3);pointer-events:auto;touch-action:none}
-.selov b[data-h=n]{left:50%;top:0}.selov b[data-h=s]{left:50%;top:100%}.selov b[data-h=w]{left:0;top:50%}.selov b[data-h=e]{left:100%;top:50%}.selov b[data-h=se]{left:100%;top:100%;border-radius:4px}
+.selov b[data-h=n]{left:50%;top:0;margin-top:calc(-34px*var(--k))}.selov b[data-h=s]{left:50%;top:100%;margin-top:calc(4px*var(--k))}.selov b[data-h=w]{left:0;top:50%;margin-left:calc(-34px*var(--k))}.selov b[data-h=e]{left:100%;top:50%;margin-left:calc(4px*var(--k))}.selov b[data-h=se]{left:100%;top:100%;margin:calc(4px*var(--k)) 0 0 calc(4px*var(--k));border-radius:4px}
 .ghost{position:absolute;border:2.5px dashed #18a058;background:rgba(24,160,88,.10);pointer-events:none;z-index:6}
 .ghost.no{border-color:var(--red);background:rgba(255,107,107,.15)}
 .ghost span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(var(--k,1));font:700 13px -apple-system,sans-serif;color:#fff;background:rgba(16,22,31,.85);padding:5px 9px;border-radius:8px;white-space:nowrap}
@@ -114,10 +118,11 @@ body.kb #fmt{padding-bottom:0}
 .frow button{flex:1;min-width:0;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;margin:5px 0}
 .frow button.on{background:var(--card);color:#fff}
 .frow button.act{background:var(--txt);color:var(--bar)}
+.frow button.act img{filter:none!important}
 .frow button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.frow .w2{flex:1.5;font-size:14px;font-weight:600}
+.frow .w2{flex:1.3;font-size:14px;font-weight:600}
 .frow .w2 small{font-size:10px;margin-left:1px;opacity:.7}
-.frow .done{flex:1.5;background:var(--acc);color:#0b1422;font-size:15px;font-weight:700}
+.frow .done{flex:1.35;background:var(--acc);color:#0b1422;font-size:15px;font-weight:700}
 #ffam{font-family:var(--times);font-size:16px}
 #ffam.a{font-family:var(--anton);letter-spacing:.03em}
 .fpan{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line);min-height:56px}
@@ -158,6 +163,7 @@ body.kb #fmt{padding-bottom:0}
 .ilist .m{flex:1;min-width:0}
 .ilist .m b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
 .ilist .m small{color:var(--dim)}
+.tag{font-size:11px;font-weight:700;background:var(--acc);color:#0b1422;border-radius:5px;padding:1px 5px;vertical-align:2px}
 .ilist .del{width:40px;height:40px;border-radius:10px;color:var(--dim)}
 .ilist .del svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2}
 .acct{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
@@ -171,16 +177,29 @@ body.kb #fmt{padding-bottom:0}
 .lnsw{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .big{width:100%;height:52px;font-size:16px}
 .note{font-size:13px;color:var(--dim)}
+.pubx{margin-top:14px;padding:12px;border-radius:12px;background:#151d29}.pubx>b{display:block;margin-bottom:4px}.pubx .note{margin:0 0 8px}
 
 /* crop */
-#crop{position:fixed;inset:0;z-index:60;background:#0b0f15;display:flex;flex-direction:column;touch-action:none;-webkit-user-select:none;user-select:none}
+#crop{position:fixed;inset:0;z-index:60;background:#0b0f15;display:flex;flex-direction:column;-webkit-user-select:none;user-select:none}
 #crop .ct{padding:calc(14px + var(--top)) 16px 8px;text-align:center;color:var(--dim);font-size:14px}
-#crop .cst{flex:1;position:relative;overflow:hidden}
+#crop .cst{flex:1;position:relative;overflow:hidden;touch-action:none}
 #crop .cfr{position:absolute;box-shadow:0 0 0 100vmax rgba(11,15,21,.75);outline:2px solid #fff;pointer-events:none}
 #crop .cfr::before,#crop .cfr::after{content:'';position:absolute;inset:0;border:solid rgba(255,255,255,.35);border-width:0 1px}
 #crop .cfr::before{left:33.33%;right:33.33%}
 #crop .cfr::after{border-width:1px 0;top:33.33%;bottom:33.33%}
 #crop img{position:absolute;max-width:none;pointer-events:none}
+#crop .crect{position:absolute;box-shadow:0 0 0 100vmax rgba(11,15,21,.72);outline:2px solid #fff;cursor:move;touch-action:none}
+#crop .crect::before,#crop .crect::after{content:'';position:absolute;inset:0;pointer-events:none;border:solid rgba(255,255,255,.35);border-width:0 1px;left:33.33%;right:33.33%}
+#crop .crect::after{border-width:1px 0;left:0;right:0;top:33.33%;bottom:33.33%}
+#crop .crect b{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;touch-action:none;z-index:1}
+#crop .crect b::after{content:'';position:absolute;left:13px;top:13px;width:18px;height:18px;border:4px solid #fff;border-radius:3px;background:rgba(0,0,0,.25)}
+#crop .crect b[data-h=nw]{left:0;top:0}#crop .crect b[data-h=n]{left:50%;top:0}#crop .crect b[data-h=ne]{left:100%;top:0}#crop .crect b[data-h=e]{left:100%;top:50%}
+#crop .crect b[data-h=se]{left:100%;top:100%}#crop .crect b[data-h=s]{left:50%;top:100%}#crop .crect b[data-h=sw]{left:0;top:100%}#crop .crect b[data-h=w]{left:0;top:50%}
+#crop .crect.lock b[data-h=n],#crop .crect.lock b[data-h=e],#crop .crect.lock b[data-h=s],#crop .crect.lock b[data-h=w]{display:none}
+#crop .asp{padding:0}#crop .asp button{flex:0 0 auto}#crop .asp button.on{background:var(--txt);color:var(--bar)}
+.rotr{display:flex;align-items:center;gap:8px}.rotr input{flex:1;accent-color:var(--acc);height:32px}.rotr span{min-width:44px;text-align:center;font-size:13px;color:var(--dim)}.rotr .btn{height:38px;padding:0 10px;font-size:14px}
+#crop img{transform-origin:50% 50%}
+#crop .cnote{margin:0;text-align:center;font-size:13px;color:var(--dim);min-height:18px}
 #crop .cb{padding:10px 12px calc(12px + var(--bot));display:flex;flex-direction:column;gap:10px;background:var(--bar)}
 #crop .zr{display:flex;align-items:center;gap:10px;color:var(--dim)}
 #crop input[type=range]{flex:1;accent-color:var(--acc);height:30px}
@@ -212,10 +231,11 @@ body.kb #fmt{padding-bottom:0}
   <button data-f="lh" aria-label="Line spacing"><svg viewBox="0 0 24 24"><path d="M11 6h10M11 12h10M11 18h10M5 4v16M2.5 6.5 5 4l2.5 2.5M2.5 17.5 5 20l2.5-2.5"/></svg></button>
   <button data-f="al" aria-label="Alignment"><svg viewBox="0 0 24 24" id="alic"><path d="M3 6h18M3 10h18M3 14h18M3 18h18"/></svg></button>
   <button data-f="st" aria-label="Paragraph styles" style="font-family:var(--times);font-size:21px">¶</button>
+  <button data-f="em" aria-label="End mark"><img src="emblem.png" alt="" style="height:20px;filter:invert(1)"></button>
   <button data-f="done" class="done">Done</button>
  </div>
 </div>
-<input type="file" id="fi" accept="image/*" hidden>
+<input type="file" id="fi" accept="image/*" hidden><input type="file" id="fp" accept="application/pdf,.pdf" hidden>
 <div id="printhost"></div>
 
 <script src="lib/supabase.js"></script>
@@ -285,21 +305,33 @@ async function ingest(file){
  const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>rej(new Error('That photo couldn’t be opened.'));i.src=url});
  const M=2200,k=Math.min(1,M/Math.max(img.naturalWidth,img.naturalHeight)),w=Math.round(img.naturalWidth*k),h=Math.round(img.naturalHeight*k);
  const cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);
- const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',.88));const id=uid();
+ const png=/png|gif|webp/.test(file.type),blob=await new Promise(r=>cv.toBlob(r,png?'image/png':'image/jpeg',.88));const id=uid();
  await dbPut('imgs',{id,blob,up:0});IMG[id]=URL.createObjectURL(blob);upSoon();
  return{id,w,h,z:1,fx:.5,fy:.5,tint:0}}
 const loading={};
-async function loadImg(id){if(IMG[id]||loading[id])return;loading[id]=1;
+async function loadImg(id,ext='jpg'){if(IMG[id]||loading[id])return;loading[id]=1;
  try{let r=await dbGet('imgs',id);
-  if(!r&&window.RR_CONFIG){const x=await fetch(`${RR_CONFIG.url}/storage/v1/object/public/issues/drafts/${id}.jpg`);if(x.ok){r={id,blob:await x.blob(),up:1};await dbPut('imgs',r)}}
-  if(r){IMG[id]=URL.createObjectURL(r.blob);render()}}catch(e){}finally{delete loading[id]}}
-async function tinted(id){const k=id+'~t';if(IMG[k])return IMG[k];if(!IMG[id]||loading[k])return null;loading[k]=1;
- const i=new Image();i.src=IMG[id];await i.decode();const cv=document.createElement('canvas');cv.width=i.naturalWidth;cv.height=i.naturalHeight;const c=cv.getContext('2d');c.drawImage(i,0,0);
- const d=c.getImageData(0,0,cv.width,cv.height),p=d.data,A=[0,0,0],B=[255,255,255];
- for(let j=0;j<p.length;j+=4){let L=(.299*p[j]+.587*p[j+1]+.114*p[j+2])/255;p[j]=A[0]+(B[0]-A[0])*L;p[j+1]=A[1]+(B[1]-A[1])*L;p[j+2]=A[2]+(B[2]-A[2])*L}
- c.putImageData(d,0,0);const bl=await new Promise(r=>cv.toBlob(r,'image/jpeg',.9));IMG[k]=URL.createObjectURL(bl);delete loading[k];render();return IMG[k]}
-function imgSrc(im){if(!IMG[im.id]){loadImg(im.id);return null}if(im.tint){if(IMG[im.id+'~t'])return IMG[im.id+'~t'];tinted(im.id);return null}return IMG[im.id]}
-function cropBox(im,W,H){const s0=Math.max(W/im.w,H/im.h),s=s0*(im.z||1),dw=im.w*s,dh=im.h*s;let l=W/2-im.fx*dw,t=H/2-im.fy*dh;l=clamp(l,W-dw,0);t=clamp(t,H-dh,0);return{l,t,dw,dh}}
+  if(!r&&window.RR_CONFIG){const x=await fetch(`${RR_CONFIG.url}/storage/v1/object/public/issues/drafts/${id}.${ext}`);if(x.ok){r={id,blob:await x.blob(),up:1};await dbPut('imgs',r)}}
+  if(r){IMG[id]=URL.createObjectURL(r.blob);BLOB[id]=r.blob;render()}}catch(e){}finally{delete loading[id]}}
+const BLOB={};
+// rotation: the photo is turned inside a larger upright canvas; crops live in that canvas
+const dimsOf=im=>{const a=(im.rot||0)*Math.PI/180,c=Math.abs(Math.cos(a)),n=Math.abs(Math.sin(a));return{w:im.w*c+im.h*n,h:im.w*n+im.h*c}};
+const imKey=im=>im.id+(im.rot?'~r'+(+im.rot).toFixed(1):'')+(im.tint?'~t':'');
+const DER={};
+function derive(im){const k=imKey(im);if(IMG[k])return Promise.resolve();if(!IMG[im.id])return loadImg(im.id).then(()=>IMG[im.id]&&derive(im));
+ return DER[k]||(DER[k]=(async()=>{const i=new Image();i.src=IMG[im.id];await i.decode();const D=dimsOf(im),cv=document.createElement('canvas');cv.width=Math.round(D.w);cv.height=Math.round(D.h);const c=cv.getContext('2d');
+  const png=BLOB[im.id]&&/png/.test(BLOB[im.id].type);if(!png){c.fillStyle='#fff';c.fillRect(0,0,cv.width,cv.height)}
+  c.translate(cv.width/2,cv.height/2);c.rotate((im.rot||0)*Math.PI/180);c.drawImage(i,-im.w/2,-im.h/2,im.w,im.h);c.setTransform(1,0,0,1,0,0);
+  if(im.tint){const d=c.getImageData(0,0,cv.width,cv.height),p=d.data;for(let j=0;j<p.length;j+=4){const L=.299*p[j]+.587*p[j+1]+.114*p[j+2];p[j]=p[j+1]=p[j+2]=L}c.putImageData(d,0,0)}
+  const bl=await new Promise(r=>cv.toBlob(r,png?'image/png':'image/jpeg',.9));IMG[k]=URL.createObjectURL(bl);render()})().finally(()=>delete DER[k]))}
+function imgSrc(im){if(!IMG[im.id]){loadImg(im.id);return null}const k=imKey(im);if(k===im.id)return IMG[im.id];if(IMG[k])return IMG[k];derive(im);return null}
+// is a crop rectangle (0..1 of the upright canvas) fully on the photo?
+function okRect(im,c){const e=1e-4;if(c.x<-e||c.y<-e||c.x+c.w>1+e||c.y+c.h>1+e)return false;if(!im.rot)return true;const D=dimsOf(im),a=-im.rot*Math.PI/180,co=Math.cos(a),si=Math.sin(a);
+ for(const[px,py]of[[c.x,c.y],[c.x+c.w,c.y],[c.x,c.y+c.h],[c.x+c.w,c.y+c.h]]){const X=(px-.5)*D.w,Y=(py-.5)*D.h,x=X*co-Y*si,y=X*si+Y*co;if(Math.abs(x)>im.w/2+.5||Math.abs(y)>im.h/2+.5)return false}return true}
+function visRect(im,W,H){if(im.c)return im.c;const s0=Math.max(W/im.w,H/im.h),s=s0*(im.z||1),dw=im.w*s,dh=im.h*s;let l=W/2-(im.fx??.5)*dw,t=H/2-(im.fy??.5)*dh;l=clamp(l,W-dw,0);t=clamp(t,H-dh,0);return{x:-l/dw,y:-t/dh,w:W/dw,h:H/dh}}
+function cropBox(im,W,H){const D=dimsOf(im),c=visRect(im,W,H),s=Math.max(W/(c.w*D.w),H/(c.h*D.h)),dw=D.w*s,dh=D.h*s;let l=W/2-(c.x+c.w/2)*dw,t=H/2-(c.y+c.h/2)*dh;l=clamp(l,W-dw,0);t=clamp(t,H-dh,0);return{l,t,dw,dh}}
+const rectOf=(c,W,H)=>({x:-c.l/c.dw,y:-c.t/c.dh,w:W/c.dw,h:H/c.dh});
+const withCrop=(im,c)=>{const o={...im,c};delete o.z;delete o.fx;delete o.fy;return o};
 
 // ---------- building the page ----------
 function metaHTML(d,live){
@@ -313,8 +345,8 @@ function place(e,b){const B=box(b);Object.assign(e.style,{left:B.l+'px',top:B.t+
 function photoInner(b,live){const B=box(b);
  if(b.im){const src=imgSrc(b.im);if(!src)return live?'<div class="ph" style="border-style:solid;opacity:.6">Loading photo…</div>':'';const c=cropBox(b.im,B.w,B.h);return`<img src="${src}" alt="" style="left:${c.l}px;top:${c.t}px;width:${c.dw}px;height:${c.dh}px">`}
  return live?`<div class="ph"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Tap to add a photo</div>`:''}
-function blockEl(b,live){const e=document.createElement('div');e.className='blk '+b.k;e.dataset.id=b.id;place(e,b);
- if(b.k=='s'){const t=document.createElement('div');t.className='tx';t.innerHTML=b.html||'';if(live){t.contentEditable=MODE=='w'?'true':'false';t.spellcheck=true;if(!hasText(t))e.classList.add('empty')}e.appendChild(t)}
+function blockEl(b,live){const e=document.createElement('div');e.className='blk '+b.k+(b.fl?' fl':'');e.dataset.id=b.id;place(e,b);
+ if(b.k=='s'){const t=document.createElement('div');t.className='tx';t.innerHTML=b.html||'';if(live){t.contentEditable=MODE=='w'?'true':'false';t.spellcheck=true;markPh(t);if(!hasText(t))e.classList.add('empty')}e.appendChild(t)}
  else e.innerHTML=photoInner(b,live);
  e._j=JSON.stringify(b)+(b.k=='p'&&b.im?imgSrc(b.im):'');return e}
 function linesHTML(d){let h='';const L=1.3;
@@ -328,7 +360,7 @@ const hasText=t=>/\S/.test(t.textContent);
 
 let SH=null;
 function render(){
- if(!I)return;
+ if(!I)return;if(I.pdf)return renderPdf();$('.seg').style.visibility='';
  if(!SH||SH._id!==I.id){$('#pg').innerHTML='';SH=sheetEl(I,true);SH._id=I.id;$('#pg').appendChild(SH)}
  const m=metaHTML(I,true);SH.querySelector('.addr').innerHTML=m.addr;SH.querySelector('.ibar').innerHTML=m.bar;
  const bl=SH.querySelector('.bls'),have={};
@@ -338,13 +370,13 @@ function render(){
   if(e&&e.contains(document.activeElement)&&b.k=='s'){place(e,b);e._j=j;continue}
   if(!e||e._j!==j){const n=blockEl(b,true);e?e.replaceWith(n):bl.appendChild(n);e=n}
   const tx=e.querySelector('.tx');if(tx)tx.contentEditable=MODE=='w'?'true':'false';
-  e.classList.toggle('sel',MODE=='w'&&SEL==b.id);e.classList.toggle('bad',MODE=='a'&&overlaps(b))}
+  e.classList.toggle('sel',MODE=='w'&&SEL==b.id);e.classList.toggle('fl',!!b.fl);e.classList.toggle('bad',MODE=='a'&&overlaps(b))}
  for(const id in have)have[id].remove();
  SH.querySelector('.lns').innerHTML=linesHTML(I);
  $('#isn').textContent='№ '+I.n;
  selOverlay();overflow();
  if(!DRAG)bar()}
-function overflow(){if(!SH)return;let h='';
+function overflow(){if(!SH||!I||I.pdf)return;let h='';
  for(const e of SH.querySelectorAll('.blk.s')){const t=e.querySelector('.tx'),b=I.b[e.dataset.id];if(!b)continue;const B=box(b),extra=t.scrollHeight-B.h;
   if(extra>2){const lh=parseFloat(getComputedStyle(t.lastElementChild||t).lineHeight)||18,n=Math.max(1,Math.ceil(extra/lh));
    const k=1/S;h+=`<s style="left:${B.l}px;top:${B.t+B.h-1}px;width:${B.w}px"></s><b style="left:${B.l+B.w/2}px;top:${B.t+B.h+3}px;transform:translate(-50%,0) scale(${Math.max(1,k*.8)});transform-origin:50% 0">${n} line${n>1?'s':''} too long</b>`}}
@@ -379,16 +411,18 @@ const ICON={
  trash:'<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
  crop:'<svg viewBox="0 0 24 24"><path d="M6 2v14a2 2 0 0 0 2 2h14M2 6h14a2 2 0 0 1 2 2v14"/></svg>',
  swap:'<svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg>',
+ layer:'<svg viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg>',
  info:'<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/></svg>'};
 function bar(){const bb=$('#bb');if(!I)return;
+ if(I.pdf){bb.innerHTML=`<div class="hint">Finished PDF${I.pdf.pages>1?` (${I.pdf.pages} pages, first shown)`:''}. Set the number and date in Details, then Export to publish.</div><button class="btn sm" id="b-det">${ICON.info}Details</button>`;$('#b-det').onclick=details;return}
  if(MODE=='w'){const b=SEL&&I.b[SEL];
   if(b&&b.k=='p'){bb.innerHTML=`<button class="btn" id="b-rep">${ICON.photo}${b.im?'Replace':'Add photo'}</button>${b.im?`<button class="btn" id="b-crop">${ICON.crop}Crop</button><button class="btn ${b.im.tint?'on':''}" id="b-tint">B&amp;W</button>`:''}<button class="btn pri sm" id="b-ok">Done</button>`;
    $('#b-rep').onclick=()=>pick(b.id);if(b.im){$('#b-crop').onclick=()=>cropUI(b.id);$('#b-tint').onclick=()=>{snap();b.im.tint=b.im.tint?0:1;b.t=now();changed();render();toast(b.im.tint?'Black and white':'Colour')}}
    $('#b-ok').onclick=()=>{SEL=null;render()};return}
   bb.innerHTML=`<div class="hint">Tap a story to write. Tap a photo to change or crop it.</div><button class="btn sm" id="b-det">${ICON.info}Details</button>`;$('#b-det').onclick=details;return}
  const b=SEL&&I.b[SEL];
- if(b){bb.innerHTML=`<button class="btn" id="b-ln">${ICON.lines}Lines</button><button class="btn" id="b-kind">${ICON.swap}${b.k=='s'?'Make photo':'Make story'}</button><button class="btn dng sm" id="b-del">${ICON.trash}</button><button class="btn pri sm" id="b-ok">Done</button>`;
-  $('#b-ln').onclick=()=>linesUI(b.id);$('#b-del').onclick=()=>delBlock(b.id);$('#b-ok').onclick=()=>{SEL=null;render()};
+ if(b){bb.innerHTML=`<button class="btn" id="b-ln">${ICON.lines}Lines</button><button class="btn ${b.fl?'on':''}" id="b-top">${ICON.layer}On top</button><button class="btn" id="b-kind">${ICON.swap}${b.k=='s'?'Photo':'Story'}</button><button class="btn dng sm" id="b-del">${ICON.trash}</button><button class="btn pri sm" id="b-ok">Done</button>`;
+  $('#b-ln').onclick=()=>linesUI(b.id);$('#b-top').onclick=()=>toggleTop(b);$('#b-del').onclick=()=>delBlock(b.id);$('#b-ok').onclick=()=>{SEL=null;render()};
   $('#b-kind').onclick=()=>{const has=b.k=='s'?hasTextHTML(b.html):!!b.im;const go=()=>{snap();if(b.k=='s'){b.k='p';b.html='';b.im=null}else{b.k='s';b.im=null;b.html=storyHTML()}b.t=now();changed();render()};if(has)ask(`This box has ${b.k=='s'?'writing':'a photo'} in it. Swap it for an empty ${b.k=='s'?'photo':'story'} box?`,'Swap',go);else go()};return}
  bb.innerHTML=`<button class="btn" id="b-as">${ICON.story}Story</button><button class="btn" id="b-ah">${ICON.story.replace('M4 5h16','M4 5h16" stroke-width="4')}Headline</button><button class="btn" id="b-ap">${ICON.photo}Photo</button>`;
  $('#b-as').onclick=()=>addBlock('s');$('#b-ah').onclick=()=>addBlock('h');$('#b-ap').onclick=()=>addBlock('p')}
@@ -397,15 +431,19 @@ const hasTextHTML=h=>{const d=document.createElement('div');d.innerHTML=h||'';re
 // ---------- arrange: collisions, add, delete ----------
 const hit=(a,b)=>a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h;
 const inside=r=>r.x>=0&&r.y>=0&&r.x+r.w<=COLS&&r.y+r.h<=ROWS;
-const free=(r,ex)=>inside(r)&&blocks().every(b=>b.id===ex||!hit(r,b));
-const overlaps=b=>blocks().some(o=>o.id!==b.id&&hit(o,b));
-function biggestFree(minW,minH){const occ=Array.from({length:ROWS},()=>new Array(COLS).fill(0));for(const b of blocks())for(let y=b.y;y<b.y+b.h;y++)for(let x=b.x;x<b.x+b.w;x++)if(occ[y])occ[y][x]=1;
+const free=(r,ex,fl)=>inside(r)&&(fl||blocks().every(b=>b.id===ex||b.fl||!hit(r,b)));
+const overlaps=b=>!b.fl&&blocks().some(o=>o.id!==b.id&&!o.fl&&hit(o,b));
+function biggestFree(minW,minH){const occ=Array.from({length:ROWS},()=>new Array(COLS).fill(0));for(const b of blocks())if(!b.fl)for(let y=b.y;y<b.y+b.h;y++)for(let x=b.x;x<b.x+b.w;x++)if(occ[y])occ[y][x]=1;
  let best=null;for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){if(occ[y][x])continue;let maxW=COLS-x;for(let h=1;y+h<=ROWS;h++){let w=0;while(w<maxW&&!occ[y+h-1][x+w])w++;maxW=w;if(!w)break;const a=Math.min(w,8)*Math.min(h,30);if(w>=minW&&h>=minH&&(!best||a>best.a))best={x,y,w:Math.min(w,8),h:Math.min(h,30),a}}}
  return best}
-function addBlock(k,r){r=r||biggestFree(2,k=='h'?2:3);if(!r)return toast('No empty space. Make a box smaller first.');
- if(k=='h'&&!arguments[1])r.h=Math.min(r.h,4);
- snap();const id=uid();I.b[id]={id,k:k=='h'?'s':k,x:r.x,y:r.y,w:r.w,h:r.h,ln:'',html:k=='s'?storyHTML():k=='h'?headHTML():'',im:null,t:now()};delete I.del[id];
- SEL=id;changed();render();toast(k=='p'?'Photo box added. Switch to Write to put a photo in it.':'Box added. Drag it or its handles to fit.')}
+function addBlock(k,r){const given=!!r;r=r||biggestFree(2,k=='h'?2:3);let fl=0;
+ if(!r){fl=1;r={x:4,y:18,w:4,h:k=='h'?4:k=='p'?10:12}}
+ if(k=='h'&&!given)r.h=Math.min(r.h,4);
+ snap();const id=uid();I.b[id]={id,k:k=='h'?'s':k,x:r.x,y:r.y,w:r.w,h:r.h,ln:'',html:k=='s'?storyHTML():k=='h'?headHTML():'',im:null,fl,t:now()};delete I.del[id];
+ SEL=id;changed();render();toast(fl?'No empty space, so this box floats on top. Drag it where you want.':k=='p'?'Photo box added. Switch to Write to put a photo in it.':'Box added. Drag it or its handles to fit.')}
+function toggleTop(b){if(b.fl){const r={x:Math.round(b.x),y:Math.round(b.y),w:Math.max(1,Math.round(b.w)),h:Math.max(1,Math.round(b.h))};r.x=clamp(r.x,0,COLS-r.w);r.y=clamp(r.y,0,ROWS-r.h);
+  if(!free(r,b.id))return toast('It’s overlapping other boxes. Move it to an empty spot first.');snap();Object.assign(b,r,{fl:0,t:now()});changed();render();toast('Back in the grid')}
+ else{snap();b.fl=1;b.t=now();changed();render();toast('This box now sits on top. Drag it over a photo or story.')}}
 function delBlock(id){snap();delete I.b[id];I.del[id]=now();SEL=null;changed();render();toast('Box deleted',['Undo',undo])}
 function linesUI(id){const b=I.b[id];const p=sheet(`<h3>Lines around this box<button class="x">✕</button></h3><p>Lines sit in the gap beside the box and move with it.</p><div class="lnsw">${[['l','Left'],['r','Right'],['t','Top'],['b','Bottom']].map(([k,n])=>`<button class="btn big ${b.ln.includes(k)?'on':''}" data-k="${k}">${n}</button>`).join('')}</div>`);
  p.querySelectorAll('[data-k]').forEach(x=>x.onclick=()=>{snap();const k=x.dataset.k;b.ln=b.ln.includes(k)?b.ln.replace(k,''):b.ln+k;b.t=now();x.classList.toggle('on');changed();render()})}
@@ -423,16 +461,16 @@ $('#pg').addEventListener('pointerdown',e=>{if(MODE!='a'||e.button>0)return;cons
  try{$('#pg').setPointerCapture(e.pointerId)}catch(_){}
  e.preventDefault()});
 $('#pg').addEventListener('pointermove',e=>{if(!DRAG||DRAG.k=='none')return;const p=pagePt(e),dx=p.x-DRAG.p.x,dy=p.y-DRAG.p.y;
- if(!DRAG.moved&&Math.hypot(dx,dy)*S<6)return;DRAG.moved=1;const cx=Math.round(dx/CU),cy=Math.round(dy/RH);let r;
+ if(!DRAG.moved&&Math.hypot(dx,dy)*S<6)return;DRAG.moved=1;const st=DRAG.b&&DRAG.b.fl?.25:1,mn=st<1?1:2,cx=Math.round(dx/CU/st)*st,cy=Math.round(dy/RH/st)*st;let r;
  if(DRAG.k=='mv'){const o=DRAG.o;r={x:clamp(o.x+cx,0,COLS-o.w),y:clamp(o.y+cy,0,ROWS-o.h),w:o.w,h:o.h};DRAG.el.classList.add('mv');DRAG.el.style.transform=`translate(${dx}px,${dy}px)`;SH.querySelector('.selov')?.remove()}
  else if(DRAG.k=='rs'){const o=DRAG.o,h=DRAG.h;r={...o};
-  if(h.includes('e'))r.w=clamp(o.w+cx,2,COLS-o.x);
-  if(h=='w'){r.x=clamp(o.x+cx,0,o.x+o.w-2);r.w=o.w+o.x-r.x}
-  if(h.includes('s'))r.h=clamp(o.h+cy,2,ROWS-o.y);
-  if(h=='n'){r.y=clamp(o.y+cy,0,o.y+o.h-2);r.h=o.h+o.y-r.y}
+  if(h.includes('e'))r.w=clamp(o.w+cx,mn,COLS-o.x);
+  if(h=='w'){r.x=clamp(o.x+cx,0,o.x+o.w-mn);r.w=o.w+o.x-r.x}
+  if(h.includes('s'))r.h=clamp(o.h+cy,mn,ROWS-o.y);
+  if(h=='n'){r.y=clamp(o.y+cy,0,o.y+o.h-mn);r.h=o.h+o.y-r.y}
   const ov=SH.querySelector('.selov');if(ov)posOv(ov,r)}
  else{const c2={x:clamp(Math.floor((p.x-GX)/CU),0,COLS-1),y:clamp(Math.floor((p.y-GY)/RH),0,ROWS-1)};r={x:Math.min(DRAG.c.x,c2.x),y:Math.min(DRAG.c.y,c2.y)};r.w=Math.abs(c2.x-DRAG.c.x)+1;r.h=Math.abs(c2.y-DRAG.c.y)+1}
- const ok=free(r,DRAG.b&&DRAG.b.id)&&(DRAG.k!='dr'||(r.w>=2&&r.h>=2));DRAG.r=r;DRAG.ok=ok;
+ const ok=free(r,DRAG.b&&DRAG.b.id,DRAG.b&&DRAG.b.fl)&&(DRAG.k!='dr'||(r.w>=2&&r.h>=2));DRAG.r=r;DRAG.ok=ok;
  ghost(r,ok,!ok?(DRAG.k=='dr'&&free(r)?'Keep dragging':'Overlaps a box'):(DRAG.k=='dr'?'New box':''))});
 function endDrag(e){if(!DRAG)return;const d=DRAG;DRAG=null;SH&&SH.querySelector('.ghost')?.remove();
  if(d.el){d.el.classList.remove('mv');d.el.style.transform=''}
@@ -450,32 +488,71 @@ let pickFor=null;
 function pick(id){pickFor=id;$('#fi').value='';$('#fi').click()}
 $('#fi').onchange=async()=>{const f=$('#fi').files[0],id=pickFor;if(!f||!I.b[id])return;busy('Developing photo…');
  try{const im=await ingest(f);snap();const b=I.b[id];b.im=im;b.t=now();SEL=id;changed();render()}catch(x){toast(x.message||'That photo couldn’t be used.')}finally{busy()}};
-$('#pg').addEventListener('click',e=>{if(MODE!='w')return;
- const el=e.target.closest('.blk.p');if(el){const id=el.dataset.id;if(!I.b[id].im){SEL=id;render();pick(id);return}SEL=SEL==id?null:id;render();return}
+$('#pg').addEventListener('click',e=>{if(MODE!='w'||noClick)return;
+ const el=e.target.closest('.blk.p');if(el){const id=el.dataset.id;if(!I.b[id].im){SEL=id;render();pick(id);return}SEL=SEL==id?null:id;render();if(SEL)toast('Drag or pinch the photo to adjust it. Crop changes its shape.');return}
  if(e.target.closest('.meta')){details();return}
  if(!e.target.closest('.blk')&&SEL){SEL=null;render()}});
 
-// crop
-function cropUI(id){const b=I.b[id];if(!b||!b.im)return;const B=box(b),im={...b.im},src=IMG[b.im.id];
+// adjust a selected photo right on the page: drag to move it, pinch to zoom
+let PZ=null,noClick=0;
+const gst=P=>{const a=[...P.values()];return a.length>1?{x:(a[0].x+a[1].x)/2,y:(a[0].y+a[1].y)/2,d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),n:2}:{x:a[0].x,y:a[0].y,d:0,n:1}};
+function pzApply(){const{img,c}=PZ;if(img)Object.assign(img.style,{left:c.l+'px',top:c.t+'px',width:c.dw+'px',height:c.dh+'px'})}
+function pzMove(dx,dy,f,cx,cy){const{B,b}=PZ,im=b.im,D=dimsOf(im);let{l,t,dw,dh}=PZ.c;
+ if(f&&f!==1){const mn=Math.max(B.w/D.w,B.h/D.h);let ndw=clamp(dw*f,D.w*mn,D.w*mn*10);const g=ndw/dw;l=cx-(cx-l)*g;t=cy-(cy-t)*g;dw=ndw;dh=dh*g}
+ l=clamp(l+dx,B.w-dw,0);t=clamp(t+dy,B.h-dh,0);const n={l,t,dw,dh};if(!okRect(im,rectOf(n,B.w,B.h)))return;PZ.c=n;PZ.moved=1;pzApply()}
+function pzEnd(){if(!PZ)return;const{b,B,c,moved}=PZ;PZ=null;if(moved){noClick=1;setTimeout(()=>noClick=0,350);snap();b.im=withCrop(b.im,rectOf(c,B.w,B.h));b.t=now();changed();render()}}
+$('#pg').addEventListener('pointerdown',e=>{if(MODE!='w')return;const el=e.target.closest('.blk.p.sel');if(!el)return;const b=I.b[el.dataset.id];if(!b||!b.im)return;
+ if(!PZ){const B=box(b);PZ={b,el,B,img:el.querySelector('img'),c:cropBox(b.im,B.w,B.h),P:new Map(),moved:0}}
+ PZ.P.set(e.pointerId,{x:e.clientX,y:e.clientY});PZ.g=gst(PZ.P);try{el.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
+$('#pg').addEventListener('pointermove',e=>{if(!PZ||!PZ.P.has(e.pointerId))return;PZ.P.set(e.pointerId,{x:e.clientX,y:e.clientY});const g=gst(PZ.P);if(g.n!==PZ.g.n){PZ.g=g;return}
+ const r=$('#pg').getBoundingClientRect(),cx=(g.x-r.left)/S-PZ.B.l,cy=(g.y-r.top)/S-PZ.B.t;
+ pzMove((g.x-PZ.g.x)/S,(g.y-PZ.g.y)/S,g.n==2&&PZ.g.d>10?g.d/PZ.g.d:1,cx,cy);PZ.g=g});
+const pzUp=e=>{if(!PZ||!PZ.P.has(e.pointerId))return;PZ.P.delete(e.pointerId);if(PZ.P.size)PZ.g=gst(PZ.P);else pzEnd()};
+$('#pg').addEventListener('pointerup',pzUp);$('#pg').addEventListener('pointercancel',pzUp);
+$('#pg').addEventListener('wheel',e=>{if(MODE!='w')return;const el=e.target.closest('.blk.p.sel');if(!el)return;const b=I.b[el.dataset.id];if(!b||!b.im)return;e.preventDefault();
+ const B=box(b);PZ={b,el,B,img:el.querySelector('img'),c:cropBox(b.im,B.w,B.h),P:new Map(),moved:0};const p=pagePt(e);pzMove(0,0,e.deltaY<0?1.08:1/1.08,p.x-B.l,p.y-B.t);pzEnd()},{passive:false});
+
+// crop screen: free crop rectangle over the whole photo, with shape presets
+const ASPECTS=[['box','Box shape'],['free','Free'],['orig','Original'],['1','Square'],['1.333','4:3'],['0.75','3:4'],['1.778','16:9']];
+function cropUI(id){const b=I.b[id];if(!b||!b.im)return;const B=box(b),im0=b.im,iw=im0.w,ih=im0.h,MIN=Math.min(iw,ih)*.06;if(!IMG[im0.id])return toast('Photo still loading…');
+ let rot=im0.rot||0,q=Math.round(rot/90),fine=rot-q*90;const IM=()=>({...im0,rot});let D=dimsOf(IM());
+ const v=rectOf(cropBox(im0,B.w,B.h),B.w,B.h);let r={x:v.x*D.w,y:v.y*D.h,w:v.w*D.w,h:v.h*D.h},mode='box',A=B.w/B.h;
  const ov=document.createElement('div');ov.id='crop';
- ov.innerHTML=`<div class="ct">Drag to move the photo. Pinch or use the slider to zoom.</div><div class="cst"><img src="${src}" alt=""><div class="cfr"></div></div><div class="cb"><div class="zr"><span>−</span><input type="range" min="1" max="5" step="0.01" value="${im.z||1}"><span>+</span></div><div class="row" style="margin:0"><button class="btn" id="c-x">Cancel</button><button class="btn" id="c-r">Reset</button><button class="btn pri" id="c-ok">Done</button></div></div>`;
- document.body.appendChild(ov);const st=ov.querySelector('.cst'),img=ov.querySelector('img'),fr=ov.querySelector('.cfr'),zr=ov.querySelector('input');
- let FW,FH,FX,FY;
- const lay=()=>{const W=st.clientWidth-32,H=st.clientHeight-32,k=Math.min(W/B.w,H/B.h);FW=B.w*k;FH=B.h*k;FX=(st.clientWidth-FW)/2;FY=(st.clientHeight-FH)/2;Object.assign(fr.style,{left:FX+'px',top:FY+'px',width:FW+'px',height:FH+'px'});draw()};
- const fix=()=>{const c=cropBox(im,FW,FH);im.fx=(FW/2-c.l)/c.dw;im.fy=(FH/2-c.t)/c.dh};
- const draw=()=>{fix();const c=cropBox(im,FW,FH);Object.assign(img.style,{left:FX+c.l+'px',top:FY+c.t+'px',width:c.dw+'px',height:c.dh+'px'});zr.value=im.z};
- const P=new Map();let g0=null;
- const gs=()=>{const a=[...P.values()];if(a.length>1)return{d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),x:(a[0].x+a[1].x)/2,y:(a[0].y+a[1].y)/2};return{d:0,x:a[0].x,y:a[0].y}};
- st.addEventListener('pointerdown',e=>{st.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY});g0={...gs(),z:im.z,n:P.size}});
- st.addEventListener('pointermove',e=>{if(!P.has(e.pointerId))return;P.set(e.pointerId,{x:e.clientX,y:e.clientY});const g=gs();if(g0.n!==P.size){g0={...g,z:im.z,n:P.size};return}
-  const c=cropBox(im,FW,FH);im.fx-=(g.x-g0.x)/c.dw;im.fy-=(g.y-g0.y)/c.dh;if(P.size>1&&g0.d>10)im.z=clamp(g0.z*g.d/g0.d,1,5);g0={...g,z:g0.z,d:g0.d,n:P.size};if(P.size>1)g0.z=im.z,g0.d=g.d;draw()});
- const up=e=>{P.delete(e.pointerId);if(P.size)g0={...gs(),z:im.z,n:P.size}};st.addEventListener('pointerup',up);st.addEventListener('pointercancel',up);
- st.addEventListener('wheel',e=>{e.preventDefault();im.z=clamp(im.z*(e.deltaY<0?1.06:1/1.06),1,5);draw()},{passive:false});
- zr.oninput=()=>{im.z=+zr.value;draw()};
+ ov.innerHTML=`<div class="ct">Drag the corners to crop. Drag inside the frame to move it.</div><div class="cst"><img src="${IMG[im0.id]}" alt=""><div class="crect">${['nw','n','ne','e','se','s','sw','w'].map(h=>`<b data-h="${h}"></b>`).join('')}</div></div>
+ <div class="cb"><div class="rotr"><button class="btn sm" id="c-l" aria-label="Turn left">⟲ 90°</button><input type="range" id="c-a" min="-45" max="45" step="0.5" aria-label="Straighten"><span id="c-av"></span><button class="btn sm" id="c-rr" aria-label="Turn right">90° ⟳</button></div>
+ <div class="chips asp">${ASPECTS.map(([k,n])=>`<button data-a="${k}">${n}</button>`).join('')}</div><p class="cnote" id="c-n"></p><div class="row" style="margin:0"><button class="btn" id="c-x">Cancel</button><button class="btn" id="c-r">Whole photo</button><button class="btn pri" id="c-ok">Done</button></div></div>`;
+ document.body.appendChild(ov);const st=ov.querySelector('.cst'),img=ov.querySelector('img'),cr=ov.querySelector('.crect'),ang=ov.querySelector('#c-a');let k=1,IX=0,IY=0;
+ const norm=x=>({x:x.x/D.w,y:x.y/D.h,w:x.w/D.w,h:x.h/D.h}),ok=x=>okRect(IM(),norm(x));
+ const lay=()=>{k=Math.min((st.clientWidth-44)/D.w,(st.clientHeight-44)/D.h);IX=(st.clientWidth-D.w*k)/2;IY=(st.clientHeight-D.h*k)/2;
+  Object.assign(img.style,{left:IX+(D.w-iw)*k/2+'px',top:IY+(D.h-ih)*k/2+'px',width:iw*k+'px',height:ih*k+'px',transform:`rotate(${rot}deg)`});draw()};
+ const note=()=>{const same=Math.abs((r.w/r.h)/(B.w/B.h)-1)<.04;ov.querySelector('#c-n').textContent=same?'Fits the box exactly.':'The box will change shape to match this crop.'};
+ const draw=()=>{Object.assign(cr.style,{left:IX+r.x*k+'px',top:IY+r.y*k+'px',width:r.w*k+'px',height:r.h*k+'px'});cr.classList.toggle('lock',!!A);ov.querySelectorAll('[data-a]').forEach(x=>x.classList.toggle('on',x.dataset.a==mode));ang.value=fine;ov.querySelector('#c-av').textContent=(Math.round(rot*2)/2)+'°';note()};
+ // biggest rectangle of aspect a, centred at (cx,cy), that stays on the photo
+ const biggest=(a,cx,cy)=>{let w=D.w,h=w/a;if(h>D.h){h=D.h;w=h*a}let lo=0,hi=1;const at=s=>({x:cx-w*s/2,y:cy-h*s/2,w:w*s,h:h*s});if(ok(at(1)))return at(1);for(let n=0;n<22;n++){const m=(lo+hi)/2;ok(at(m))?lo=m:hi=m}return at(lo)};
+ const setRot=()=>{const a=r.w/r.h,cx=(r.x+r.w/2)/D.w,cy=(r.y+r.h/2)/D.h;rot=q*90+fine;rot=((rot+180)%360+360)%360-180;D=dimsOf(IM());let n=biggest(a,cx*D.w,cy*D.h);if(n.w<MIN)n=biggest(a,D.w/2,D.h/2);r=n;lay()};
+ ang.oninput=()=>{fine=+ang.value;setRot()};ov.querySelector('#c-l').onclick=()=>{q--;setRot()};ov.querySelector('#c-rr').onclick=()=>{q++;setRot()};
+ const fitA=()=>{if(!A)return;const cx=r.x+r.w/2,cy=r.y+r.h/2;let w=Math.sqrt(r.w*r.h*A),h=w/A;let n={x:clamp(cx-w/2,0,D.w-w),y:clamp(cy-h/2,0,D.h-h),w,h};if(!ok(n)||w>D.w||h>D.h)n=biggest(A,cx,cy);r=n};
+ ov.querySelectorAll('[data-a]').forEach(x=>x.onclick=()=>{mode=x.dataset.a;A=mode=='box'?B.w/B.h:mode=='orig'?(Math.abs(q)%2?ih/iw:iw/ih):mode=='free'?null:+mode;fitA();draw()});
+ const calc=(o,h,dx,dy)=>{if(h=='mv')return{...o,x:clamp(o.x+dx,0,D.w-o.w),y:clamp(o.y+dy,0,D.h-o.h)};
+  if(!A){let x1=o.x,y1=o.y,x2=o.x+o.w,y2=o.y+o.h;if(h.includes('w'))x1=clamp(x1+dx,0,x2-MIN);if(h.includes('e'))x2=clamp(x2+dx,x1+MIN,D.w);if(h.includes('n'))y1=clamp(y1+dy,0,y2-MIN);if(h.includes('s'))y2=clamp(y2+dy,y1+MIN,D.h);return{x:x1,y:y1,w:x2-x1,h:y2-y1}}
+  const E=h.includes('e'),Sd=h.includes('s'),ax=E?o.x:o.x+o.w,ay=Sd?o.y:o.y+o.h;let w=Math.max(Math.abs((E?o.x+o.w:o.x)+dx-ax),Math.abs((Sd?o.y+o.h:o.y)+dy-ay)*A);w=Math.min(w,E?D.w-ax:ax,(Sd?D.h-ay:ay)*A);w=Math.max(w,MIN);const hh=w/A;return{x:E?ax:ax-w,y:Sd?ay:ay-hh,w,h:hh}};
+ let d=null;
+ st.addEventListener('pointerdown',e=>{const h=e.target.closest('.crect b'),inR=e.target.closest('.crect');if(!h&&!inR)return;e.preventDefault();st.setPointerCapture(e.pointerId);d={h:h?h.dataset.h:'mv',r0:{...r},x0:e.clientX,y0:e.clientY,id:e.pointerId}});
+ st.addEventListener('pointermove',e=>{if(!d||e.pointerId!==d.id)return;const dx=(e.clientX-d.x0)/k,dy=(e.clientY-d.y0)/k;let n=calc(d.r0,d.h,dx,dy);
+  if(!ok(n)){let lo=0,hi=1;for(let j=0;j<16;j++){const m=(lo+hi)/2;ok(calc(d.r0,d.h,dx*m,dy*m))?lo=m:hi=m}n=calc(d.r0,d.h,dx*lo,dy*lo);if(!ok(n))return}r=n;draw()});
+ const up=e=>{if(d&&e.pointerId===d.id)d=null};st.addEventListener('pointerup',up);st.addEventListener('pointercancel',up);
  const done=()=>{ov.remove();removeEventListener('resize',lay)};
- ov.querySelector('#c-x').onclick=done;ov.querySelector('#c-r').onclick=()=>{im.z=1;im.fx=.5;im.fy=.5;draw()};
- ov.querySelector('#c-ok').onclick=()=>{snap();b.im={...b.im,z:im.z,fx:im.fx,fy:im.fy};b.t=now();changed();render();done()};
+ ov.querySelector('#c-x').onclick=done;
+ ov.querySelector('#c-r').onclick=()=>{r=biggest(A||(Math.abs(q)%2?ih/iw:iw/ih),D.w/2,D.h/2);draw()};
+ ov.querySelector('#c-ok').onclick=()=>{snap();const n=norm(r);let im={...withCrop(im0,n),rot};if(!rot)delete im.rot;b.im=im;const ca=r.w/r.h;let msg='';
+  if(Math.abs(ca/(B.w/B.h)-1)>.04)msg=reshape(b,ca)?'Box reshaped to fit your crop.':'There isn’t room to reshape the box, so the photo fills it. Make room in Arrange, then crop again.';
+  b.t=now();changed();render();done();if(msg)toast(msg)};
  addEventListener('resize',lay);if(img.complete)lay();else img.onload=lay;requestAnimationFrame(lay)}
+function reshape(b,ca){const st=b.fl?.25:1,ok=r=>b.fl?inside(r):free(r,b.id);
+ const hFor=w=>Math.max(st,Math.round(((w*CU-HG)/ca+VG)/RH/st)*st),wFor=h=>Math.max(st,Math.round(((h*RH-VG)*ca+HG)/CU/st)*st);
+ const tries=[{x:b.x,y:b.y,w:b.w,h:hFor(b.w)},{x:b.x,y:b.y,w:wFor(b.h),h:b.h},{x:b.x+b.w-wFor(b.h),y:b.y,w:wFor(b.h),h:b.h}];
+ for(let w=b.w-st;w>=st*2;w-=st)tries.push({x:b.x,y:b.y,w,h:hFor(w)});
+ for(const r of tries)if(ok(r)){Object.assign(b,r);return true}return false}
 
 // ---------- write mode: text ----------
 function rng(){const s=getSelection();if(!s.rangeCount||!ED)return null;const r=s.getRangeAt(0);return ED.contains(r.commonAncestorContainer)?r:null}
@@ -521,15 +598,23 @@ function readState(){const n=cur();if(!n||!ED)return;const cs=getComputedStyle(n
  $('[data-f=b]').classList.toggle('on',b);$('[data-f=i]').classList.toggle('on',i);
  $('#alic').innerHTML={left:'<path d="M3 6h18M3 10h12M3 14h18M3 18h12"/>',justify:'<path d="M3 6h18M3 10h18M3 14h18M3 18h18"/>',center:'<path d="M3 6h18M6 10h12M3 14h18M6 18h12"/>',right:'<path d="M3 6h18M9 10h12M3 14h18M9 18h12"/>'}[FS.al];
  pan(PANEL,true)}
+// end marks: the little stamp, or the author's initials in bold small caps
+function initials(){if(!ED)return'';for(const p of ED.children){const m=p.textContent.trim().match(/^by\s+([^,]+)/i);if(m){const w=m[1].trim().split(/\s+/).filter(x=>/^[A-ZÀ-Ý]/.test(x));if(w.length)return w.map(x=>x[0]).join('').slice(0,3).toUpperCase()}}let v='';try{v=localStorage.getItem('rp_ini')||''}catch(e){}return v}
+function endMark(kind){if(!ED)return;let r=rng();if(!r){const n=ED.lastElementChild||ED;r=document.createRange();r.selectNodeContents(n);r.collapse(false);const s2=getSelection();s2.removeAllRanges();s2.addRange(r)}
+ editSnap();let html;if(kind=='stamp')html='&nbsp;<img class="em" src="emblem.png" alt="">';
+ else{let ini=initials();if(!ini){ini=(prompt('Initials for the end mark (e.g. MR)')||'').trim().toUpperCase().slice(0,4);if(!ini)return;try{localStorage.setItem('rp_ini',ini)}catch(e){}}
+  html=`&nbsp;<b style="font-size:0.78em;letter-spacing:0.04em">${esc(ini)}</b>`}
+ document.execCommand('insertHTML',false,html);edited();pan(null);$$('.frow button').forEach(b=>b.classList.remove('act'));toast('End mark added')}
 function editSnap(){if(pendSnap){U.push(pendSnap);if(U.length>80)U.shift();R=[];pendSnap=null;updUndo()}}
 
 // sanitise stored HTML
-const KEEP=['font-family','font-size','letter-spacing','line-height','text-align','font-weight','font-style'];
+const KEEP=['font-family','font-size','letter-spacing','line-height','text-align','font-weight','font-style','color'];
 function clean(html){const t=document.createElement('template');t.innerHTML=html;
  (function walk(n){for(const c of [...n.childNodes]){if(c.nodeType==3)continue;if(c.nodeType!=1){c.remove();continue}
-  let tg=c.nodeName;if(!['DIV','P','BR','SPAN','B','STRONG','I','EM'].includes(tg)){walk(c);c.replaceWith(...c.childNodes);continue}
+  let tg=c.nodeName;if(tg=='IMG'){if(/emblem\.png/.test(c.getAttribute('src')||'')){const m=document.createElement('img');m.setAttribute('class','em');m.setAttribute('src','emblem.png');m.setAttribute('alt','');c.replaceWith(m)}else c.remove();continue}
+  if(!['DIV','P','BR','SPAN','B','STRONG','I','EM'].includes(tg)){walk(c);c.replaceWith(...c.childNodes);continue}
   let el=c;if(tg=='P'||tg=='STRONG'||tg=='EM'){el=document.createElement(tg=='P'?'div':tg=='STRONG'?'b':'i');for(const a of c.attributes)el.setAttribute(a.name,a.value);el.append(...c.childNodes);c.replaceWith(el)}
-  const css=[];for(const k of KEEP){let v=el.style.getPropertyValue(k);if(!v)continue;if(k=='font-family')v=/anton/i.test(v)?ANTON:TIMES;css.push(`${k}:${v}`)}
+  const css=[];for(const k of KEEP){let v=el.style.getPropertyValue(k);if(!v)continue;if(k=='font-family')v=/anton/i.test(v)?ANTON:TIMES;if(k=='color')v=/255,\s*255,\s*255|#fff/i.test(v)?'#fff':'#000';css.push(`${k}:${v}`)}
   const ph=el.getAttribute('data-ph');for(const a of [...el.attributes])el.removeAttribute(a.name);if(css.length)el.setAttribute('style',css.join(';'));if(ph&&el.nodeName=='DIV')el.setAttribute('data-ph',ph);
   walk(el)}})(t.content);
  // wrap loose top-level runs into paragraphs
@@ -537,10 +622,11 @@ function clean(html){const t=document.createElement('template');t.innerHTML=html
  return t.innerHTML}
 
 let edT=null;
-function edited(t){t=t||ED;if(!t)return;const e=t.parentNode,b=I.b[e.dataset.id];if(!b)return;const h=clean(t.innerHTML);
+function markPh(t){const seen=new Set();for(const p of t.children){const ph=p.getAttribute('data-ph');if(ph){if(seen.has(ph))p.removeAttribute('data-ph');else seen.add(ph)}p.classList.toggle('e',!/\S/.test(p.textContent)&&!p.querySelector('img'))}}
+function edited(t){t=t||ED;if(!t)return;const e=t.parentNode,b=I.b[e.dataset.id];if(!b)return;markPh(t);const h=clean(t.innerHTML);
  e.classList.toggle('empty',!hasText(t));if(h!==b.html){b.html=h;b.t=now();e._j=JSON.stringify(b);changed()}overflow()}
 function commitEdit(){clearTimeout(edT);if(ED)edited(ED)}
-document.addEventListener('input',e=>{const t=e.target.closest&&e.target.closest('.tx');if(!t)return;editSnap();t.parentNode.classList.toggle('empty',!hasText(t));clearTimeout(edT);edT=setTimeout(()=>edited(t),300);overflow();requestAnimationFrame(keepCaret)});
+document.addEventListener('input',e=>{const t=e.target.closest&&e.target.closest('.tx');if(!t)return;editSnap();markPh(t);t.parentNode.classList.toggle('empty',!hasText(t));clearTimeout(edT);edT=setTimeout(()=>edited(t),300);overflow();requestAnimationFrame(keepCaret)});
 document.addEventListener('paste',e=>{const t=e.target.closest&&e.target.closest('.tx');if(!t)return;e.preventDefault();const txt=(e.clipboardData||window.clipboardData).getData('text/plain').replace(/\r/g,'');const ls=txt.split('\n');
  ls.forEach((l,i)=>{if(i)document.execCommand('insertParagraph');if(l)document.execCommand('insertText',false,l)})});
 document.addEventListener('drop',e=>{if(e.target.closest&&e.target.closest('.tx'))e.preventDefault()});
@@ -564,7 +650,8 @@ function pan(k,refresh){const fp=$('#fpan');if(!refresh){PANEL=PANEL===k?null:k;
  k=PANEL;if(!k){fp.hidden=true;fp.innerHTML='';placeBars();return}fp.hidden=false;
  if(refresh&&fp.dataset.k===k){updScrub();placeBars();return}
  fp.dataset.k=k;
- if(k=='st')fp.innerHTML=`<div class="fpan" style="border:0"><button class="stl" data-st="head" style="font-family:var(--anton);letter-spacing:.03em">Headline</button><button class="stl" data-st="big" style="font-family:var(--anton);font-size:18px">BIG</button><button class="stl" data-st="by" style="font-family:var(--times);font-style:italic">Byline</button><button class="stl" data-st="body" style="font-family:var(--times)">Body</button></div>`;
+ if(k=='em'){const ini=initials();fp.innerHTML=`<div class="fpan" style="border:0"><span class="note" style="flex:0 0 auto">End mark</span><button class="stl" data-em="stamp"><img src="emblem.png" alt="" style="height:18px;vertical-align:-3px;filter:invert(1)"> Stamp</button><button class="stl" data-em="ini"><b>${esc(ini||'AB')}</b> Initials</button></div>${ini?'':'<p class="note" style="margin:0 12px 8px">No byline found, so you’ll be asked for initials.</p>'}`}
+ else if(k=='st')fp.innerHTML=`<div class="fpan" style="border:0"><button class="stl" data-st="head" style="font-family:var(--anton);letter-spacing:.03em">Headline</button><button class="stl" data-st="big" style="font-family:var(--anton);font-size:18px">BIG</button><button class="stl" data-st="by" style="font-family:var(--times);font-style:italic">Byline</button><button class="stl" data-st="body" style="font-family:var(--times)">Body</button></div><div class="fpan" style="border:0;padding-top:0"><button class="stl" data-c="#000" style="background:#fff;color:#000">Black text</button><button class="stl" data-c="#fff" style="background:#000;color:#fff;border:1px solid #444">White text</button></div>`;
  else fp.innerHTML=`<div class="fpan"><button class="stp" data-s="-1">−</button><div class="scrub" data-k="${k}"><div class="rul"></div><i class="ndl"></i><div class="sv"></div></div><button class="stp" data-s="1">+</button></div>`+(k=='ls'?`<div class="chips"><button data-l="-30">Tight</button><button data-l="0">Normal</button><button data-l="50">Wide</button><button data-l="150">Wider</button></div>`:k=='lh'?`<div class="chips">${[1,1.15,1.3,1.5,2].map(v=>`<button data-h="${v}">${v.toFixed(2)}</button>`).join('')}</div>`:'');
  updScrub();
  placeBars()}
@@ -594,7 +681,9 @@ function fmtAct(el){const f=el.dataset.f;
  if(el.dataset.s)applyStep(PANEL,+el.dataset.s);
   if(el.dataset.l!=null&&el.dataset.l!==undefined&&el.closest('#fpan')&&PANEL=='ls'){FS.ls=+el.dataset.l;charStyle('letter-spacing',FS.ls/1000+'em')}
  if(el.dataset.h&&PANEL=='lh'){FS.lh=+el.dataset.h;paraStyle({'line-height':String(FS.lh)})}
- if(el.dataset.st)presetStyle(el.dataset.st)}
+ if(el.dataset.st)presetStyle(el.dataset.st);
+ if(el.dataset.c)charStyle('color',el.dataset.c);
+ if(el.dataset.em)endMark(el.dataset.em)}
 // keep the keyboard and selection while tapping toolbar buttons
 (()=>{const f=$('#fmt');let down=null,rep=null,rt=null;
  const stop=()=>{clearTimeout(rt);clearInterval(rep);rt=rep=null};
@@ -631,12 +720,17 @@ const live=()=>Object.values(DOCS).filter(d=>!d.gone).sort((a,b)=>b.n-a.n||b.t-a
 function ago(t){const s=(now()-t)/1000;return s<60?'just now':s<3600?Math.round(s/60)+' min ago':s<86400?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()}
 function issues(){if(ED)ED.blur();const L=live();
  const p=sheet(`<h3>Issues<button class="x">✕</button></h3><button class="btn pri big" id="i-new">＋ New issue</button>
- <ul class="ilist">${L.map(d=>`<li data-id="${d.id}" class="${d.id==I.id?'cur':''}"><span class="n">№ ${esc(d.n)}</span><span class="m"><b>${esc(d.theme||'No theme yet')}</b><small>${longDate(d.date).toLowerCase()} · edited ${ago(d.t)}</small></span><button class="del" aria-label="Delete issue">${ICON.trash}</button></li>`).join('')}</ul>
- <div class="acct" id="acct"></div>`);
+ <ul class="ilist">${L.map(d=>`<li data-id="${d.id}" class="${d.id==I.id?'cur':''}"><span class="n">№ ${esc(d.n)}</span><span class="m"><b>${d.pdf?'<span class="tag">PDF</span> ':''}${esc(d.theme||(d.pdf?d.pdf.name:'No theme yet'))}</b><small>${longDate(d.date).toLowerCase()} · edited ${ago(d.t)}</small></span><button class="del" aria-label="Delete issue">${ICON.trash}</button></li>`).join('')}</ul>
+ <div id="pin"></div><div class="acct" id="acct"></div>`);
  p.querySelector('#i-new').onclick=newIssue;
  p.querySelectorAll('li').forEach(li=>{li.onclick=e=>{const id=li.dataset.id;if(e.target.closest('.del')){const d=DOCS[id];ask(`Delete Issue № ${d.n}${d.theme?' ('+d.theme+')':''}? This can’t be undone.`,'Delete',()=>{d.gone=now();d.t=now();dbPut('docs',d);syncSoon(id);if(id==I.id){const n=live()[0];n?openDoc(n.id):openDoc(makeDoc('classic').id)}toast('Issue deleted')});return}close();openDoc(id)}});
- acct()}
-function openDoc(id){if(ED)ED.blur();I=DOCS[id];U=[];R=[];SEL=null;SH=null;updUndo();try{localStorage.setItem('rp_cur',id)}catch(e){}render();fit()}
+ acct();pinHint()}
+function pinHint(){const el=$('#pin');if(!el)return;let hide=false;try{hide=localStorage.getItem('rp_home')=='1'||localStorage.getItem('rp_pinhide')=='1'}catch(e){}if(hide)return;
+ el.innerHTML=`<div class="pubx" style="margin-top:4px"><b>Put Rag Press on your home screen</b><p class="note">Open <b>joshp523.github.io/RileyRag/press</b> in Safari, tap Share <span style="font-size:15px">⇪</span>, then <b>Add to Home Screen</b>.</p><div class="row" style="margin-top:6px"><button class="btn" id="pin-c">Copy link</button><button class="btn" id="pin-h">Hide</button></div></div>`;
+ el.querySelector('#pin-c').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText('https://joshp523.github.io/RileyRag/press/').then(()=>toast('Link copied. Paste it into Safari.'),()=>toast('joshp523.github.io/RileyRag/press'))};
+ el.querySelector('#pin-h').onclick=()=>{try{localStorage.setItem('rp_pinhide','1')}catch(e){}el.innerHTML=''}}
+try{if(/[?&]home=1/.test(location.search))localStorage.setItem('rp_home','1')}catch(e){}
+function openDoc(id){if(ED)ED.blur();I=DOCS[id];if(I.pdf&&MODE!='w'){MODE='w';document.body.className='write';$('#mw').classList.add('on');$('#ma').classList.remove('on')}U=[];R=[];SEL=null;SH=null;updUndo();try{localStorage.setItem('rp_cur',id)}catch(e){}render();fit()}
 function makeDoc(lay,from){const L=live(),last=from||L[0],t=now();let date=iso(new Date());
  if(last&&last.date){const p=pd(last.date),nd=new Date(p.y,p.m-1,p.d+7);if(nd>new Date())date=iso(nd)}
  const d={id:uid(),v:1,t,mt:t,n:last?(Math.max(...L.map(x=>+x.n||0))+1):7,date,theme:'',addr:last?last.addr:'Boulevard de\nl’Empereur,\nBrussels',by:last?last.by:'J. & M. Riley',b:{},del:{},gone:0};
@@ -645,22 +739,42 @@ function makeDoc(lay,from){const L=live(),last=from||L[0],t=now();let date=iso(n
  DOCS[d.id]=d;dbPut('docs',d);syncSoon(d.id);return d}
 function blankLike(h){const t=document.createElement('template');t.innerHTML=h||'';const ps=[...t.content.children].slice(0,3);if(!ps.length)return storyHTML();return ps.map(p=>{const st=p.getAttribute('style')||ST.body;const ff=/anton/i.test(st);const fs=parseFloat((st.match(/font-size:\s*([\d.]+)px/)||[])[1]||15);return PAR(st,ff?(fs>36?'BIG HEADLINE':'HEADLINE'):/italic/.test(st)?'By Name, Title':'Tap here and start writing.')}).join('')}
 function mini(spec){return`<span class="mini"><u></u>${spec.map(([k,x,y,w,h])=>`<i class="${k=='p'?'p':''}" style="left:${(x/12*64+4).toFixed(1)}px;top:${(y/52*78+20).toFixed(1)}px;width:${(w/12*64-2).toFixed(1)}px;height:${(h/52*78-2).toFixed(1)}px"></i>`).join('')}</span>`}
-function newIssue(){const last=live()[0];const cs=last?Object.values(last.b).map(b=>[b.k,b.x,b.y,b.w,b.h]):null;
- const p=sheet(`<h3>New issue<button class="x">✕</button></h3><p>Pick a starting layout. You can change it any time in Arrange.</p><div class="lays">${cs?`<button data-l="copy">${mini(cs)}Same as № ${esc(last.n)}</button>`:''}${Object.entries(LAYOUTS).map(([k,l])=>`<button data-l="${k}">${mini(l.b)}${l.name}</button>`).join('')}</div>`);
+function newIssue(){const last=live().find(d=>!d.pdf);const cs=last?Object.values(last.b).map(b=>[b.k,b.x,b.y,b.w,b.h]):null;
+ const p=sheet(`<h3>New issue<button class="x">✕</button></h3><p>Pick a starting layout. You can change it any time in Arrange.</p><div class="lays">${cs&&cs.length?`<button data-l="copy">${mini(cs)}Same as № ${esc(last.n)}</button>`:''}${Object.entries(LAYOUTS).map(([k,l])=>`<button data-l="${k}">${mini(l.b)}${l.name}</button>`).join('')}</div>
+ <p style="margin-top:16px">Already have the finished paper as a PDF?</p><button class="btn big" style="width:100%" id="i-pdf">Upload a finished PDF</button>`);
+ p.querySelector('#i-pdf').onclick=()=>{$('#fp').value='';$('#fp').click()};
  p.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const d=makeDoc(b.dataset.l);close();openDoc(d.id);toast(`Issue № ${d.n} is ready`)})}
 $('#isb').onclick=issues;
+function needPdf(){return need('lib/pdf.min.js',()=>window.pdfjsLib).then(()=>{pdfjsLib.GlobalWorkerOptions.workerSrc='lib/pdf.worker.min.js'})}
+async function pageImg(pg,width,type){const vp=pg.getViewport({scale:width/pg.getViewport({scale:1}).width});const cv=document.createElement('canvas');cv.width=Math.round(vp.width);cv.height=Math.round(vp.height);const c=cv.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,cv.width,cv.height);await pg.render({canvasContext:c,viewport:vp}).promise;return new Promise(r=>cv.toBlob(r,type,.9))}
+async function pdfBlob(){if(!BLOB[I.pdf.id])await loadImg(I.pdf.id,'pdf');if(!BLOB[I.pdf.id])throw new Error('The PDF isn’t on this device yet. Connect to the internet once and try again.');return BLOB[I.pdf.id]}
+async function pdfPage(width,type){await needPdf();const doc=await pdfjsLib.getDocument({data:await (await pdfBlob()).arrayBuffer()}).promise;return pageImg(await doc.getPage(1),width,type)}
+$('#fp').onchange=async()=>{const file=$('#fp').files[0];if(!file)return;busy('Opening PDF…');
+ try{await needPdf();const buf=await file.arrayBuffer(),doc=await pdfjsLib.getDocument({data:buf.slice(0)}).promise,pg=await doc.getPage(1),pv=await pageImg(pg,1588,'image/jpeg');
+  let n=null,date=null;try{const txt=(await pg.getTextContent()).items.map(i=>i.str).join(' ');const m=txt.match(/Issue\s*(?:№|No\.?|#)\s*(\d+)/i);if(m)n=+m[1];
+   const dm=txt.match(/(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})/i);if(dm)date=iso(new Date(+dm[3],MONTHS.indexOf(dm[2].toUpperCase()),+dm[1]))}catch(e){}
+  const pid=uid(),vid=uid(),pb=new Blob([buf],{type:'application/pdf'});await dbPut('imgs',{id:pid,blob:pb,up:0});await dbPut('imgs',{id:vid,blob:pv,up:0});
+  IMG[pid]=URL.createObjectURL(pb);BLOB[pid]=pb;IMG[vid]=URL.createObjectURL(pv);BLOB[vid]=pv;
+  const d=makeDoc('blank');d.b={};d.pdf={id:pid,pv:vid,name:file.name,pages:doc.numPages};if(n)d.n=n;if(date)d.date=date;d.t=d.mt=now();DOCS[d.id]=d;await dbPut('docs',JSON.parse(JSON.stringify(d)));
+  syncSoon(d.id);upSoon();close();openDoc(d.id);toast(`Added as Issue № ${d.n}. Check Details, then Export to publish.`)}
+ catch(x){toast('Couldn’t open that PDF: '+(x.message||x))}finally{busy()}};
+function renderPdf(){SH=null;const src=IMG[I.pdf.pv];if(!src)loadImg(I.pdf.pv);
+ $('#pg').innerHTML=`<div class="sheet">${src?`<img src="${src}" alt="" style="position:absolute;left:0;top:0;width:794px;height:auto">`:'<p style="padding:60px;text-align:center;color:#777;font:16px -apple-system,sans-serif">Loading the PDF…</p>'}</div>`;
+ $('#isn').textContent='№ '+I.n;$('.seg').style.visibility='hidden';bar()}
 
 // ---------- export ----------
 async function canvasOf(scale){if(ED)ED.blur();
  const fams=['400 15px Anton','400 15px Tinos','700 15px Tinos','italic 400 15px Tinos','italic 700 15px Tinos'];try{await Promise.all(fams.map(f=>document.fonts.load(f,'Aa№')))}catch(_){}await document.fonts.ready;
- for(const b of blocks())if(b.im){if(!IMG[b.im.id])await loadImg(b.im.id);if(b.im.tint)await tinted(b.im.id)}
+ for(const b of blocks())if(b.im){if(!IMG[b.im.id])await loadImg(b.im.id);if(imKey(b.im)!==b.im.id)await derive(b.im)}
  const host=$('#printhost');host.innerHTML='';const sh=sheetEl(I,false),bl=sh.querySelector('.bls');for(const b of blocks())bl.appendChild(blockEl(b,false));sh.querySelector('.lns').innerHTML=linesHTML(I);host.appendChild(sh);
  await Promise.all([...sh.querySelectorAll('img')].map(i=>i.decode?i.decode().catch(()=>{}):null));
  try{return await html2canvas(sh,{scale,backgroundColor:'#ffffff',useCORS:true,logging:false,scrollX:0,scrollY:0,windowWidth:Math.max(innerWidth,PW),windowHeight:Math.max(innerHeight,PH)})}finally{host.innerHTML=''}}
 const lib={};
 function need(src,test){if(test())return Promise.resolve();return lib[src]||(lib[src]=new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>{delete lib[src];rej(new Error('Couldn’t load the exporter. Check your connection once, then it works offline.'))};document.head.appendChild(s)}))}
 const fname=ext=>`The Riley Rag No. ${I.n}${I.theme?' – '+I.theme.replace(/[\\/:*?"<>|]/g,''):''}.${ext}`;
-async function makeFile(kind){await need('lib/html2canvas.min.js',()=>window.html2canvas);
+async function makeFile(kind){
+ if(I.pdf){if(kind=='pdf')return new File([await pdfBlob()],fname('pdf'),{type:'application/pdf'});return new File([await pdfPage(2382,'image/png')],fname('png'),{type:'image/png'})}
+ await need('lib/html2canvas.min.js',()=>window.html2canvas);
  const cv=await canvasOf(3);
  if(kind=='png'){const bl=await new Promise(r=>cv.toBlob(r,'image/png'));return new File([bl],fname('png'),{type:'image/png'})}
  await need('lib/jspdf.umd.min.js',()=>window.jspdf);const pdf=new jspdf.jsPDF({unit:'pt',format:'a4',compress:true});
@@ -670,7 +784,7 @@ function deliver(f){const touch=matchMedia('(pointer:coarse)').matches;
  if(touch&&navigator.canShare&&navigator.canShare({files:[f]}))return navigator.share({files:[f]}).catch(()=>{});
  const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
 function exportUI(){if(ED)ED.blur();
- setTimeout(()=>{overflow();const over=SH.querySelectorAll('.ovl b').length,emptyPh=blocks().filter(b=>b.k=='p'&&!b.im).length;
+ setTimeout(()=>{overflow();const over=SH?SH.querySelectorAll('.ovl b').length:0,emptyPh=blocks().filter(b=>b.k=='p'&&!b.im).length;
  const p=sheet(`<h3>Export № ${esc(I.n)}<button class="x">✕</button></h3>
  ${over?`<p class="err">${over} stor${over>1?'ies run':'y runs'} past ${over>1?'their boxes':'its box'}. The hidden lines won’t show up.</p>`:''}${emptyPh?`<p class="note">${emptyPh} empty photo box${emptyPh>1?'es':''} will print as blank space.</p>`:''}
  <div class="row"><button class="btn big" id="x-png">PNG image</button><button class="btn big" id="x-pdf">PDF</button></div>
@@ -682,14 +796,20 @@ function exportUI(){if(ED)ED.blur();
    else{btn.textContent=old;deliver(files[kind]);msg.textContent='Downloaded.'}}
   catch(x){btn.textContent=old;msg.textContent=x.message||String(x);msg.classList.add('err')}finally{btn.disabled=false}};
  p.querySelector('#x-png').onclick=e=>go('png',e.currentTarget);p.querySelector('#x-pdf').onclick=e=>go('pdf',e.currentTarget);
- pubBtn(p.querySelector('#x-pub'))},250)}
+ const xp=p.querySelector('#x-pub');pubBtn(xp);who().then(()=>{if(xp.isConnected)pubBtn(xp)})},250)}
 $('#xb').onclick=exportUI;
 
-function pubBtn(el){if(!ME||!ME.ed){el.innerHTML=`<p class="note" style="margin-top:12px">${ME?'Only Riley Rag editors can publish.':'Sign in (in the Issues menu) to publish straight to The Riley Rag.'}</p>`;return}
- el.innerHTML=`<button class="btn pri big" style="margin-top:10px" id="x-go">Publish to The Riley Rag</button>`;
+function pubBtn(el){
+ if(!sb){el.innerHTML='<p class="note" style="margin-top:12px">Publishing needs an internet connection.</p>';return}
+ if(!ME){el.innerHTML=`<div class="pubx"><b>Publish to The Riley Rag</b><p class="note">Sign in with your Riley Rag account.</p><form id="pl"><input id="pl-e" type="email" autocomplete="username" placeholder="Email" required><input id="pl-p" type="password" autocomplete="current-password" placeholder="Password" required style="margin-top:8px"><p class="err note" id="pl-x"></p><button class="btn pri big">Sign in</button></form></div>`;
+  el.querySelector('#pl').onsubmit=async e=>{e.preventDefault();const x=el.querySelector('#pl-x');x.textContent='Signing in…';const{error}=await sb.auth.signInWithPassword({email:el.querySelector('#pl-e').value.trim(),password:el.querySelector('#pl-p').value});if(error){x.textContent=error.message;return}await who();pubBtn(el);sync()};return}
+ if(!ME.ed){el.innerHTML=`<div class="pubx"><b>Publish to The Riley Rag</b><p class="note">You’re signed in as ${esc(ME.name)}${ME.email&&ME.email!==ME.name?' ('+esc(ME.email)+')':''}, but this account isn’t showing as a Rag editor.${ME.err?' Details: '+esc(ME.err):''}</p><div class="row"><button class="btn" id="pl-c">Check again</button><button class="btn" id="pl-o">Use another account</button></div></div>`;
+  el.querySelector('#pl-c').onclick=async()=>{el.querySelector('#pl-c').textContent='Checking…';await who();pubBtn(el);if(ME&&ME.ed)sync()};
+  el.querySelector('#pl-o').onclick=async()=>{await sb.auth.signOut({scope:'local'});ME=null;localStorage.removeItem('rp_me');dot('');pubBtn(el)};return}
+ el.innerHTML=`<button class="btn pri big" style="margin-top:12px" id="x-go">Publish to The Riley Rag</button><p class="note" style="margin-top:6px">Signed in as ${esc(ME.name)} (editor).</p>`;
  el.querySelector('#x-go').onclick=()=>ask(`Publish Issue № ${I.n}${I.theme?' ('+I.theme+')':''} to The Riley Rag? Everyone gets the new-issue alert.`,'Publish',publish)}
 async function publish(){busy('Printing Issue № '+I.n+'…');
- try{const f=await makeFile('pdf');await need('lib/html2canvas.min.js',()=>window.html2canvas);const cv=await canvasOf(1600/PW);const img=await new Promise(r=>cv.toBlob(r,'image/jpeg',.85));
+ try{const f=await makeFile('pdf');let img;if(I.pdf)img=await pdfPage(1600,'image/jpeg');else{await need('lib/html2canvas.min.js',()=>window.html2canvas);const cv=await canvasOf(1600/PW);img=await new Promise(r=>cv.toBlob(r,'image/jpeg',.85))}
   const id=uid(),pp=`${id}.pdf`,ip=`${id}.jpg`;let u=await sb.storage.from('issues').upload(pp,f,{contentType:'application/pdf'});if(u.error)throw u.error;
   u=await sb.storage.from('issues').upload(ip,img,{contentType:'image/jpeg'});if(u.error)throw u.error;
   const{error}=await sb.from('issues').insert({number:+I.n,issue_date:I.date,tagline:I.theme.trim()||null,pdf_path:pp,img_path:ip});if(error)throw error;
@@ -702,8 +822,17 @@ let sb=null,ME=null;try{ME=JSON.parse(localStorage.getItem('rp_me')||'null')}cat
 try{if(window.supabase&&window.RR_CONFIG)sb=supabase.createClient(RR_CONFIG.url,RR_CONFIG.key,{auth:{storageKey:'riley-rag-auth',persistSession:true,autoRefreshToken:true}})}catch(e){}
 const canSync=()=>sb&&ME&&ME.ed&&navigator.onLine;
 function dot(s){const d=$('#sdot');d.className='dot'+(s?' '+s:'');d.title={ok:'Shared',wait:'Saving…'}[s]||'On this device only'}
-async function who(){if(!sb)return;try{const{data:{session}}=await sb.auth.getSession();if(!session){ME=null}else{const{data,error}=await sb.from('profiles').select('name,is_editor').eq('id',session.user.id).single();if(!error)ME={id:session.user.id,name:data.name,ed:!!data.is_editor};else if(!ME||ME.id!==session.user.id)ME={id:session.user.id,name:session.user.email,ed:false}}
- localStorage.setItem('rp_me',JSON.stringify(ME))}catch(e){}dot(canSync()?'ok':'')}
+async function who(){if(!sb)return;
+ try{const{data:{session}}=await sb.auth.getSession();
+  if(!session)ME=null;
+  else{const u=session.user;let ed=null,name=u.email,err='';
+   const pr=await sb.from('profiles').select('name,is_editor').eq('id',u.id).maybeSingle();
+   if(pr.data){name=pr.data.name||name;ed=!!pr.data.is_editor}else err=pr.error?pr.error.message:'No Riley Rag member profile for this account.';
+   if(!ed){const rp=await sb.rpc('is_editor');if(!rp.error&&rp.data===true)ed=true;else if(rp.error&&!err)err=rp.error.message}
+   if(ed===null&&ME&&ME.id===u.id)ed=ME.ed;
+   ME={id:u.id,name,email:u.email,ed:!!ed,err:ed?'':err}}
+  localStorage.setItem('rp_me',JSON.stringify(ME))}catch(e){if(ME)ME.err=e.message||String(e)}
+ dot(canSync()?'ok':'')}
 function merge(a,b){if(!a)return b;if(!b)return a;const m=(a.mt||0)>=(b.mt||0)?a:b,o={...m,b:{},del:{...a.del}};
  for(const k in b.del)o.del[k]=Math.max(o.del[k]||0,b.del[k]);
  for(const id of new Set([...Object.keys(a.b),...Object.keys(b.b)])){const x=a.b[id],y=b.b[id],w=!x?y:!y?x:(y.t>x.t?y:x);if(o.del[id]&&o.del[id]>=w.t)continue;o.b[id]=w}
@@ -723,8 +852,8 @@ async function sync(){if(!canSync()||syncing)return;syncing=true;dot('wait');
   if(!I||I.gone){const n=live()[0];if(n)openDoc(n.id)}}
  catch(e){dot('');console.warn('sync',e)}finally{syncing=false}}
 let upT=null;function upSoon(){clearTimeout(upT);upT=setTimeout(upImgs,1500)}
-async function upImgs(){if(!canSync())return;const all=await dbAll('imgs');const used=new Set();for(const d of Object.values(DOCS))for(const b of Object.values(d.b))if(b.im)used.add(b.im.id);
- for(const r of all){if(r.up||!used.has(r.id))continue;const{error}=await sb.storage.from('issues').upload(`drafts/${r.id}.jpg`,r.blob,{contentType:'image/jpeg',upsert:false});if(!error||/exists|duplicate/i.test(error.message)){r.up=1;await dbPut('imgs',r)}}}
+async function upImgs(){if(!canSync())return;const all=await dbAll('imgs');const used=new Set();for(const d of Object.values(DOCS)){if(d.pdf){used.add(d.pdf.id);used.add(d.pdf.pv)}for(const b of Object.values(d.b))if(b.im)used.add(b.im.id)}
+ for(const r of all){if(r.up||!used.has(r.id))continue;const{error}=await sb.storage.from('issues').upload(`drafts/${r.id}.${r.blob.type=='application/pdf'?'pdf':'jpg'}`,r.blob,{contentType:r.blob.type||'image/jpeg',upsert:false});if(!error||/exists|duplicate/i.test(error.message)){r.up=1;await dbPut('imgs',r)}}}
 function acct(){const el=$('#acct');if(!el)return;
  if(!sb){el.innerHTML='<p class="note">Sharing isn’t available right now. Your work is saved on this device.</p>';return}
  if(!ME){el.innerHTML=`<p class="note">Sign in with your Riley Rag account to share drafts with each other and publish straight to the Rag.</p><form id="lg"><input id="lg-e" type="email" autocomplete="username" placeholder="Email" required><input id="lg-p" type="password" autocomplete="current-password" placeholder="Password" required style="margin-top:8px"><p class="err" id="lg-x"></p><button class="btn pri big">Sign in</button></form>`;

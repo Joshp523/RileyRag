@@ -1,0 +1,39 @@
+RAG PRESS — how to install
+
+1. Upload to the RileyRag repo on GitHub:
+   - the whole "press" folder (keep the folder name and everything inside it)
+   - index.html (replaces the old one; Rag Press is now in "Other apps by Josh Riley" on the Us page,
+     and the old "Publish new issue" button is gone)
+   - app-press.png (the Rag Press icon for that list)
+   - sw.js (replaces the old one; keeps the Rag and the Press from mixing up their offline copies)
+
+2. In Supabase: SQL Editor > New query > paste press/press_drafts.sql > Run.
+   If Meishe isn't a Rag editor yet, fill in her email on the last line first and remove the "--".
+
+3. To pin it: open https://joshp523.github.io/RileyRag/press/ in Safari (not from inside the Rag app),
+   tap Share > Add to Home Screen, then open it from the home screen.
+   Tap Export: the Publish box there lets you sign in with your Riley Rag account and publish.
+   If it says the account isn't an editor, it shows why, with a Check again button.
+
+How it works
+- WRITE mode: tap a story to type (the box zooms in on iPhone). Nothing can move.
+  Toolbar: Bold, Italic, Times/Anton, size, letter spacing, line spacing, alignment.
+  Size and both spacings have a drag scrubber (slide the ruler left/right) plus − / + for fine steps.
+  ¶ quick styles (Headline / BIG / Byline / Body). Select words to style just those;
+  with no selection, the change applies to the whole paragraph.
+- Tap a photo box to add a photo. Once it's selected, drag or pinch it right on the page to adjust.
+  Crop opens the whole photo with a free crop frame (or Box shape / Original / Square / 4:3 / 3:4 / 16:9);
+  if the new shape differs, the box reshapes to match. The slider and 90° buttons rotate the photo
+  inside the frame (the frame always stays on the photo). B&W makes it black and white.
+- End marks: the stamp button on the typing toolbar inserts the tiny stamp or the author's initials
+  (taken from the "By ..." line) at the cursor.
+- Finished PDFs: ☰ > New issue > Upload a finished PDF. It becomes its own issue (number and date are
+  read from the PDF when possible; check Details), and Export publishes it to the Rag when you're ready.
+- Layering (like Ask Peter): in Arrange, select a box and tap "On top". It can then sit over a photo
+  or story and moves in finer steps. The ¶ menu has Black text / White text for writing over photos.
+- ARRANGE mode: tap a box to select, then drag it or its handles. Boxes snap to a
+  12-column grid and can't overlap. Drag across empty space to draw a new box.
+  "Lines" puts column rules on any side of a box; they move with it.
+- A red "lines too long" tag shows when a story doesn't fit its box.
+- Export (top-right): PNG or PDF, or Publish straight into The Riley Rag.
+- Works offline, including export. Undo/redo at the top.
