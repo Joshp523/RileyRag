@@ -241,7 +241,7 @@ function authView(){
 
 async function feedView(){
  const hello = !greeted; greeted = true;
- app.innerHTML = `${hello?`<p class="hi" id="hi">Welcome, ${esc(me.name)}</p>`:''}${me.is_editor?'<div class="bar ed"><button class="btn" id="pb">Publish new issue</button><button class="btn ghost" id="eb">Email draft</button><button class="btn ghost" id="mb">Members</button></div>':''}<div id="tools"></div><div id="feed">Loading issues…</div><div class="foot"><button class="btn ghost" id="so">Sign out</button></div>`;
+ app.innerHTML = `${hello?`<p class="hi" id="hi">Welcome, ${esc(me.name)}</p>`:''}${me.is_editor?'<div class="bar ed"><button class="btn" id="pb">Publish new issue</button><a class="btn ghost" href="press/">Rag Press</a><button class="btn ghost" id="eb">Email draft</button><button class="btn ghost" id="mb">Members</button></div>':''}<div id="tools"></div><div id="feed">Loading issues…</div><div class="foot"><button class="btn ghost" id="so">Sign out</button></div>`;
  if(hello) setTimeout(() => $('#hi')?.classList.add('off'), 3500);
  $('#so').onclick = () => sb.auth.signOut();
  if(me.is_editor){ $('#pb').onclick = publishForm; $('#mb').onclick = () => $('#mp') ? closeMembers() : members(); $('#eb').onclick = () => emailDraft(); memberCount(); }
@@ -487,6 +487,7 @@ const MORE_APPS = [
  ['Russian Verbs','https://joshp523.github.io/russian/','app-russian.png'],
  ['Riley Rangers','https://joshp523.github.io/Rangers-app/','app-rangers.png'],
  ['Habits: Josh','https://joshp523.github.io/daily-discipline/','app-habits-josh.png'],
+ ['Habits: Meishe','https://joshp523.github.io/Habit-tracker-app-Meishe/','app-habits-meishe.png'],
  ['Habits: Grandma','https://joshp523.github.io/wendys-app/','app-habits-grandma.png'],
  ['Writing','https://joshp523.github.io/writing-app/','app-writing.png'],
  ['Mushroom classifier','','app-mushroom.png']];
