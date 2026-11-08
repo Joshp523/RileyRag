@@ -56,6 +56,10 @@ input,textarea{width:100%;padding:10px;border-radius:2px;border:1px solid #5a402
 .cm b{color:var(--g1);font-weight:700}.cm small{opacity:.55;margin-left:8px}
 .cm .del{float:right;background:none;border:0;color:#c88;cursor:pointer}
 .err{color:#e99;margin:6px 0 0}
+.who{margin:0 2px 10px;padding:8px 12px;border:1px solid var(--g3);background:#0b0603;font-size:17px;max-width:420px}
+.who>div{padding:4px 0;border-top:1px solid #2a1c10}.who>div:first-child{border-top:0}.who small{opacity:.6;margin-left:8px}
+.who .whoh{display:flex;align-items:center;gap:8px;color:var(--g1);font-variant:all-small-caps;letter-spacing:.05em}.who .whoh img{width:26px;height:26px}
+.btn.seen{padding:4px 2px;font-size:16px;margin:0 0 6px}
 #lb{padding-top:env(safe-area-inset-top);position:fixed;inset:0;background:#000f;z-index:9;display:none;flex-direction:column}
 #lb.on{display:flex}#lb .top{display:flex;justify-content:space-between;padding:10px 14px}
 #lb .scroll{flex:1;overflow:auto;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch}
@@ -207,79 +211,135 @@ const RX = {
  sleepy:['So sleepy',stk('sleepy')], object:['I object',stk('object')]
 };
 
+// ---- Remembering readers: name + email are kept on this device (and in a cookie as a backup),
+// so if the browser ever forgets the session we sign them straight back in without asking.
+const WHO_K = 'rr_who';
+function who(){ try{ const v = localStorage.getItem(WHO_K); if(v) return JSON.parse(v); }catch(e){}
+ const m = document.cookie.match(/(?:^|; )rr_who=([^;]*)/); try{ return m ? JSON.parse(decodeURIComponent(m[1])) : null; }catch(e){ return null; } }
+function saveWho(name, email){ const v = JSON.stringify({name, email}); try{ localStorage.setItem(WHO_K, v); }catch(e){}
+ document.cookie = `rr_who=${encodeURIComponent(v)}; max-age=${400*864e2}; path=/RileyRag/; SameSite=Lax; Secure`;
+ try{ navigator.storage && navigator.storage.persist && navigator.storage.persist(); }catch(e){} }
+function forgetWho(){ try{ localStorage.removeItem(WHO_K); }catch(e){} document.cookie = 'rr_who=; max-age=0; path=/RileyRag/'; }
+async function quickLogin(name, email){   // true, 'editor', or an error message
+ try{
+  const { data, error } = await sb.functions.invoke('rr-login', { body:{ name, email } });
+  if(error){ let m = error.message; try{ const j = await error.context.json(); if(j.editor) return 'editor'; m = j.error || m; }catch(x){} return m; }
+  if(data.editor) return 'editor';
+  let v = await sb.auth.verifyOtp({ token_hash:data.token_hash, type:'magiclink' });
+  if(v.error) v = await sb.auth.verifyOtp({ token_hash:data.token_hash, type:'email' });
+  if(v.error) return v.error.message;
+  saveWho(name, email); return true;
+ }catch(x){ return navigator.onLine === false ? 'You’re offline. Connect to the internet and try again.' : (x.message || 'Couldn’t sign in. Please try again.'); }
+}
+let switching = false;
 async function boot(){
- const { data:{ session } } = await sb.auth.getSession();
+ let { data:{ session } } = await sb.auth.getSession();
+ if(!session && !switching){ const w = who(); if(w && w.email && await quickLogin(w.name, w.email) === true) session = (await sb.auth.getSession()).data.session; }
  if(!session){ $('#nav').hidden = true; setTimeout(nudge, 2500); return authView(); }
  if(recovering) return recoveryView();
  const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
  if(!data){ await sb.auth.signOut({ scope:'local' }); $('#nav').hidden = true; return authView(); } // signed in, but not as a Rag member
- me = data; $('#nav').hidden = false; route(); setTimeout(nudge, 2500);
+ me = data; if(session.user.email && !who()) saveWho(me.name, session.user.email);
+ sb.rpc('touch_me').then(() => {}, () => {});
+ $('#nav').hidden = false; route(); setTimeout(nudge, 2500);
 }
 sb.auth.onAuthStateChange(ev => { if(ev==='PASSWORD_RECOVERY'){ recovering = true; recoveryView(); } if(ev==='SIGNED_OUT'){ me = null; boot(); } });
 addEventListener('hashchange', () => { if(me) route(); });
 
-function authView(){
- app.innerHTML = `<form class="panel" id="af"><h2 class="gilt">${signup?'Join the family':'Welcome back'}</h2>
- ${signup?'<label for="n">Your name (as the family knows you)</label><input id="n" required autocomplete="name">':''}
- <label for="e">Email</label><input id="e" type="email" required autocomplete="email">
- <label for="p">Password ${signup?'(6 or more characters)':''}</label><input id="p" type="password" minlength="6" required autocomplete="${signup?'new':'current'}-password">
- <p class="err" id="er" role="alert"></p>
- <button class="btn">${signup?'Create my account':'Sign in'}</button>
- <button type="button" class="btn ghost" id="sw">${signup?'I already have an account':'New here? Create an account'}</button>${signup?'':'<button type="button" class="btn ghost" id="fg">Forgot your password?</button>'}</form>${PHONE&&!STANDALONE()?'<button class="btn ghost getapp" id="ga">📲 Put the Rag on your phone</button>':''}`;
+function authView(msg){
+ const w = who() || {};
+ app.innerHTML = `<form class="panel" id="af"><h2 class="gilt">Welcome to the Rag</h2><p style="margin:6px 0 4px">Just tell us who you are. No password needed, and this phone will remember you.</p>
+ <label for="n">Your name (as the family knows you)</label><input id="n" required maxlength="60" autocomplete="name" value="${esc(w.name||'')}">
+ <label for="e">Your email</label><input id="e" type="email" required autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" value="${esc(w.email||'')}">
+ <div id="pw" hidden><label for="p">Editor password</label><input id="p" type="password" autocomplete="current-password"></div>
+ <p class="err" id="er" role="alert">${esc(msg||'')}</p>
+ <button class="btn solid" id="go" style="width:100%;padding:12px">Open the paper</button>
+ <button type="button" class="btn ghost" id="fg" hidden>Forgot your editor password?</button></form>${PHONE&&!STANDALONE()?'<button class="btn ghost getapp" id="ga">📲 Put the Rag on your phone</button>':''}`;
  $('#ga') && ($('#ga').onclick = installSheet);
- $('#sw').onclick = () => { signup=!signup; authView(); };
- if(!signup) $('#fg').onclick = forgotView;
+ $('#fg').onclick = forgotView;
  $('#af').onsubmit = async e => {
-  e.preventDefault(); const email=$('#e').value.trim(), password=$('#p').value;
-  const r = signup ? await sb.auth.signUp({email,password,options:{data:{name:$('#n').value.trim()}}}) : await sb.auth.signInWithPassword({email,password});
-  if(r.error) return $('#er').textContent = r.error.message;
-  if(signup && !r.data.session){ const t = await sb.auth.signInWithPassword({email,password});
-   if(t.error) return $('#er').textContent = 'Almost there! If you received a confirmation email, tap its link and then sign in. If you already have an account, choose “I already have an account.”'; }
-  boot();
+  e.preventDefault(); const name = $('#n').value.trim(), email = $('#e').value.trim().toLowerCase(), er = $('#er'), go = $('#go');
+  er.textContent = ''; go.disabled = true; go.textContent = 'Opening…';
+  try{
+   if(!$('#pw').hidden){
+    const r = await sb.auth.signInWithPassword({ email, password:$('#p').value });
+    if(r.error){ er.textContent = r.error.message; return; }
+    saveWho(name, email); switching = false; return boot();
+   }
+   const r = await quickLogin(name, email);
+   if(r === 'editor'){ $('#pw').hidden = false; $('#fg').hidden = false; er.textContent = 'You’re an editor, so please add your password too.'; $('#p').focus(); return; }
+   if(r !== true){ er.textContent = r; return; }
+   switching = false; boot();
+  }finally{ go.disabled = false; go.textContent = 'Open the paper'; }
  };
 }
 
 async function feedView(){
  const hello = !greeted; greeted = true;
- app.innerHTML = `${hello?`<p class="hi" id="hi">Welcome, ${esc(me.name)}</p>`:''}${me.is_editor?'<div class="bar ed"><button class="btn ghost" id="eb">Email draft</button><button class="btn ghost" id="mb">Members</button></div>':''}<div id="tools"></div><div id="feed">Loading issues…</div><div class="foot"><button class="btn ghost" id="so">Sign out</button></div>`;
+ app.innerHTML = `${hello?`<p class="hi" id="hi">Welcome, ${esc(me.name)}</p>`:''}${me.is_editor?'<div class="bar ed"><button class="btn ghost" id="eb">Email draft</button><button class="btn ghost" id="mb">Members</button></div>':''}<div id="tools"></div><div id="feed">Loading issues…</div><div class="foot"><button class="btn ghost" id="so">Not ${esc(me.name)}? Switch reader</button></div>`;
  if(hello) setTimeout(() => $('#hi')?.classList.add('off'), 3500);
- $('#so').onclick = () => sb.auth.signOut();
+ $('#so').onclick = () => { if(!confirm('Sign out so someone else can read here?')) return; switching = true; forgetWho(); sb.auth.signOut(); };
  if(me.is_editor){ $('#mb').onclick = () => $('#mp') ? closeMembers() : members(); $('#eb').onclick = () => emailDraft(); memberCount(); }
  const [i,c,r] = await Promise.all([
   sb.from('issues').select('*').order('issue_date',{ascending:false}).order('number',{ascending:false}),
   sb.from('comments').select('*,profiles(name)').order('created_at'),
-  sb.from('reactions').select('*')]);
+  me.is_editor ? sb.from('reactions').select('issue_id,kind,user_id,profiles(name)') : sb.from('reactions').select('issue_id,kind,user_id').eq('user_id', me.id)]);
+ const [cn, vw] = await Promise.all([sb.rpc('reaction_counts'), me.is_editor ? sb.from('issue_views').select('issue_id,last_at,n,profiles(name)') : Promise.resolve({data:null})]);
+ RXC = {}; (cn.data||[]).forEach(x => RXC[x.issue_id+'|'+x.kind] = x.n);
+ VIEWS = vw.data || [];
  if(i.error) return $('#feed').textContent = i.error.message;
  $('#feed').innerHTML = i.data.length ? '' : '<p style="text-align:center">No issues yet. The press is warming up.</p>';
  i.data.forEach(is => $('#feed').append(issueEl(is, c.data||[], r.data||[])));
 }
 
+let RXC = {}, VIEWS = [];
+const seen = new Set(), viewObs = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const id = +en.target.dataset.iss;
+ if(en.isIntersecting && !seen.has(id)){ seen.add(id); viewObs.unobserve(en.target); sb.rpc('saw_issue', {iid:id}).then(() => {}, () => {}); } }), {threshold:.5}) : null;
+const ago = t => { const d = (Date.now() - new Date(t)) / 864e5; return d < 1 ? 'today' : d < 2 ? 'yesterday' : d < 30 ? Math.floor(d)+' days ago' : new Date(t).toLocaleDateString(); };
 function issueEl(is, cs, rs){
  const el = document.createElement('article'); el.className='issue';
  const d = new Date(is.issue_date+'T00:00').toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
  el.innerHTML = `<button class="sheet" aria-label="Open issue ${is.number} full size"><img loading="lazy" src="${pub(is.img_path)}" alt="The Riley Rag, Issue ${is.number}, ${d}"></button>
- <div class="rxs"></div><div class="cms"></div>
+ <div class="rxs"></div><div class="who" hidden></div>${me.is_editor?'<button class="btn ghost seen"></button><div class="who seenl" hidden></div>':''}<div class="cms"></div>
  <form><label class="sr" for="c${is.id}">Leave a comment</label><textarea id="c${is.id}" rows="2" maxlength="1000" placeholder="Leave a comment…" required></textarea><button class="btn">Post comment</button><p class="err"></p></form>`;
- el.querySelector('.sheet').onclick = () => { $('#lbimg').src = pub(is.img_path); $('#lbpdf').href = pub(is.pdf_path); $('#lb').classList.add('on'); };
- const rx = el.querySelector('.rxs');
+ el.querySelector('.sheet').onclick = () => { $('#lbimg').src = pub(is.img_path); $('#lbpdf').href = pub(is.pdf_path); $('#lb').classList.add('on'); if(!me.is_editor) sb.rpc('saw_issue', {iid:is.id}).then(() => {}, () => {}); };
+ if(!me.is_editor && viewObs){ el.querySelector('.sheet').dataset.iss = is.id; viewObs.observe(el.querySelector('.sheet')); }
+ if(me.is_editor){   // who has read this issue
+  const v = VIEWS.filter(x => x.issue_id === is.id).sort((a,b) => new Date(b.last_at) - new Date(a.last_at)), sb2 = el.querySelector('.seen'), sl = el.querySelector('.seenl');
+  sb2.textContent = v.length ? `👁 Read by ${v.length} ${v.length===1?'person':'people'} ▾` : '👁 Nobody has opened this one yet';
+  sl.innerHTML = v.map(x => `<div><b>${esc(x.profiles?.name||'Someone')}</b><small>${ago(x.last_at)}${x.n>1?` · ${x.n} times`:''}</small></div>`).join('');
+  sb2.onclick = () => { if(v.length){ sl.hidden = !sl.hidden; sb2.textContent = sb2.textContent.replace(/[▾▴]$/, sl.hidden?'▾':'▴'); } };
+ }
+ const rx = el.querySelector('.rxs'), whoBox = el.querySelector('.who');
+ let openKind = null;
  const drawRx = () => {
   rx.innerHTML = '';
   Object.entries(RX).forEach(([k,[label,svg]]) => {
    const mine = rs.some(x => x.issue_id===is.id && x.kind===k && x.user_id===me.id);
-   const n = rs.filter(x => x.issue_id===is.id && x.kind===k).length;
+   const n = RXC[is.id+'|'+k] || 0;
    const b = document.createElement('button'); b.className='rx'; b.setAttribute('aria-pressed',mine);
    b.setAttribute('aria-label',label+(n?`, ${n}`:'')); b.title = label;
    b.innerHTML = `${svg}${n?`<span>${n}</span>`:''}`;
+   if(me.is_editor){   // editors don't react; they see who did
+    b.setAttribute('aria-pressed', openKind===k); b.setAttribute('aria-expanded', openKind===k);
+    b.onclick = () => { openKind = openKind===k ? null : k; drawRx(); };
+    rx.append(b); return;
+   }
    b.onclick = async () => {
     b.disabled = true;
     const {error} = mine ? await sb.from('reactions').delete().match({issue_id:is.id,user_id:me.id,kind:k}) : await sb.from('reactions').insert({issue_id:is.id,kind:k});
     if(error){ b.disabled = false; return alert(error.message); }
-    if(mine){ const i = rs.findIndex(x => x.issue_id===is.id && x.kind===k && x.user_id===me.id); if(i>-1) rs.splice(i,1); }
-    else rs.push({issue_id:is.id, user_id:me.id, kind:k});
+    if(mine){ const i = rs.findIndex(x => x.issue_id===is.id && x.kind===k && x.user_id===me.id); if(i>-1) rs.splice(i,1); RXC[is.id+'|'+k] = Math.max(0, n-1); }
+    else { rs.push({issue_id:is.id, user_id:me.id, kind:k}); RXC[is.id+'|'+k] = n+1; }
     drawRx(); [...rx.children].find(c => c.title===label)?.focus({preventScroll:true});
    };
    rx.append(b);
   });
+  if(me.is_editor){
+   const names = openKind ? rs.filter(x => x.issue_id===is.id && x.kind===openKind).map(x => x.profiles?.name || 'Someone').sort((a,b) => a.localeCompare(b)) : [];
+   whoBox.hidden = !openKind;
+   if(openKind) whoBox.innerHTML = `<div class="whoh">${RX[openKind][1]}<span>${esc(RX[openKind][0])}</span></div>` + (names.length ? names.map(n => `<div>${esc(n)}</div>`).join('') : '<div><i>Nobody yet</i></div>');
+  }
  };
  drawRx();
  const box = el.querySelector('.cms');
@@ -334,11 +394,13 @@ async function members(){
  const {data, error} = await sb.rpc('member_list');
  if(error) return $('#tools').innerHTML = `<p class="err">${esc(error.message)}</p>`;
  memberLabel(data.length);
- $('#tools').innerHTML = `<div class="panel" id="mp"><h2 class="gilt">Members (${data.length})</h2>${data.map(m => `<div class="cm"><b>${esc(m.name)}</b>${m.is_editor?' (editor)':''}<br><small style="margin:0">${esc(m.email)}</small>${m.is_editor?'':`<button class="del" data-id="${m.id}">Remove</button>`}</div>`).join('')}<button class="btn ghost" id="mc">Close</button></div>`;
+ const {data:ls} = await sb.from('profiles').select('id,last_seen'), LS = {}; (ls||[]).forEach(x => LS[x.id] = x.last_seen);
+ data.sort((a,b) => new Date(LS[b.id]||0) - new Date(LS[a.id]||0));
+ $('#tools').innerHTML = `<div class="panel" id="mp"><h2 class="gilt">Members (${data.length})</h2>${data.map(m => `<div class="cm"><b>${esc(m.name)}</b>${m.is_editor?' (editor)':''}<br><small style="margin:0">${esc(m.email)} · ${LS[m.id]?'last read '+ago(LS[m.id]):'hasn’t visited yet'}</small>${m.is_editor?'':`<button class="del" data-id="${m.id}">Remove</button>`}</div>`).join('')}<button class="btn ghost" id="mc">Close</button></div>`;
  $('#mc').onclick = closeMembers;
  document.querySelectorAll('#tools .del').forEach(b => b.onclick = async () => {
   const nm = b.closest('.cm').querySelector('b').textContent;
-  if(!confirm(`Remove ${nm}? This also deletes their comments, reactions, game scores and Ask Peter letters. They can sign up again with the same email.`)) return;
+  if(!confirm(`Remove ${nm}? This also deletes their comments, reactions, game scores and Ask Peter letters. If they come back with the same email, they’ll start fresh.`)) return;
   const {error} = await sb.rpc('delete_member',{uid:b.dataset.id}); error ? alert(error.message) : members();
  });
 }
@@ -484,12 +546,13 @@ function recoveryView(){
 }
 const GALLERY = 'https://photos.app.goo.gl/6F13zuFyThHE7W2AA';   // shared Google Photos album; phones with the Google Photos app open it there
 const MORE_APPS = [
- ['язык врагов','https://joshp523.github.io/russian/','app-russian.png'],['Idioma Celestial','https://joshp523.github.io/palabras/','app-palabras.png'],
-  ['Rag Press','https://joshp523.github.io/RileyRag/press/','app-press.png'],['Writing','https://joshp523.github.io/writing-app/','app-writing.png'],
+ ['Rag Press','https://joshp523.github.io/RileyRag/press/','app-press.png'],
+ ['язык врагов','https://joshp523.github.io/russian/','app-russian.png'],['Idioma Celestial','https://joshp523.github.io/palabras/','app-palabras.png?v=3'],
+ ['Riley Rangers','https://joshp523.github.io/Rangers-app/','app-rangers.png'],
  ['Habits: Josh','https://joshp523.github.io/daily-discipline/','app-habits-josh.png'],
  ['Habits: Grandma','https://joshp523.github.io/wendys-app/','app-habits-grandma.png'],
-  ['Riley Rangers','https://joshp523.github.io/Rangers-app/','app-rangers.png'],
- ['Mushroom classifier','https://joshp523.github.io/Mushroom-Classifier/','app-shroom.png']];
+ ['Writing','https://joshp523.github.io/writing-app/','app-writing.png'],
+ ['Mushroom classifier','','app-mushroom.png']];
 function aboutExtras(){
  return `<div class="bar" style="margin-top:26px"><a class="btn" href="${GALLERY}" target="_blank" rel="noopener">Photo gallery</a></div>
  <div class="ph-panel" id="phn"></div>
