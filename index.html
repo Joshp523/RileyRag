@@ -512,8 +512,7 @@ async function charterView(){
  let body = data?.body || '';
  const show = () => {
   $('#cb').innerHTML = `<p class="charter">${body ? linkify(esc(body)) : '<i>Nothing here yet.</i>'}</p>${me.is_editor?'<div class="bar"><button class="btn" id="ce">Edit</button></div>':''}`;
-  if(me.is_
-     itor) $('#ce').onclick = edit;
+  if(me.is_editor) $('#ce').onclick = edit;
  };
  $('#ex').innerHTML = aboutExtras(); phonePanel();
  const edit = () => {
@@ -531,4 +530,3 @@ async function charterView(){
 $('#lbx').onclick = () => $('#lb').classList.remove('on');
 boot();
 </script></body></html>
-
