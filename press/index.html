@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Rag Press">
-<meta name="theme-color" content="#10161f">
+<meta name="theme-color" content="#ece6d6">
 <title>Rag Press</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -209,17 +209,190 @@ body.kb #fmt{padding-bottom:0}
 #toast button{color:#1d63d8;font-weight:800}
 #printhost{position:absolute;left:0;top:0;z-index:-10;pointer-events:none}
 .busy{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font:600 18px -apple-system,sans-serif}
+
+/* ================= Printing Department theme: retro, utilitarian, a little corporate ================= */
+@font-face{font-family:'Plex Mono';font-weight:400;src:url(fonts/ibm-plex-mono-latin-400-normal.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Plex Mono';font-weight:500;src:url(fonts/ibm-plex-mono-latin-500-normal.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Plex Mono';font-weight:600;src:url(fonts/ibm-plex-mono-latin-600-normal.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Plex Sans';font-weight:400;src:url(fonts/ibm-plex-sans-latin-400-normal.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Plex Sans';font-weight:500;src:url(fonts/ibm-plex-sans-latin-500-normal.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Plex Sans';font-weight:600;src:url(fonts/ibm-plex-sans-latin-600-normal.woff2) format('woff2');font-display:swap}
+:root{--desk:#002454;--desk2:#00183c;--bone:#ece6d6;--bone2:#e2dac6;--paper:#f6f2e8;--ink:#00183c;--teal:#00609c;--teal2:#006ca8;--green:#3c7830;--green2:#488430;--mint:#a6dc84;--gold:#d8c060;--rule:#b9b09a;--mut:#6a6352;--red:#c2410c;
+ --ui:'Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:'Plex Mono',ui-monospace,Menlo,Consolas,monospace;--txt:var(--ink);--dim:var(--mut);--acc:var(--teal);--card:var(--bone2);--bar:var(--bone);--line:var(--rule)}
+html{background:var(--desk)}
+body{font-family:var(--ui);color:var(--ink);background:var(--desk)}
+.mono,.lbl{font-family:var(--mono)}
+#view{background:radial-gradient(ellipse at 50% 35%,#003c6c 0%,var(--desk) 55%,var(--desk2) 100%) fixed}
+#view::before{content:'';position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(166,220,132,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(166,220,132,.045) 1px,transparent 1px);background-size:24px 24px}
+#view::after{content:'';position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.08) 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
+#wrap{z-index:1}
+#pg{box-shadow:0 0 0 1px rgba(0,0,0,.5),0 22px 60px rgba(0,0,0,.55)}
+
+/* header: a control strip */
+#hd{background:var(--bone);border-bottom:2px solid var(--ink);box-shadow:0 3px 0 var(--teal),0 6px 0 var(--green);color:var(--ink);gap:6px}
+.brand{display:flex;align-items:center;gap:9px;padding:0 4px 0 2px;flex:0 0 auto}
+.brand img{width:32px;height:32px;border-radius:7px;box-shadow:0 0 0 1.5px var(--ink)}
+.brand .bt{display:flex;flex-direction:column;line-height:1.05}
+.brand b{font:600 13px var(--mono);letter-spacing:.22em}
+.brand small{font:500 9.5px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--teal)}
+.hb{color:var(--ink);border-radius:6px}
+.hb:active{background:var(--bone2)}
+#isb{font:600 15px var(--mono);letter-spacing:.04em;white-space:nowrap;flex:0 0 auto;padding:0 6px;gap:4px}
+#isb .dot{width:8px;height:8px;background:#a39a84;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+#isb .dot.ok{background:#488430;box-shadow:0 0 6px #6aa84a}#isb .dot.wait{background:#d8c060;box-shadow:0 0 6px #d8c060}
+.seg>div{background:var(--bone2);border:1.5px solid var(--ink);border-radius:7px;padding:2px}
+.seg button{font:600 11.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);height:32px;border-radius:5px;padding:0 11px}
+.seg button.on{background:var(--green);color:#fff;box-shadow:inset 0 0 0 1.5px var(--ink)}
+#xb{background:var(--teal);color:var(--paper);border:1.5px solid var(--ink);box-shadow:0 2px 0 var(--ink);height:36px}
+#xb:active{transform:translateY(2px);box-shadow:none}
+#xb .lbl{display:none;font:600 11.5px var(--mono);letter-spacing:.14em;text-transform:uppercase}
+@media (max-width:400px){.brand .bt{display:none}.brand img{width:28px;height:28px}}
+@media (max-width:360px){.brand{display:none}}
+
+/* buttons: typewriter keys */
+.btn{background:var(--paper);color:var(--ink);border:1.5px solid var(--ink);border-radius:6px;box-shadow:0 2px 0 var(--ink);font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.btn:active{transform:translateY(2px);box-shadow:none;filter:none}
+.btn.pri{background:var(--teal);color:var(--paper)}
+.btn.dng{color:var(--red)}
+.btn.on{background:var(--green);color:#fff}
+.btn:disabled{opacity:.5}
+
+/* bottom control panel */
+#bb{background:var(--bone);border-top:2px solid var(--ink);box-shadow:0 -3px 0 var(--teal),0 -6px 0 var(--green)}
+#bb .hint{font:500 11.5px/1.35 var(--mono);color:var(--mut);letter-spacing:.02em}
+#bb .hint::before{content:'▸ ';color:var(--green)}
+
+/* typing toolbar */
+#fmt{background:var(--bone);border-top:2px solid var(--ink);box-shadow:0 -3px 0 var(--teal),0 -6px 0 var(--green);color:var(--ink)}
+.frow button{color:var(--ink);border-radius:5px}
+.frow button.on{background:var(--bone2);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.frow button.act{background:var(--green);color:#fff}
+.frow button.act img{filter:invert(1)!important}
+.frow .w2{font-family:var(--mono)}
+.frow .done{background:var(--teal);color:var(--paper);border:1.5px solid var(--ink);font:600 12px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.frow [data-f=em] img{filter:none!important}
+.fpan{border-bottom:1px solid var(--rule)}
+.fpan .stp{background:var(--paper);border:1.5px solid var(--ink);box-shadow:0 2px 0 var(--ink);color:var(--ink);font-family:var(--mono)}
+.fpan .stp:active{transform:translateY(2px);box-shadow:none}
+.chips button,.stl{background:var(--paper);border:1.5px solid var(--ink);color:var(--ink);font-family:var(--mono);font-size:12.5px}
+.stl.inv{background:var(--ink);color:#fff}
+.chips button:active,.stl:active{background:var(--bone2)}
+/* scrubber: a little CRT readout */
+.scrub{background:#001230;border:1.5px solid var(--ink);border-radius:6px;box-shadow:inset 0 0 14px rgba(0,0,0,.7)}
+.scrub .rul{background:repeating-linear-gradient(90deg,rgba(166,220,132,.95) 0 2px,transparent 2px 40px) 0 0/100% 24px no-repeat,repeating-linear-gradient(90deg,rgba(166,220,132,.45) 0 1px,transparent 1px 8px) 0 10px/100% 14px no-repeat}
+.scrub .ndl{background:var(--gold);box-shadow:0 0 6px var(--gold)}
+.scrub .sv{color:var(--mint);font-family:var(--mono);text-shadow:0 0 6px rgba(166,220,132,.6)}
+.scrub .sv small{color:rgba(166,220,132,.6)}
+.scrub::before{background:linear-gradient(90deg,#001230,transparent)}.scrub::after{background:linear-gradient(-90deg,#001230,transparent)}
+
+/* sheets */
+.scrim{background:rgba(0,14,36,.62)}
+.panel{background:var(--bone);color:var(--ink);border:2px solid var(--ink);border-bottom:0;box-shadow:0 -6px 30px rgba(0,0,0,.35)}
+@media (min-width:700px){.panel{border-bottom:2px solid var(--ink);box-shadow:8px 8px 0 rgba(0,0,0,.35)}}
+.panel h3{font:600 13px var(--mono);letter-spacing:.18em;text-transform:uppercase;padding-bottom:10px;border-bottom:3px double var(--ink)}
+.panel h3 .x{background:var(--paper);border:1.5px solid var(--ink);color:var(--ink);font-size:14px}
+.panel p{color:var(--mut)}
+.panel label{font:600 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.panel input,.panel textarea{background:#fbf8f0;border:1.5px solid var(--ink);border-radius:5px;color:var(--ink);font-family:var(--ui)}
+.panel input:focus,.panel textarea:focus{outline:2px solid var(--teal);outline-offset:1px}
+.note{color:var(--mut)}.err{color:var(--red)!important}
+.pubx{background:var(--bone2);border:1.5px solid var(--rule)}
+.ilist li{background:var(--paper);border:1.5px solid var(--rule);border-radius:7px}
+.ilist li.cur{border-color:var(--ink);box-shadow:inset 4px 0 0 var(--teal),inset 8px 0 0 var(--green)}
+.ilist .n{font:600 15px var(--mono)}
+.ilist .m small{color:var(--mut);font-family:var(--mono);font-size:11px}
+.ilist .del{color:var(--mut)}
+.tag{background:var(--green);color:var(--paper);font-family:var(--mono);border-radius:3px}
+.lays button{background:var(--paper);border:1.5px solid var(--rule);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink)}
+.lays button:active,.lays button.on{border-color:var(--ink)}
+.mini{box-shadow:0 0 0 1px var(--ink)}
+.acct{border-top:1px solid var(--rule)}
+.motto{margin:18px 0 4px;text-align:center;font:500 10px/1.6 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+.motto i{font:italic 13px var(--times);letter-spacing:0;text-transform:none}
+
+/* toasts and busy screen: terminal messages */
+#toast{background:var(--ink);color:var(--mint);font:500 12.5px var(--mono);letter-spacing:.03em;border:1.5px solid var(--green2);border-radius:6px;text-shadow:0 0 6px rgba(166,220,132,.45);box-shadow:0 8px 24px rgba(0,0,0,.45)}
+#toast button{color:var(--gold);text-transform:uppercase;font-size:11.5px;letter-spacing:.1em}
+.busy{background:rgba(0,20,52,.88);color:var(--mint);font:600 14px var(--mono);letter-spacing:.2em;text-transform:uppercase;text-shadow:0 0 8px rgba(166,220,132,.6)}
+.busy::after{content:'▌';margin-left:4px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* crop screen */
+#crop{background:var(--desk2)}
+#crop .ct{color:var(--mint);font:500 12px var(--mono);letter-spacing:.06em}
+#crop .cb{background:var(--bone);border-top:2px solid var(--ink)}
+.rotr span{color:var(--ink);font-family:var(--mono)}
+.rotr input{accent-color:var(--teal)}
+#crop .asp button.on{background:var(--green);color:#fff}
+#crop .cnote{color:var(--mut);font-family:var(--mono);font-size:11.5px}
+
+/* arranging boxes */
+.selov{border-color:var(--teal2)}
+.selov b{background:var(--teal2)}
+body.arr .live .blk{outline-color:rgba(0,96,156,.6)}
+
+/* zoom control */
+#zm{position:fixed;z-index:25;right:12px;bottom:calc(78px + var(--bot));display:none;align-items:center;gap:4px;background:var(--bone);border:1.5px solid var(--ink);border-radius:8px;padding:3px;box-shadow:0 3px 0 var(--ink)}
+#zm button{height:30px;min-width:30px;padding:0 8px;border-radius:5px;font:600 13px var(--mono);color:var(--ink)}
+#zm button:active{background:var(--bone2)}
+#zm span{font:600 11.5px var(--mono);min-width:44px;text-align:center}
+#zm .zf{background:var(--green);color:#fff;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+#zm.on{display:flex}
+#zm.on>button:not(.zf),#zm.on>span{display:none}
+body.kb #zm{display:none!important}
+
+/* ================= desktop: issues on the left, page in the middle, tools on the right ================= */
+#rail{display:none}
+body.desk #rail{display:block;position:fixed;z-index:20;left:0;top:calc(54px + var(--top));bottom:0;width:280px;overflow:auto;background:var(--bone2);border-right:2px solid var(--ink);padding:14px 14px 20px}
+#rail .rh{font:600 12px var(--mono);letter-spacing:.2em;text-transform:uppercase;margin:2px 0 12px;padding-bottom:8px;border-bottom:3px double var(--ink)}
+#rail .btn.big{width:100%}
+#rail input{display:block;width:100%;font:15px var(--ui);color:var(--ink);background:#fbf8f0;border:1.5px solid var(--ink);border-radius:5px;padding:9px 10px;margin:0}
+#rail input:focus{outline:2px solid var(--teal);outline-offset:1px}
+#rail .acct .btn{width:100%;margin-top:8px}
+#rail .ilist li{cursor:pointer}
+#rail .ilist li:hover{border-color:var(--ink)}
+body.desk #isb{display:none}
+body.desk #xb .lbl{display:inline}
+body.desk #view{left:280px;right:300px;padding-bottom:20px}
+body.desk #bb,body.desk #fmt{top:calc(54px + var(--top));left:auto;right:0;bottom:0;width:300px;min-height:0;border-top:0;border-left:2px solid var(--ink);box-shadow:none;transform:none!important;overflow:auto;padding:16px 14px 20px}
+body.desk #bb{flex-direction:column;align-items:stretch;justify-content:flex-start;gap:10px}
+body.desk #bb .btn{flex:0 0 auto;width:100%;height:46px}
+body.desk #bb .hint{flex:0 0 auto;font-size:12px;padding:10px 12px;background:var(--bone2);border:1.5px solid var(--rule);border-radius:7px}
+body.desk #bb::before{content:'Control panel';font:600 12px var(--mono);letter-spacing:.2em;text-transform:uppercase;padding-bottom:8px;border-bottom:3px double var(--ink)}
+body.desk #fmt{display:flex;flex-direction:column}
+body.desk #fmt[hidden]{display:none!important}
+body.desk #fmt::before{content:'Typesetting';order:-2;font:600 12px var(--mono);letter-spacing:.2em;text-transform:uppercase;padding-bottom:8px;margin-bottom:10px;border-bottom:3px double var(--ink)}
+body.desk .frow{order:-1;flex-wrap:wrap;height:auto;padding:0;gap:6px}
+body.desk .frow button{flex:1 1 calc(25% - 6px);height:42px;margin:0;border:1.5px solid var(--ink);background:var(--paper)}
+body.desk .frow .w2,body.desk .frow .done{flex-basis:calc(50% - 6px)}
+body.desk .frow .done{background:var(--teal);color:var(--paper);box-shadow:0 2px 0 var(--ink)}
+body.desk .frow [data-f=size],body.desk .frow [data-f=ls],body.desk .frow [data-f=lh],body.desk .frow [data-f=st],body.desk .frow [data-f=em]{display:none}
+body.desk #fpan{margin-top:8px}
+body.desk .fpan{padding:4px 0 6px;border:0}
+body.desk .chips{padding:0 0 4px;flex-wrap:wrap}
+body.desk .chips button{flex:1 1 auto}
+.dsec{margin:10px 0 6px}
+.dl{font:600 10.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin-bottom:2px}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.dgrid .stl{height:40px}
+.dfoot{font:500 11px/1.45 var(--mono);color:var(--mut);margin:14px 0 0}
+body.desk #zm{display:flex;right:316px;bottom:18px}
+body.desk #zm.on>button:not(.zf),body.desk #zm.on>span{display:inline-flex;align-items:center;justify-content:center}
+body.desk #toast{bottom:28px;left:calc(280px + (100vw - 580px)/2)}
 </style>
 </head>
 <body class="write">
 <header id="hd">
+ <div class="brand"><img src="icon-192.png" alt=""><div class="bt"><b>RAG&nbsp;PRESS</b><small>Printing Dept.</small></div></div>
  <button class="hb" id="isb" aria-label="Issues"><svg viewBox="0 0 24 24" style="width:20px"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span id="isn">№ 1</span><i class="dot" id="sdot"></i></button>
  <div class="seg"><div><button id="mw" class="on">Write</button><button id="ma">Arrange</button></div></div>
  <button class="hb" id="ub" aria-label="Undo" disabled><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
  <button class="hb" id="rb" aria-label="Redo" disabled><svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg></button>
- <button class="hb" id="xb" aria-label="Export"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg></button>
+ <button class="hb" id="xb" aria-label="Export"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg><span class="lbl">Export</span></button>
 </header>
+<aside id="rail" aria-label="Issues"></aside>
 <div id="view"><div id="wrap"><div id="pg"></div></div></div>
+<div id="zm"><button data-z="out" aria-label="Zoom out">−</button><span id="zv">100%</span><button data-z="in" aria-label="Zoom in">+</button><button data-z="fit" class="zf">Fit page</button></div>
 <div id="bb"></div>
 <div id="fmt" hidden>
  <div id="fpan" hidden></div>
@@ -276,7 +449,7 @@ const LAYOUTS={
 function mkBlocks(spec,t){const o={};for(const[k,x,y,w,h,ln]of spec){const id=uid();o[id]={id,k:k=='h'?'s':k,x,y,w,h,ln:ln||'',html:k=='s'?storyHTML():k=='h'?headHTML():'',im:null,t}}return o}
 
 // ---------- state ----------
-let DOCS={},I=null,MODE='w',SEL=null,ED=null,S=1,FIT=1,ZB=null,U=[],R=[],pendSnap=null,IMG={},DRAG=null;
+let UZ=false,DOCS={},I=null,MODE='w',SEL=null,ED=null,S=1,FIT=1,ZB=null,U=[],R=[],pendSnap=null,IMG={},DRAG=null;
 const blocks=()=>Object.values(I.b);
 
 // ---------- local storage (IndexedDB) ----------
@@ -375,7 +548,7 @@ function render(){
   e.classList.toggle('sel',MODE=='w'&&SEL==b.id);e.classList.toggle('fl',!!b.fl);e.classList.toggle('bad',MODE=='a'&&overlaps(b))}
  for(const id in have)have[id].remove();
  SH.querySelector('.lns').innerHTML=linesHTML(I);
- $('#isn').textContent='№ '+I.n;
+ $('#isn').textContent='№ '+I.n;renderRail();
  selOverlay();overflow();
  if(!DRAG)bar()}
 // "too long": measure where the last visible line really ends (empty lines and spacing at the end don't count)
@@ -401,23 +574,24 @@ document.addEventListener('pointerdown',e=>{const t=e.target.closest&&e.target.c
 
 // ---------- scale and zoom ----------
 function heights(){return{top:$('#hd').offsetHeight,bot:($('#fmt').hidden?$('#bb').offsetHeight:0)}}
-function fitScale(){const h=heights(),W=innerWidth,H=innerHeight-$('#hd').offsetHeight-Math.max($('#bb').offsetHeight,62)-16;return Math.min((W-16)/PW,H/PH,1.4)}
+const isDesk=()=>document.body.classList.contains('desk');
+function fitScale(){const W=VIEW.clientWidth||innerWidth,H=(VIEW.clientHeight||innerHeight)-(isDesk()?28:Math.max($('#bb').offsetHeight,62))-16;return Math.min((W-(isDesk()?56:16))/PW,H/PH,isDesk()?1.6:1.4)}
 function setScale(s){S=s;$('#pg').style.transform=`scale(${s})`;$('#wrap').style.width=PW*s+'px';$('#wrap').style.height=PH*s+'px';
  const k=1/s;if(SH)SH.style.setProperty('--k',k);$$('.selov,.ghost').forEach(e=>e.style.setProperty('--k',k));overflow()}
 const VIEW=$('#view');
-function fit(){FIT=fitScale();ZB=null;setScale(FIT);VIEW.scrollTo(0,0)}
-function zoomTo(id){const b=I.b[id];if(!b)return;const B=box(b);
- if(FIT>=.75){ZB=id;return}
+function fit(){FIT=fitScale();ZB=null;UZ=false;setScale(FIT);VIEW.scrollTo(0,0);zoomUI()}
+function zoomTo(id){const b=I.b[id];if(!b)return;const B=box(b);if(UZ){ZB=id;return}
+ if(FIT>=.75||isDesk()){ZB=id;return}
  const s=innerWidth<700?Math.min(1.35,(innerWidth-20)/B.w):1;
  if(ZB!==id||Math.abs(S-s)>.01){ZB=id;setScale(s)}
  requestAnimationFrame(()=>{const w=$('#wrap');VIEW.scrollLeft=Math.max(0,w.offsetLeft+B.l*s-10);VIEW.scrollTop=Math.max(0,w.offsetTop+B.t*s-10);setTimeout(keepCaret,60)})}
 function keepCaret(){if(!ED)return;const r=rng();if(!r)return;let rc=r.getClientRects()[0]||r.getBoundingClientRect();
  if(!rc||(!rc.height&&!rc.top)){const n=r.startContainer.nodeType==1?r.startContainer:r.startContainer.parentElement;rc=n.getBoundingClientRect()}
- const vv=window.visualViewport,vh=vv?vv.height:innerHeight,top=$('#hd').offsetHeight+8,bot=vh-($('#fmt').offsetHeight||0)-12;
+ const vv=window.visualViewport,vh=vv?vv.height:innerHeight,top=$('#hd').offsetHeight+8,bot=vh-(isDesk()?0:($('#fmt').offsetHeight||0))-12;
  if(rc.bottom>bot)VIEW.scrollTop+=rc.bottom-bot+40;else if(rc.top<top)VIEW.scrollTop+=rc.top-top-40}
 
 // ---------- modes ----------
-function setMode(m){if(ED)ED.blur();MODE=m;SEL=null;document.body.className=m=='w'?'write':'arr';$('#mw').classList.toggle('on',m=='w');$('#ma').classList.toggle('on',m=='a');render();bar();fit()}
+function setMode(m){if(ED)ED.blur();MODE=m;SEL=null;document.body.classList.toggle('write',m=='w');document.body.classList.toggle('arr',m!='w');$('#mw').classList.toggle('on',m=='w');$('#ma').classList.toggle('on',m=='a');render();bar();fit()}
 $('#mw').onclick=()=>setMode('w');$('#ma').onclick=()=>setMode('a');
 $('#ub').onclick=undo;$('#rb').onclick=redo;
 
@@ -655,15 +829,23 @@ document.addEventListener('focusin',e=>{const t=e.target.closest&&e.target.close
  $$('.blk.ed').forEach(x=>x.classList.remove('ed'));t.parentNode.classList.add('ed');
  showFmt();zoomTo(t.parentNode.dataset.id);setTimeout(readState,30)});
 document.addEventListener('focusout',e=>{const t=e.target.closest&&e.target.closest('.tx');if(!t)return;clearTimeout(edT);edited(t);
- unzT=setTimeout(()=>{const a=document.activeElement;if(a&&a.closest&&a.closest('.tx'))return;ED=null;pendSnap=null;updUndo();$$('.blk.ed').forEach(x=>x.classList.remove('ed'));hideFmt();fit();render()},220)});
+ unzT=setTimeout(()=>{const a=document.activeElement;if(a&&a.closest&&a.closest('.tx'))return;ED=null;pendSnap=null;updUndo();$$('.blk.ed').forEach(x=>x.classList.remove('ed'));hideFmt();if(!UZ)fit();render()},220)});
 document.addEventListener('selectionchange',()=>{if(ED&&rng())readState()});
 
 // format toolbar
 let PANEL=null;
-function showFmt(){$('#fmt').hidden=false;$('#bb').hidden=true;placeBars()}
-function hideFmt(){$('#fmt').hidden=true;$('#bb').hidden=false;PANEL=null;pan(null);$$('.frow button').forEach(b=>b.classList.remove('act'))}
+function showFmt(){$('#fmt').hidden=false;$('#bb').hidden=true;if(isDesk())deskPan();placeBars()}
+function hideFmt(){$('#fmt').hidden=true;$('#bb').hidden=false;PANEL=null;const fp=$('#fpan');fp.hidden=true;fp.innerHTML='';fp.dataset.k='';$$('.frow button').forEach(b=>b.classList.remove('act'))}
 function stepSize(d){let v=FS.pt;if(d>0)v=v<24?v+.5:v+2;else v=v<=24?v-.5:v-2;return clamp(v,5,120)}
-function pan(k,refresh){const fp=$('#fpan');if(!refresh){PANEL=PANEL===k?null:k;$$('.frow button').forEach(b=>b.classList.toggle('act',b.dataset.f===PANEL&&PANEL!=null))}
+function deskPan(){const fp=$('#fpan');fp.hidden=false;
+ if(fp.dataset.k==='desk'){updScrub();return}fp.dataset.k='desk';const ini=initials();
+ const sc=(k,lab,chips)=>`<div class="dsec"><div class="dl">${lab}</div><div class="fpan"><button class="stp" data-s="-1" data-sk="${k}">−</button><div class="scrub" data-k="${k}"><div class="rul"></div><i class="ndl"></i><div class="sv"></div></div><button class="stp" data-s="1" data-sk="${k}">+</button></div>${chips||''}</div>`;
+ fp.innerHTML=sc('size','Text size')+sc('ls','Letter spacing',`<div class="chips"><button data-l="-30">Tight</button><button data-l="0">Normal</button><button data-l="50">Wide</button><button data-l="150">Wider</button></div>`)+sc('lh','Line spacing',`<div class="chips">${[1,1.15,1.3,1.5,2].map(v=>`<button data-h="${v}">${v.toFixed(2)}</button>`).join('')}</div>`)
+  +`<div class="dsec"><div class="dl">Paragraph style</div><div class="dgrid"><button class="stl" data-st="head" style="font-family:var(--anton);letter-spacing:.03em">Headline</button><button class="stl" data-st="big" style="font-family:var(--anton)">BIG</button><button class="stl" data-st="by" style="font-family:var(--times);font-style:italic">Byline</button><button class="stl" data-st="body" style="font-family:var(--times)">Body</button><button class="stl" data-c="#000">Black text</button><button class="stl inv" data-c="#fff">White text</button></div></div>
+  <div class="dsec"><div class="dl">End mark</div><div class="dgrid"><button class="stl" data-em="stamp"><img src="emblem.png" alt="" style="height:16px;vertical-align:-3px"> Stamp</button><button class="stl" data-em="ini"><b>${esc(ini||'AB')}</b> Initials</button></div></div>
+  <p class="dfoot">Select words to style just those. With nothing selected, changes apply to the whole paragraph.</p>`;
+ updScrub()}
+function pan(k,refresh){const fp=$('#fpan');if(isDesk()){PANEL=null;deskPan();return}if(!refresh){PANEL=PANEL===k?null:k;$$('.frow button').forEach(b=>b.classList.toggle('act',b.dataset.f===PANEL&&PANEL!=null))}
  k=PANEL;if(!k){fp.hidden=true;fp.innerHTML='';placeBars();return}fp.hidden=false;
  if(refresh&&fp.dataset.k===k){updScrub();placeBars();return}
  fp.dataset.k=k;
@@ -676,11 +858,12 @@ function pan(k,refresh){const fp=$('#fpan');if(!refresh){PANEL=PANEL===k?null:k;
 const SCR={size:{min:5,max:100,ppu:8,step:.5,get:()=>FS.pt,txt:v=>`${v} pt<small>size</small>`},
  ls:{min:-100,max:800,ppu:.8,step:5,get:()=>FS.ls,txt:v=>`${v>0?'+':''}${v}<small>letter spacing</small>`},
  lh:{min:.5,max:3,ppu:160,step:.01,get:()=>FS.lh,txt:v=>`${v.toFixed(2)}<small>line spacing</small>`}};
-function updScrub(v){const el=$('#fpan .scrub');if(!el)return;const c=SCR[el.dataset.k];if(v==null)v=c.get();const r=el.querySelector('.rul');r.style.width=(c.max-c.min)*c.ppu+'px';r.style.transform=`translateX(${-(v-c.min)*c.ppu}px)`;el.querySelector('.sv').innerHTML=c.txt(v)}
+function updScrub(v,only){for(const el of $$('#fpan .scrub')){if(only&&el.dataset.k!==only)continue;updOne(el,v)}}
+function updOne(el,v){const c=SCR[el.dataset.k];if(v==null)v=c.get();const r=el.querySelector('.rul');r.style.width=(c.max-c.min)*c.ppu+'px';r.style.transform=`translateX(${-(v-c.min)*c.ppu}px)`;el.querySelector('.sv').innerHTML=c.txt(v)}
 function setVal(k,v){if(k=='size'){FS.pt=v;charStyle('font-size',+(v/.75).toFixed(2)+'px')}else if(k=='ls'){FS.ls=v;charStyle('letter-spacing',v/1000+'em')}else{FS.lh=v;paraStyle({'line-height':String(v)})}}
 (()=>{let sd=null,raf=0;
  document.addEventListener('pointerdown',e=>{const el=e.target.closest&&e.target.closest('#fpan .scrub');if(!el)return;e.preventDefault();const c=SCR[el.dataset.k];try{el.setPointerCapture(e.pointerId)}catch(_){}sd={el,c,k:el.dataset.k,x0:e.clientX,v0:c.get(),v:c.get(),id:e.pointerId}});
- document.addEventListener('pointermove',e=>{if(!sd||e.pointerId!==sd.id)return;const c=sd.c;let v=sd.v0-(e.clientX-sd.x0)/c.ppu;v=clamp(Math.round(v/c.step)*c.step,c.min,c.max);v=+v.toFixed(2);updScrub(v);
+ document.addEventListener('pointermove',e=>{if(!sd||e.pointerId!==sd.id)return;const c=sd.c;let v=sd.v0-(e.clientX-sd.x0)/c.ppu;v=clamp(Math.round(v/c.step)*c.step,c.min,c.max);v=+v.toFixed(2);updOne(sd.el,v);
   if(v!==sd.v){sd.v=v;if(!raf)raf=requestAnimationFrame(()=>{raf=0;if(sd)setVal(sd.k,sd.v)})}});
  const end=e=>{if(!sd||e.pointerId!==sd.id)return;const d=sd;sd=null;if(raf){cancelAnimationFrame(raf);raf=0}if(d.v!==d.c.get())setVal(d.k,d.v);updScrub()};
  document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end)})();
@@ -695,9 +878,9 @@ function fmtAct(el){const f=el.dataset.f;
  else if(f=='al'){const o=['left','justify','center','right'],n=o[(o.indexOf(FS.al)+1)%4];paraStyle({'text-align':n});toast({left:'Aligned left',justify:'Justified',center:'Centred',right:'Aligned right'}[n])}
  else if(f=='done'){ED&&ED.blur();getSelection().removeAllRanges()}
  else if(f)pan(f);
- if(el.dataset.s)applyStep(PANEL,+el.dataset.s);
-  if(el.dataset.l!=null&&el.dataset.l!==undefined&&el.closest('#fpan')&&PANEL=='ls'){FS.ls=+el.dataset.l;charStyle('letter-spacing',FS.ls/1000+'em')}
- if(el.dataset.h&&PANEL=='lh'){FS.lh=+el.dataset.h;paraStyle({'line-height':String(FS.lh)})}
+ if(el.dataset.s)applyStep(el.dataset.sk||PANEL,+el.dataset.s);
+  if(el.dataset.l!=null&&el.dataset.l!==undefined&&el.closest('#fpan')&&(PANEL=='ls'||isDesk())){FS.ls=+el.dataset.l;charStyle('letter-spacing',FS.ls/1000+'em')}
+ if(el.dataset.h&&(PANEL=='lh'||isDesk())){FS.lh=+el.dataset.h;paraStyle({'line-height':String(FS.lh)})}
  if(el.dataset.st)presetStyle(el.dataset.st);
  if(el.dataset.c)charStyle('color',el.dataset.c);
  if(el.dataset.em)endMark(el.dataset.em)}
@@ -707,14 +890,14 @@ function fmtAct(el){const f=el.dataset.f;
  f.addEventListener('touchstart',e=>{if(e.target.closest('button,.scrub'))e.preventDefault()},{passive:false});
  f.addEventListener('mousedown',e=>e.preventDefault());
  f.addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b)return;e.preventDefault();down=b;
-  if(b.dataset.s){rt=setTimeout(()=>{rep=setInterval(()=>applyStep(PANEL,+b.dataset.s),110)},420)}});
+  if(b.dataset.s){rt=setTimeout(()=>{rep=setInterval(()=>applyStep(b.dataset.sk||PANEL,+b.dataset.s),110)},420)}});
  f.addEventListener('pointerup',e=>{const b=e.target.closest('button');const held=!!rep;stop();if(b&&b===down&&!held)fmtAct(b);down=null});
  f.addEventListener('pointercancel',()=>{stop();down=null});
  f.addEventListener('pointerleave',stop)})();
 function placeBars(){const vv=window.visualViewport;if(!vv)return;const kb=innerHeight-vv.height-vv.offsetTop;document.body.classList.toggle('kb',kb>60);
  $('#fmt').style.transform=`translateY(${-Math.max(0,kb)}px)`;$('#hd').style.transform=vv.offsetTop>0?`translateY(${vv.offsetTop}px)`:''}
 if(window.visualViewport){visualViewport.addEventListener('resize',()=>{placeBars();keepCaret()});visualViewport.addEventListener('scroll',placeBars)}
-addEventListener('resize',()=>{if(!ED)fit()});
+addEventListener('resize',()=>{deskMode();if(!ED&&!UZ)fit();else{FIT=fitScale();zoomUI()}});
 
 // ---------- sheets, toasts ----------
 function sheet(html){close();const s=document.createElement('div');s.className='scrim';s.innerHTML=`<div class="panel">${html}</div>`;s.onclick=e=>{if(e.target===s||e.target.closest('.x'))close()};document.body.appendChild(s);return s.firstChild}
@@ -743,19 +926,26 @@ let askedShare=false;
 function offerShare(){const P=Object.values(DOCS).filter(d=>d.play&&!d.gone&&hasContent(d));if(!isEd()||askedShare||!P.length)return;askedShare=true;
  ask(`You made ${P.length} issue${P.length>1?'s':''} on this phone before signing in as an editor. Share ${P.length>1?'them':'it'} with the other editors as drafts?`,'Share',()=>{for(const d of P){delete d.play;d.t=now();dbPut('docs',JSON.parse(JSON.stringify(d)));dirty.add(d.id)}sync();toast('Shared with the other editors')})}
 function ago(t){const s=(now()-t)/1000;return s<60?'just now':s<3600?Math.round(s/60)+' min ago':s<86400?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()}
-function issues(){if(ED)ED.blur();const L=live();
- const p=sheet(`<h3>Issues<button class="x">✕</button></h3>${isEd()?'':'<p class="note pubx" style="margin:0 0 12px">You’re exploring in practice mode: anything you make stays on this phone. Real drafts are only visible to Rag editors once they sign in.</p>'}<button class="btn pri big" id="i-new">＋ New issue</button>
- <ul class="ilist">${L.map(d=>`<li data-id="${d.id}" class="${d.id==I.id?'cur':''}"><span class="n">№ ${esc(d.n)}</span><span class="m"><b>${d.play&&isEd()?'<span class="tag">Practice</span> ':''}${d.pdf?'<span class="tag">PDF</span> ':''}${esc(d.theme||(d.pdf?d.pdf.name:'No theme yet'))}</b><small>${longDate(d.date).toLowerCase()} · edited ${ago(d.t)}</small></span><button class="del" aria-label="Delete issue">${ICON.trash}</button></li>`).join('')}</ul>
- <div id="pin"></div><div class="acct" id="acct"></div>`);
- p.querySelector('#i-new').onclick=newIssue;
- p.querySelectorAll('li').forEach(li=>{li.onclick=e=>{const id=li.dataset.id;if(e.target.closest('.del')){const d=DOCS[id];ask(`Delete Issue № ${d.n}${d.theme?' ('+d.theme+')':''}? This can’t be undone.`,'Delete',()=>{d.gone=now();d.t=now();dbPut('docs',d);syncSoon(id);if(id==I.id){const n=live()[0];n?openDoc(n.id):openDoc(makeDoc('classic').id)}toast('Issue deleted')});return}close();openDoc(id)}});
- acct();pinHint()}
+const SIGNOFF='<p class="motto">The Riley Rag · Printing Department<br><i>Please enjoy each issue equally.</i></p>';
+function issuesHTML(){const L=live();
+ return `${isEd()?'':'<p class="note pubx" style="margin:0 0 12px">You’re exploring in practice mode: anything you make stays on this device. Real drafts are only visible to Rag editors once they sign in.</p>'}<button class="btn pri big" data-i="new">＋ New issue</button>
+ <ul class="ilist">${L.map(d=>`<li data-id="${d.id}" class="${I&&d.id==I.id?'cur':''}"><span class="n">№ ${esc(d.n)}</span><span class="m"><b>${d.play&&isEd()?'<span class="tag">Practice</span> ':''}${d.pdf?'<span class="tag">PDF</span> ':''}${esc(d.theme||(d.pdf?d.pdf.name:'No theme yet'))}</b><small>${longDate(d.date).toLowerCase()} · edited ${ago(d.t)}</small></span><button class="del" aria-label="Delete issue">${ICON.trash}</button></li>`).join('')}</ul>`}
+function wireIssues(root,inSheet){root.querySelector('[data-i=new]').onclick=newIssue;
+ root.querySelectorAll('li[data-id]').forEach(li=>{li.onclick=e=>{const id=li.dataset.id;if(e.target.closest('.del')){const d=DOCS[id];ask(`Delete Issue № ${d.n}${d.theme?' ('+d.theme+')':''}? This can’t be undone.`,'Delete',()=>{d.gone=now();d.t=now();dbPut('docs',d);syncSoon(id);if(id==I.id){const n=live()[0];n?openDoc(n.id):openDoc(makeDoc('classic').id)}renderRail(true);toast('Issue deleted')});return}if(inSheet)close();openDoc(id)}})}
+function issues(){if(ED)ED.blur();if(isDesk()){renderRail(true);return}
+ const p=sheet(`<h3>Issues<button class="x">✕</button></h3><div id="ilw">${issuesHTML()}</div><div id="pin"></div><div class="acct" id="acct"></div>${SIGNOFF}`);
+ wireIssues(p,true);acct();pinHint()}
+let railSig='';
+function renderRail(force){const r=$('#rail');if(!isDesk()){if(r.innerHTML){r.innerHTML='';railSig=''}return}
+ const sig=JSON.stringify(live().map(d=>[d.id,d.n,d.theme,d.date,Math.floor(d.t/60000),d.play,!!d.pdf]))+(I&&I.id)+isEd()+(ME&&ME.name);
+ if(!force&&sig===railSig)return;railSig=sig;
+ r.innerHTML=`<div class="rh">Issues</div><div id="ilw">${issuesHTML()}</div><div id="pin"></div><div class="acct" id="acct"></div>${SIGNOFF}`;wireIssues(r,false);acct();pinHint()}
 function pinHint(){const el=$('#pin');if(!el)return;let hide=false;try{hide=localStorage.getItem('rp_home')=='1'||localStorage.getItem('rp_pinhide')=='1'}catch(e){}if(hide)return;
  el.innerHTML=`<div class="pubx" style="margin-top:4px"><b>Put Rag Press on your home screen</b><p class="note">Open <b>joshp523.github.io/RileyRag/press</b> in Safari, tap Share <span style="font-size:15px">⇪</span>, then <b>Add to Home Screen</b>.</p><div class="row" style="margin-top:6px"><button class="btn" id="pin-c">Copy link</button><button class="btn" id="pin-h">Hide</button></div></div>`;
  el.querySelector('#pin-c').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText('https://joshp523.github.io/RileyRag/press/').then(()=>toast('Link copied. Paste it into Safari.'),()=>toast('joshp523.github.io/RileyRag/press'))};
  el.querySelector('#pin-h').onclick=()=>{try{localStorage.setItem('rp_pinhide','1')}catch(e){}el.innerHTML=''}}
 try{if(/[?&]home=1/.test(location.search))localStorage.setItem('rp_home','1')}catch(e){}
-function openDoc(id){if(ED)ED.blur();I=DOCS[id];if(I.pdf&&MODE!='w'){MODE='w';document.body.className='write';$('#mw').classList.add('on');$('#ma').classList.remove('on')}U=[];R=[];SEL=null;SH=null;updUndo();try{localStorage.setItem('rp_cur',id)}catch(e){}render();fit()}
+function openDoc(id){if(ED)ED.blur();I=DOCS[id];if(I.pdf&&MODE!='w'){MODE='w';document.body.classList.add('write');document.body.classList.remove('arr');$('#mw').classList.add('on');$('#ma').classList.remove('on')}U=[];R=[];SEL=null;SH=null;updUndo();try{localStorage.setItem('rp_cur',id)}catch(e){}render();fit()}
 function makeDoc(lay,from){const L=live(),last=from||L[0],t=now();let date=iso(new Date());
  if(last&&last.date){const p=pd(last.date),nd=new Date(p.y,p.m-1,p.d+7);if(nd>new Date())date=iso(nd)}
  const d={id:uid(),v:1,t,mt:t,...(isEd()?{}:{play:1}),n:last?(Math.max(...L.map(x=>+x.n||0))+1):7,date,theme:'',addr:last?last.addr:'Boulevard de\nl’Empereur,\nBrussels',by:last?last.by:'J. & M. Riley',b:{},del:{},gone:0};
@@ -785,7 +975,7 @@ $('#fp').onchange=async()=>{const file=$('#fp').files[0];if(!file)return;busy('O
  catch(x){toast('Couldn’t open that PDF: '+(x.message||x))}finally{busy()}};
 function renderPdf(){SH=null;const src=IMG[I.pdf.pv];if(!src)loadImg(I.pdf.pv);
  $('#pg').innerHTML=`<div class="sheet">${src?`<img src="${src}" alt="" style="position:absolute;left:0;top:0;width:794px;height:auto">`:'<p style="padding:60px;text-align:center;color:#777;font:16px -apple-system,sans-serif">Loading the PDF…</p>'}</div>`;
- $('#isn').textContent='№ '+I.n;$('.seg').style.visibility='hidden';bar()}
+ $('#isn').textContent='№ '+I.n;$('.seg').style.visibility='hidden';renderRail();bar()}
 
 // ---------- export ----------
 async function canvasOf(scale){if(ED)ED.blur();
@@ -890,8 +1080,44 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState=='
 addEventListener('online',()=>sync());setInterval(()=>{if(document.visibilityState=='visible')sync()},20000);
 addEventListener('pagehide',saveNow);
 
+// ---------- zoom: pinch on phones, ctrl/⌘ + scroll or the zoom buttons on desktop ----------
+function zoomUI(){const z=$('#zm');if(!z)return;$('#zv').textContent=Math.round(S/FIT*100)+'%';z.classList.toggle('on',UZ)}
+function zoomAt(s,cx,cy,px,py){s=clamp(s,Math.min(FIT,.25),4);const r=$('#pg').getBoundingClientRect();if(px==null){px=(cx-r.left)/S;py=(cy-r.top)/S}
+ setScale(s);const r2=$('#pg').getBoundingClientRect();VIEW.scrollLeft+=r2.left+px*s-cx;VIEW.scrollTop+=r2.top+py*s-cy;UZ=Math.abs(s-FIT)>.005;zoomUI()}
+function zoomBy(f){const r=VIEW.getBoundingClientRect();zoomAt(S*f,r.left+r.width/2,r.top+r.height/2)}
+$('#zm').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const z=b.dataset.z;if(z=='fit'){fit();return}zoomBy(z=='in'?1.2:1/1.2)});
+VIEW.addEventListener('wheel',e=>{if(!e.ctrlKey&&!e.metaKey)return;e.preventDefault();zoomAt(S*Math.exp(-clamp(e.deltaY,-60,60)*.006),e.clientX,e.clientY)},{passive:false});
+let PIN=null;
+function cancelDrag(){if(!DRAG)return;const d=DRAG;DRAG=null;SH&&SH.querySelector('.ghost')?.remove();if(d.el){d.el.classList.remove('mv');d.el.style.transform=''}render()}
+VIEW.addEventListener('touchstart',e=>{if(e.touches.length!==2)return;if(MODE=='w'&&e.target.closest&&e.target.closest('.blk.p.sel'))return;
+ const[a,b]=e.touches,mx=(a.clientX+b.clientX)/2,my=(a.clientY+b.clientY)/2,r=$('#pg').getBoundingClientRect();
+ PIN={d:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),s:S,px:(mx-r.left)/S,py:(my-r.top)/S};cancelDrag();e.preventDefault()},{passive:false});
+VIEW.addEventListener('touchmove',e=>{if(!PIN||e.touches.length!==2)return;e.preventDefault();const[a,b]=e.touches;
+ zoomAt(PIN.s*Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)/PIN.d,(a.clientX+b.clientX)/2,(a.clientY+b.clientY)/2,PIN.px,PIN.py)},{passive:false});
+VIEW.addEventListener('touchend',e=>{if(e.touches.length<2)PIN=null});
+document.addEventListener('gesturestart',e=>e.preventDefault());
+// arrange drags ignore a second finger (that's a pinch)
+$('#pg').addEventListener('pointerdown',e=>{if(PIN)cancelDrag()},true);
+
+// ---------- desktop: issues rail on the left, tools on the right ----------
+function deskMode(){const was=isDesk(),on=innerWidth>=1024&&matchMedia('(pointer:fine)').matches||innerWidth>=1180;document.body.classList.toggle('desk',on);
+ if(was!==on){renderRail(true);const fp=$('#fpan');fp.dataset.k='';if(ED){if(on)deskPan();else{fp.hidden=true;fp.innerHTML=''}}if(I)bar()}}
+document.addEventListener('keydown',e=>{const t=e.target,typing=t&&t.closest&&(t.closest('.tx')||/INPUT|TEXTAREA|SELECT/.test(t.tagName)),mod=e.metaKey||e.ctrlKey,k=e.key;
+ if($('.scrim')||$('#crop')){if(k=='Escape'){close();$('#crop')&&$('#crop').remove()}return}
+ if(mod&&(k=='='||k=='+')){e.preventDefault();zoomBy(1.2);return}
+ if(mod&&k=='-'){e.preventDefault();zoomBy(1/1.2);return}
+ if(mod&&k=='0'){e.preventDefault();fit();return}
+ if(mod&&!typing&&k.toLowerCase()=='z'){e.preventDefault();e.shiftKey?redo():undo();return}
+ if(k=='Escape'){if(ED){ED.blur();return}if(SEL){SEL=null;render()}return}
+ if(typing||MODE!='a'||!SEL||!I.b[SEL])return;const b=I.b[SEL];
+ if(k=='Backspace'||k=='Delete'){e.preventDefault();delBlock(SEL);return}
+ const dir={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[k];if(!dir)return;e.preventDefault();
+ const st=b.fl?.25:1,r={x:b.x+dir[0]*st,y:b.y+dir[1]*st,w:b.w,h:b.h};
+ if(e.shiftKey){r.x=b.x;r.y=b.y;r.w=Math.max(st,b.w+dir[0]*st);r.h=Math.max(st,b.h+dir[1]*st)}
+ if(!free(r,b.id,b.fl))return toast('That would overlap another box.');snap();Object.assign(b,r,{t:now()});changed();render()});
+
 // ---------- start ----------
-(async()=>{try{for(const d of await dbAll('docs'))DOCS[d.id]=d}catch(e){toast('This browser won’t let the app save. Export copies as you go.')}
+(async()=>{deskMode();try{for(const d of await dbAll('docs'))DOCS[d.id]=d}catch(e){toast('This browser won’t let the app save. Export copies as you go.')}
  let cid=null;try{cid=localStorage.getItem('rp_cur')}catch(e){}
  if(!cid||!live().includes(DOCS[cid]))cid=(live()[0]||{}).id;
  if(!cid)cid=makeDoc('classic').id;
