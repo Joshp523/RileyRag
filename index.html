@@ -232,6 +232,16 @@ async function quickLogin(name, email){   // true, 'editor', or an error message
  }catch(x){ return navigator.onLine === false ? 'You’re offline. Connect to the internet and try again.' : (x.message || 'Couldn’t sign in. Please try again.'); }
 }
 let switching = false;
+// ---- Tell the editors what readers are doing (the server function sends the alerts; readers are never pinged for this) ----
+let TOKEN = null;
+sb.auth.onAuthStateChange((ev, ses) => { TOKEN = ses ? ses.access_token : null; });
+function act(kind, d){ if(!me || me.is_editor || !TOKEN) return; send('rr-activity', {kind, d}); }
+function send(fn, body){ try{ fetch(`${SUPABASE_URL}/functions/v1/${fn}`, {method:'POST', keepalive:true, headers:{'Content-Type':'application/json', Authorization:'Bearer '+TOKEN, apikey:SUPABASE_ANON_KEY}, body:JSON.stringify(body)}).catch(() => {}); }catch(e){} }
+// any link a reader taps (other apps, Word Games, QuipRash, the photo gallery, PDF downloads, links in the charter)
+document.addEventListener('click', e => { const a = e.target.closest && e.target.closest('a[href]'); if(!a) return; const h = a.getAttribute('href') || '';
+ if(!h || h.startsWith('#') || h.startsWith('mailto:') || h.startsWith('javascript:')) return;
+ const label = (a.id === 'lbpdf' ? 'the PDF of an issue' : (a.textContent || '').replace(/\s+/g,' ').trim()) || h;
+ act('link', {key:a.href, label}); }, true);
 async function boot(){
  let { data:{ session } } = await sb.auth.getSession();
  if(!session && !switching){ const w = who(); if(w && w.email && await quickLogin(w.name, w.email) === true) session = (await sb.auth.getSession()).data.session; }
@@ -239,7 +249,7 @@ async function boot(){
  if(recovering) return recoveryView();
  const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
  if(!data){ await sb.auth.signOut({ scope:'local' }); $('#nav').hidden = true; return authView(); } // signed in, but not as a Rag member
- me = data; if(session.user.email && !who()) saveWho(me.name, session.user.email);
+ me = data; TOKEN = session.access_token; if(session.user.email && !who()) saveWho(me.name, session.user.email);
  sb.rpc('touch_me').then(() => {}, () => {});
  $('#nav').hidden = false; route(); setTimeout(nudge, 2500);
 }
@@ -294,7 +304,7 @@ async function feedView(){
 
 let RXC = {}, VIEWS = [];
 const seen = new Set(), viewObs = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const id = +en.target.dataset.iss;
- if(en.isIntersecting && !seen.has(id)){ seen.add(id); viewObs.unobserve(en.target); sb.rpc('saw_issue', {iid:id}).then(() => {}, () => {}); } }), {threshold:.5}) : null;
+ if(en.isIntersecting && !seen.has(id)){ seen.add(id); viewObs.unobserve(en.target); sb.rpc('saw_issue', {iid:id}).then(() => {}, () => {}); act('read', {key:id, n:en.target.dataset.n}); } }), {threshold:.5}) : null;
 const ago = t => { const d = (Date.now() - new Date(t)) / 864e5; return d < 1 ? 'today' : d < 2 ? 'yesterday' : d < 30 ? Math.floor(d)+' days ago' : new Date(t).toLocaleDateString(); };
 function issueEl(is, cs, rs){
  const el = document.createElement('article'); el.className='issue';
@@ -302,8 +312,8 @@ function issueEl(is, cs, rs){
  el.innerHTML = `<button class="sheet" aria-label="Open issue ${is.number} full size"><img loading="lazy" src="${pub(is.img_path)}" alt="The Riley Rag, Issue ${is.number}, ${d}"></button>
  <div class="rxs"></div><div class="who" hidden></div>${me.is_editor?'<button class="btn ghost seen"></button><div class="who seenl" hidden></div>':''}<div class="cms"></div>
  <form><label class="sr" for="c${is.id}">Leave a comment</label><textarea id="c${is.id}" rows="2" maxlength="1000" placeholder="Leave a comment…" required></textarea><button class="btn">Post comment</button><p class="err"></p></form>`;
- el.querySelector('.sheet').onclick = () => { $('#lbimg').src = pub(is.img_path); $('#lbpdf').href = pub(is.pdf_path); $('#lb').classList.add('on'); if(!me.is_editor) sb.rpc('saw_issue', {iid:is.id}).then(() => {}, () => {}); };
- if(!me.is_editor && viewObs){ el.querySelector('.sheet').dataset.iss = is.id; viewObs.observe(el.querySelector('.sheet')); }
+ el.querySelector('.sheet').onclick = () => { $('#lbimg').src = pub(is.img_path); $('#lbpdf').href = pub(is.pdf_path); $('#lb').classList.add('on'); if(!me.is_editor){ sb.rpc('saw_issue', {iid:is.id}).then(() => {}, () => {}); act('read', {key:is.id, n:is.number}); } };
+ if(!me.is_editor && viewObs){ el.querySelector('.sheet').dataset.iss = is.id; el.querySelector('.sheet').dataset.n = is.number; viewObs.observe(el.querySelector('.sheet')); }
  if(me.is_editor){   // who has read this issue
   const v = VIEWS.filter(x => x.issue_id === is.id).sort((a,b) => new Date(b.last_at) - new Date(a.last_at)), sb2 = el.querySelector('.seen'), sl = el.querySelector('.seenl');
   sb2.textContent = v.length ? `👁 Read by ${v.length} ${v.length===1?'person':'people'} ▾` : '👁 Nobody has opened this one yet';
@@ -330,7 +340,7 @@ function issueEl(is, cs, rs){
     const {error} = mine ? await sb.from('reactions').delete().match({issue_id:is.id,user_id:me.id,kind:k}) : await sb.from('reactions').insert({issue_id:is.id,kind:k});
     if(error){ b.disabled = false; return alert(error.message); }
     if(mine){ const i = rs.findIndex(x => x.issue_id===is.id && x.kind===k && x.user_id===me.id); if(i>-1) rs.splice(i,1); RXC[is.id+'|'+k] = Math.max(0, n-1); }
-    else { rs.push({issue_id:is.id, user_id:me.id, kind:k}); RXC[is.id+'|'+k] = n+1; }
+    else { rs.push({issue_id:is.id, user_id:me.id, kind:k}); RXC[is.id+'|'+k] = n+1; act('react', {n:is.number, label}); }
     drawRx(); [...rx.children].find(c => c.title===label)?.focus({preventScroll:true});
    };
    rx.append(b);
@@ -354,7 +364,7 @@ function issueEl(is, cs, rs){
   e.preventDefault(); const ta = el.querySelector('textarea'), er = el.querySelector('.err'); er.textContent = '';
   const {data, error} = await sb.from('comments').insert({issue_id:is.id, body:ta.value.trim()}).select('*,profiles(name)').single();
   if(error) return er.textContent = error.message;
-  ta.value = ''; addComment(data);
+  act('comment', {n:is.number, text:ta.value.trim()}); ta.value = ''; addComment(data);
  };
  return el;
 }
@@ -470,14 +480,15 @@ async function gamesView(){
   if(typed.length !== pz.len) return $('#ge').textContent = `Enter ${pz.len} letters.`;
   const {data, error} = await sb.rpc('wordler_guess',{pid:pz.id, g:typed});
   if(error) return $('#ge').textContent = error.message;
-  guesses.push({guess:typed.toLowerCase(), pattern:data}); typed = ''; $('#gi').value = ''; await draw(); if(over()) board();
+  guesses.push({guess:typed.toLowerCase(), pattern:data}); typed = ''; $('#gi').value = ''; await draw();
+  if(over()){ board(); act('game', {text: solved() ? `solved Riled Up in ${guesses.length} ${guesses.length===1?'try':'tries'}` : 'played Riled Up and missed the word'}); }
  };
  draw();
 }
 async function peterView(){
  app.innerHTML = `<h2 class="hd gilt ph">Ask Peter</h2><p style="text-align:center;font-style:italic">Write in to our advice columnist. Peter replies in his own time.</p>
  <form class="panel" id="qf"><textarea id="qt" rows="3" maxlength="800" placeholder="Dear Peter…" aria-label="Your question for Peter" required></textarea><button class="btn">Send to Peter</button><p class="err" id="qe"></p></form><div id="ql">Loading…</div>`;
- $('#qf').onsubmit = async e => { e.preventDefault(); const {error} = await sb.from('advice').insert({question:$('#qt').value.trim()}); error ? $('#qe').textContent = error.message : peterView(); };
+ $('#qf').onsubmit = async e => { e.preventDefault(); const qt = $('#qt').value.trim(); const {error} = await sb.from('advice').insert({question:qt}); if(error) return $('#qe').textContent = error.message; act('peter', {text:qt}); peterView(); };
  const {data, error} = await sb.from('advice').select('*,profiles(name)').order('created_at',{ascending:false});
  if(error) return $('#ql').textContent = error.message;
  $('#ql').innerHTML = data.length ? '' : '<p style="text-align:center">No letters yet. Be the first to write in!</p>';
@@ -487,7 +498,7 @@ async function peterView(){
    : me.is_editor ? `<textarea rows="3" placeholder="Peter’s reply" aria-label="Peter’s reply"></textarea><button class="btn pa">Publish reply</button><button class="btn ghost pd">Delete</button>`
    : `<p><small>Waiting for Peter’s reply…</small></p>`);
   if(me.is_editor && !q.answer){
-   d.querySelector('.pa').onclick = async () => { const a = d.querySelector('textarea').value.trim(); if(a){ await sb.from('advice').update({answer:a, answered_at:new Date().toISOString()}).eq('id',q.id); peterView(); } };
+   d.querySelector('.pa').onclick = async () => { const a = d.querySelector('textarea').value.trim(); if(a){ const {error} = await sb.from('advice').update({answer:a, answered_at:new Date().toISOString()}).eq('id',q.id); if(error) return alert(error.message); if(TOKEN) send('rr-activity', {kind:'peter_answer', d:{id:q.id}}); peterView(); } };
    d.querySelector('.pd').onclick = async () => { if(confirm('Delete this letter?')){ await sb.from('advice').delete().eq('id',q.id); peterView(); } };
   }
   $('#ql').append(d);
@@ -546,12 +557,13 @@ function recoveryView(){
 }
 const GALLERY = 'https://photos.app.goo.gl/6F13zuFyThHE7W2AA';   // shared Google Photos album; phones with the Google Photos app open it there
 const MORE_APPS = [
+ ['Rag Press','https://joshp523.github.io/RileyRag/press/','app-press.png'],
  ['язык врагов','https://joshp523.github.io/russian/','app-russian.png'],['Idioma Celestial','https://joshp523.github.io/palabras/','app-palabras.png?v=3'],
-  ['Writing','https://joshp523.github.io/writing-app/','app-writing.png'],['Rag Press','https://joshp523.github.io/RileyRag/press/','app-press.png'],
  ['Riley Rangers','https://joshp523.github.io/Rangers-app/','app-rangers.png'],
- ['Mushroom classifier','https://joshp523.github.io/Mushroom-Classifier/','app-shroom.png'],
  ['Habits: Josh','https://joshp523.github.io/daily-discipline/','app-habits-josh.png'],
- ['Habits: Grandma','https://joshp523.github.io/wendys-app/','app-habits-grandma.png']];
+ ['Habits: Grandma','https://joshp523.github.io/wendys-app/','app-habits-grandma.png'],
+ ['Writing','https://joshp523.github.io/writing-app/','app-writing.png'],
+ ['Mushroom classifier','','app-mushroom.png']];
 function aboutExtras(){
  return `<div class="bar" style="margin-top:26px"><a class="btn" href="${GALLERY}" target="_blank" rel="noopener">Photo gallery</a></div>
  <div class="ph-panel" id="phn"></div>
