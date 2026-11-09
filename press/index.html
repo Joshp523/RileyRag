@@ -246,8 +246,10 @@ body{font-family:var(--ui);color:var(--ink);background:var(--desk)}
 #xb{background:var(--teal);color:var(--paper);border:1.5px solid var(--ink);box-shadow:0 2px 0 var(--ink);height:36px}
 #xb:active{transform:translateY(2px);box-shadow:none}
 #xb .lbl{display:none;font:600 11.5px var(--mono);letter-spacing:.14em;text-transform:uppercase}
-@media (max-width:400px){.brand .bt{display:none}.brand img{width:28px;height:28px}}
-@media (max-width:360px){.brand{display:none}}
+#hd>*{flex-shrink:0}#hd>.seg{flex:1 1 auto;min-width:0}
+@media (max-width:560px){.brand .bt{display:none}}
+@media (max-width:440px){.brand{display:none}#hd{gap:4px;padding-left:4px;padding-right:6px}.seg button{padding:0 9px;letter-spacing:.08em}.hb{min-width:34px;padding:0 4px}#isb{padding:0 4px}}
+@media (max-width:350px){.seg button{padding:0 6px;letter-spacing:.03em;font-size:11px}#isb{font-size:14px}}
 
 /* buttons: typewriter keys */
 .btn{background:var(--paper);color:var(--ink);border:1.5px solid var(--ink);border-radius:6px;box-shadow:0 2px 0 var(--ink);font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
@@ -271,6 +273,8 @@ body{font-family:var(--ui);color:var(--ink);background:var(--desk)}
 .frow .w2{font-family:var(--mono)}
 .frow .done{background:var(--teal);color:var(--paper);border:1.5px solid var(--ink);font:600 12px var(--mono);letter-spacing:.1em;text-transform:uppercase}
 .frow [data-f=em] img{filter:none!important}
+.frow{padding:0 8px 0 6px}.frow .done{white-space:nowrap;padding:0 4px}
+@media (max-width:400px){.frow{gap:1px}.frow .done{letter-spacing:.04em;font-size:11px}.frow .w2{font-size:12.5px}}
 .fpan{border-bottom:1px solid var(--rule)}
 .fpan .stp{background:var(--paper);border:1.5px solid var(--ink);box-shadow:0 2px 0 var(--ink);color:var(--ink);font-family:var(--mono)}
 .fpan .stp:active{transform:translateY(2px);box-shadow:none}
@@ -926,7 +930,7 @@ let askedShare=false;
 function offerShare(){const P=Object.values(DOCS).filter(d=>d.play&&!d.gone&&hasContent(d));if(!isEd()||askedShare||!P.length)return;askedShare=true;
  ask(`You made ${P.length} issue${P.length>1?'s':''} on this phone before signing in as an editor. Share ${P.length>1?'them':'it'} with the other editors as drafts?`,'Share',()=>{for(const d of P){delete d.play;d.t=now();dbPut('docs',JSON.parse(JSON.stringify(d)));dirty.add(d.id)}sync();toast('Shared with the other editors')})}
 function ago(t){const s=(now()-t)/1000;return s<60?'just now':s<3600?Math.round(s/60)+' min ago':s<86400?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()}
-const SIGNOFF='<p class="motto">The Riley Rag · Printing Department<br><i>Please enjoy each issue equally.</i></p>';
+const SIGNOFF='<p class="motto">The Riley Rag · Printing Department</p>';
 function issuesHTML(){const L=live();
  return `${isEd()?'':'<p class="note pubx" style="margin:0 0 12px">You’re exploring in practice mode: anything you make stays on this device. Real drafts are only visible to Rag editors once they sign in.</p>'}<button class="btn pri big" data-i="new">＋ New issue</button>
  <ul class="ilist">${L.map(d=>`<li data-id="${d.id}" class="${I&&d.id==I.id?'cur':''}"><span class="n">№ ${esc(d.n)}</span><span class="m"><b>${d.play&&isEd()?'<span class="tag">Practice</span> ':''}${d.pdf?'<span class="tag">PDF</span> ':''}${esc(d.theme||(d.pdf?d.pdf.name:'No theme yet'))}</b><small>${longDate(d.date).toLowerCase()} · edited ${ago(d.t)}</small></span><button class="del" aria-label="Delete issue">${ICON.trash}</button></li>`).join('')}</ul>`}
