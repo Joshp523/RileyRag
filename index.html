@@ -440,8 +440,8 @@ async function emailDraft(is){
  $('#c3').onclick = () => $('#tools').innerHTML = '';
 }
 async function wordForm(){
- const {data} = await sb.from('wordlers').select('word').order('id',{ascending:false}).limit(1);
- $('#tools').innerHTML = `<form class="panel" id="wf"><label for="nw">Set a new word (4 to 8 letters)${data?.[0]?`. Current word: <b>${esc(data[0].word)}</b>`:''}</label><input id="nw" pattern="[A-Za-z]{4,8}" maxlength="8" required autocomplete="off"><p class="err" id="we"></p><button class="btn">Set the word</button></form>`;
+ // The word is never shown, not even to editors, so another editor can still play. Whoever sets it sits that round out.
+ $('#tools').innerHTML = `<form class="panel" id="wf"><label for="nw">Set a new word (4 to 8 letters). Nobody will see it, and you’ll sit that round out.</label><input id="nw" pattern="[A-Za-z]{4,8}" maxlength="8" required autocomplete="off" autocapitalize="none" spellcheck="false"><p class="err" id="we"></p><button class="btn">Set the word</button></form>`;
  $('#wf').onsubmit = async e => { e.preventDefault(); const {error} = await sb.from('wordlers').insert({word:$('#nw').value.toLowerCase()}); error ? $('#we').textContent = error.message : gamesView(); };
 }
 async function board(){
@@ -456,10 +456,14 @@ async function gamesView(){
  board();
  const {data:cur} = await sb.rpc('wordler_current'), pz = cur?.[0], gm = $('#gm');
  if(!pz) return gm.innerHTML = '<p style="text-align:center">No word has been set yet. Check back soon!</p>';
+ const {data:si} = await sb.rpc('riled_setter'), st = si?.[0];
+ const when = st?.set_at ? new Date(st.set_at).toLocaleString(undefined,{weekday:'long',day:'numeric',month:'long',hour:'numeric',minute:'2-digit'}) : '';
+ const setLine = st ? `<p style="text-align:center;font-style:italic;opacity:.8">Word set by ${st.mine?'you':esc(st.name||'an editor')}${when?' on '+esc(when):''}.</p>` : '';
+ if(st?.mine) return gm.innerHTML = setLine + '<p style="text-align:center">You set this word, so you sit this round out. You can play again once someone else sets the next one.</p>';
  const {data:gs} = await sb.from('wordler_guesses').select('guess,pattern').eq('puzzle_id',pz.id).order('id');
  let guesses = gs || [], typed = '';
  const solved = () => guesses.some(g => /^g+$/.test(g.pattern)), over = () => solved() || guesses.length >= 6;
- gm.innerHTML = `<p style="text-align:center">Guess the ${pz.len}-letter word in six tries.</p><div class="bd" id="bd" style="--n:${pz.len}"></div>
+ gm.innerHTML = setLine + `<p style="text-align:center">Guess the ${pz.len}-letter word in six tries.</p><div class="bd" id="bd" style="--n:${pz.len}"></div>
  <form class="gf" id="gf"><input id="gi" maxlength="${pz.len}" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Your guess"><button class="btn">Guess</button></form><p class="err" id="ge"></p><div class="kb" id="kb"></div><p id="gend" style="text-align:center"></p>`;
  async function draw(){
   let h = '';
