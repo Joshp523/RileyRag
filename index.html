@@ -1,1157 +1,604 @@
-<!doctype html>
-<html lang="en">
-<head>
+<!DOCTYPE html>
+<html lang="en"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#120a06">
+<meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Rag Press">
-<meta name="theme-color" content="#ece6d6">
-<title>Rag Press</title>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon-180.png">
-<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>The Riley Rag</title>
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png"><link rel="icon" href="favicon.png" sizes="256x256" type="image/png"><link rel="apple-touch-icon" href="favicon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Riley Rag">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@400;700&family=Anton&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-@font-face{font-family:Anton;src:url(fonts/anton-latin-400-normal.woff2) format('woff2');font-display:block;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:Anton;src:url(fonts/anton-latin-ext-400-normal.woff2) format('woff2');font-display:block;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:Tinos;font-weight:400;src:url(fonts/tinos-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
-@font-face{font-family:Tinos;font-weight:700;src:url(fonts/tinos-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
-@font-face{font-family:Tinos;font-weight:400;font-style:italic;src:url(fonts/tinos-latin-400-italic.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
-@font-face{font-family:Tinos;font-weight:700;font-style:italic;src:url(fonts/tinos-latin-700-italic.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF,U+FFFD}
-@font-face{font-family:Tinos;font-weight:400;src:url(fonts/tinos-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1EFF,U+2113,U+2116,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:Tinos;font-weight:700;src:url(fonts/tinos-latin-ext-700-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1EFF,U+2113,U+2116,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:Tinos;font-weight:400;font-style:italic;src:url(fonts/tinos-latin-ext-400-italic.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1EFF,U+2113,U+2116,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:Tinos;font-weight:700;font-style:italic;src:url(fonts/tinos-latin-ext-700-italic.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1EFF,U+2113,U+2116,U+2C60-2C7F,U+A720-A7FF}
-
-:root{--times:'Times New Roman',Tinos,Times,serif;--anton:Anton,Impact,sans-serif;--ink:#18202c;--bar:#10161f;--card:#222c3a;--line:#2e3a4b;--txt:#eef2f7;--dim:#93a1b5;--acc:#6aa8ff;--red:#ff5d5d;--top:env(safe-area-inset-top,0px);--bot:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{background:var(--ink);height:100%;overflow:hidden;overscroll-behavior:none}
-body{margin:0;height:100%;color:var(--txt);font:15px/1.4 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--ink);overscroll-behavior:none;overflow:hidden}
-#view{position:fixed;left:0;right:0;top:calc(54px + var(--top));bottom:0;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-bottom:calc(70px + var(--bot))}
-body.kb #view{padding-bottom:60vh}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;touch-action:manipulation}
+:root{--g1:#f1d88a;--g2:#c9a24a;--g3:#8f6c24;--gold:#d9bd73;--bg:#120a06}
+*{box-sizing:border-box}
+html{background:#120a06;color-scheme:dark;min-height:100%}
+body{margin:0;min-height:100vh;font:19px/1.55 'Tinos','Times New Roman',serif;color:var(--gold);padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+body::before{content:'';position:fixed;inset:0;z-index:-1;background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)'/%3E%3C/svg%3E"),
+  radial-gradient(ellipse at 50% -10%,#3a2314,#1a0f08 55%,#0c0603)}
+.gilt{background:linear-gradient(120deg,var(--g1),var(--g2) 50%,var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent}
+h1,h2{margin:0}
+h1{font:400 clamp(48px,13vw,92px)/1 'UnifrakturCook',serif}
+h2,.hd{font:400 29px/1.1 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.08em}
+header{text-align:center;padding:14px 12px 2px}
+header .emb{width:50px;height:50px;opacity:.95}
+h1 img{width:min(94%,620px);height:auto}
+.sub{letter-spacing:.09em;font-size:clamp(8px,2.5vw,13px);white-space:nowrap;margin:2px 0 8px;color:var(--g2)}
+.hi{text-align:center;margin:0 0 14px;color:var(--g1);font-style:italic;max-height:40px;overflow:hidden;transition:opacity 1s,max-height 1s}.hi.off{opacity:0;max-height:0;margin:0}
+.foot{text-align:center;margin-top:30px;padding-top:16px;border-top:1px solid #3a2a16}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+textarea{display:block;margin-bottom:8px}
+#hint{max-width:700px;margin:8px auto 0;padding:0 14px}#hint .panel{margin:0 0 10px}#hint ol{margin:8px 0 14px;padding-left:22px}#hint li{margin:4px 0}#hint h2{font-size:22px}
+.stitch{border:0;border-top:1px solid var(--g3);opacity:.5;max-width:640px;margin:10px auto}
+main{max-width:700px;margin:0 auto;padding:10px 14px 70px}
+button,input,textarea{font:inherit}
+.btn{cursor:pointer;color:var(--g1);background:transparent;border:1px solid var(--g3);border-radius:2px;padding:8px 18px;transition:background .15s,color .15s}
+.btn:hover{background:var(--g2);color:#1a0f08}
+.btn.ghost{border-color:transparent;color:var(--g2)}.btn.ghost:hover{background:#ffffff0d;color:var(--g1)}
+.btn:focus-visible,input:focus-visible,textarea:focus-visible,.rx:focus-visible{outline:2px solid var(--g1);outline-offset:2px}
+.bar{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:6px 0 22px}
+.panel{background:#0b0603cc;border:1px solid var(--g3);padding:18px;margin:0 auto 26px}
+.panel label{display:block;margin:12px 0 4px;color:var(--g2)}
+input,textarea{width:100%;padding:10px;border-radius:2px;border:1px solid #5a4020;background:#0b0603;color:var(--g1)}
+.issue{margin:0 0 56px}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0 2px 8px}
+.meta .hd{font-size:30px}
+.sheet{display:block;width:100%;border:0;padding:0;cursor:zoom-in;background:#f4ecd8;box-shadow:0 18px 40px #000c,0 0 0 1px #000}
+.sheet img{display:block;width:100%;height:auto;min-height:200px}
+.rxs{display:flex;gap:6px clamp(4px,2.4vw,18px);flex-wrap:wrap;margin:14px 2px 6px}
+.rx{display:flex;align-items:center;gap:4px;cursor:pointer;color:var(--g3);background:none;border:0;padding:2px;font-size:17px}
+.rx img{width:clamp(38px,11.5vw,50px);height:auto;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 2px 3px #000b) saturate(.7);opacity:.6;transition:transform .15s,opacity .15s}
+.rx:hover img{opacity:.9;transform:scale(1.08)}
+.rx[aria-pressed=true]{color:var(--g1)}.rx[aria-pressed=true] img{opacity:1;filter:drop-shadow(0 2px 4px #000b);transform:scale(1.12)}
+.cm{border-left:1px solid var(--g3);padding:2px 14px;margin:10px 0}
+.cm b{color:var(--g1);font-weight:700}.cm small{opacity:.55;margin-left:8px}
+.cm .del{float:right;background:none;border:0;color:#c88;cursor:pointer}
+.err{color:#e99;margin:6px 0 0}
+.who{margin:0 2px 10px;padding:8px 12px;border:1px solid var(--g3);background:#0b0603;font-size:17px;max-width:420px}
+.who>div{padding:4px 0;border-top:1px solid #2a1c10}.who>div:first-child{border-top:0}.who small{opacity:.6;margin-left:8px}
+.who .whoh{display:flex;align-items:center;gap:8px;color:var(--g1);font-variant:all-small-caps;letter-spacing:.05em}.who .whoh img{width:26px;height:26px}
+.btn.seen{padding:4px 2px;font-size:16px;margin:0 0 6px}
+#lb{padding-top:env(safe-area-inset-top);position:fixed;inset:0;background:#000f;z-index:9;display:none;flex-direction:column}
+#lb.on{display:flex}#lb .top{display:flex;justify-content:space-between;padding:10px 14px}
+#lb .scroll{flex:1;overflow:auto;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch}
+#lb img{width:100%;max-width:900px;display:block;margin:0 auto;background:#f4ecd8}
 [hidden]{display:none!important}
+nav{display:flex;flex-wrap:nowrap;white-space:nowrap;justify-content:center;gap:clamp(6px,2.6vw,28px);margin:4px 0 10px}
+nav a{font:400 clamp(12px,4.1vw,22px) 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.05em;color:var(--g3);text-decoration:none;padding:6px 2px;border-bottom:2px solid transparent}
+nav a:hover{color:var(--g2)}nav a[aria-current=page]{color:var(--g1);border-color:var(--g2)}
+.ph{font-size:44px;text-align:center;margin:4px 0 14px}
+.pre{white-space:pre-wrap;background:#0b0603;border:1px solid #3a2a16;padding:12px;margin:8px 0 14px;font:inherit;font-size:16px}
+.cm div,.cm p{white-space:pre-wrap;margin:6px 0}.cm textarea{margin-top:8px}
+.bd{display:grid;gap:6px;margin:16px 0}.row{display:flex;gap:6px;justify-content:center}
+.t{width:min(50px,calc((100vw - 64px)/var(--n)));aspect-ratio:1;display:grid;place-items:center;font:400 clamp(16px,5vw,26px) 'Anton',sans-serif;text-transform:uppercase;border:1px solid #5a4020;color:var(--g1)}
+.t.g{background:#5f7f4d;color:#f4efd8;border-color:#7a9a64}.t.y{background:var(--g2);color:#1a0f08;border-color:var(--g1)}.t.b{background:#1c120b;color:#7a6840;border-color:#2a1c10}
+.gf{display:flex;gap:8px}.kb{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:14px 0}
+.k{min-width:26px;text-align:center;font:400 15px 'Anton',sans-serif;text-transform:uppercase;padding:4px 2px;border:1px solid #3a2a16;color:var(--g2)}
+.k.g{background:#5f7f4d;color:#f4efd8}.k.y{background:var(--g2);color:#1a0f08}.k.b{opacity:.3}
+.lbt{width:100%;border-collapse:collapse}.lbt td{padding:7px 4px;border-bottom:1px solid #3a2a16}.lbt .r{width:2em;color:var(--g3)}.lbt .n{text-align:right;color:var(--g1)}
+.pv{background:#0b0603;border:1px solid #3a2a16;padding:12px 14px;margin:8px 0 14px;font-size:16px}.pv p{margin:0 0 10px}.pv p:last-child{margin:0}.pv a{color:#8fb4ff}
+.bar.ed{flex-wrap:nowrap;gap:4px}.bar.ed .btn{white-space:nowrap;padding:8px clamp(6px,2.2vw,16px);font-size:clamp(12px,3.8vw,18px)}
+a.btn{display:inline-block;text-decoration:none}.charter{white-space:pre-wrap;font-size:19px;line-height:1.7;margin:0 0 18px}
+.apps{display:flex;justify-content:center;gap:clamp(28px,10vw,64px);margin:6px 0 30px}
+.app{display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;color:var(--g1);font:400 21px 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.06em;transition:transform .15s}
+.app img{width:clamp(84px,26vw,112px);height:auto;aspect-ratio:1;filter:drop-shadow(0 8px 14px #000c)}
+.apps.more{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 12px;max-width:420px;margin:14px auto 30px}.apps.more .app{text-align:center;line-height:1.15}.app.soon{opacity:.75}.app.soon small{display:block;font:italic 15px 'Tinos',serif;font-variant:normal;letter-spacing:0;color:var(--g2);margin-top:-4px}
+.app:hover,.app:focus-visible{transform:translateY(-3px)}.app:focus-visible{outline:2px solid var(--g1);outline-offset:6px;border-radius:12px}
+.charter a{color:var(--g1);text-decoration:underline;text-underline-offset:3px;word-break:break-all}
 
-/* header */
-#hd{position:fixed;left:0;right:0;top:0;z-index:30;padding:var(--top) 6px 0;height:calc(54px + var(--top));display:flex;align-items:center;gap:4px;background:var(--bar);border-bottom:1px solid var(--line)}
-.hb{height:40px;min-width:38px;padding:0 8px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:600}
-.hb:active{background:var(--card)}
-.hb:disabled{opacity:.3}
-.hb svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-#isb{font-size:16px;padding:0 8px}
-#isb .dot{width:7px;height:7px;border-radius:50%;background:#56637a;margin-left:2px}
-#isb .dot.ok{background:#4cd08a}#isb .dot.wait{background:#f2b84b}
-.seg{flex:1;display:flex;justify-content:center}
-.seg>div{display:flex;background:var(--card);border-radius:9px;padding:3px}
-.seg button{height:32px;padding:0 12px;border-radius:7px;font-size:14px;font-weight:600;color:var(--dim)}
-.seg button.on{background:var(--txt);color:var(--bar)}
-#xb{color:var(--acc)}
+/* phone prompts: add to home screen, new-issue alerts */
+#sheet{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center}
+#sheet .bk{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;transition:opacity .3s}
+#sheet .sh{position:relative;width:min(100% - 20px,460px);margin:0 0 max(10px,env(safe-area-inset-bottom));padding:22px 20px 16px;background:#1c110a;border:1px solid var(--g3);box-shadow:0 -10px 40px rgba(0,0,0,.6);transform:translateY(30px);opacity:0;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .3s;max-height:90vh;overflow:auto}
+#sheet.on .bk{opacity:1}#sheet.on .sh{transform:none;opacity:1}
+#sheet h2{margin:0 0 6px;font:400 26px/1.15 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.06em}
+#sheet p{margin:6px 0 12px;font-size:18px;line-height:1.45}
+.steps{list-style:none;margin:12px 0 16px;padding:0;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid #3a2a16;font-size:18px;line-height:1.35}
+.steps li:first-child{border-top:0}
+.steps li::before{content:counter(s);flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--g2);color:var(--g1);display:grid;place-items:center;font-size:16px}
+.steps svg{flex:none;width:30px;height:30px;color:var(--g1);margin-left:auto}
+.sh .btns{display:flex;flex-direction:column;gap:8px}.sh .btns .btn{width:100%;padding:12px;font-size:18px;text-align:center}
+.sh .btn.solid,.btn.solid{background:linear-gradient(120deg,var(--g1),var(--g2));color:#1c110a;border-color:transparent;font-weight:700}
+.ph-panel{text-align:center;margin-top:30px}.ph-panel p{margin:4px 0 12px}
+.getapp{display:block;margin:18px auto 0;font-size:17px}
+@media (prefers-reduced-motion:reduce){#sheet .sh,#sheet .bk{transition:none}}
+</style></head>
+<body>
+<header><img class="emb" src="emblem.png" alt=""><h1><img src="masthead.png" alt="The Riley Rag"></h1><nav id="nav" hidden><a href="#highlights">Highlights</a><a href="#games">Games</a><a href="#peter">Ask Peter</a><a href="#recipes">Recipes</a><a href="#charter">Us</a></nav><hr class="stitch"></header>
+<aside id="hint" hidden></aside>
+<main id="app"><p style="text-align:center">Opening the desk…</p></main>
+<div id="lb"><div class="top"><a id="lbpdf" class="btn ghost" target="_blank" rel="noopener">Download PDF</a><button class="btn" id="lbx">Close</button></div><div class="scroll"><img id="lbimg" alt="Full page of the newspaper"></div></div>
 
-/* page */
-#wrap{position:relative;margin:8px auto}
-#pg{position:absolute;left:0;top:0;transform-origin:0 0;box-shadow:0 4px 24px rgba(0,0,0,.35)}
-body.arr #pg{touch-action:none;-webkit-user-select:none;user-select:none}
-
-.sheet{position:relative;width:794px;height:1123px;overflow:hidden;background:#fff;color:#000;font-family:var(--times)}
-.sheet .mast{position:absolute;left:185.7px;top:37.2px;width:418.3px;height:72.3px}
-.sheet .stamp{position:absolute;left:659.7px;top:11.4px;width:101px;height:89.9px}
-.sheet .addr{position:absolute;left:20px;top:34px;width:160px;font:16px/22px var(--times);text-transform:uppercase;white-space:pre-line}
-.sheet .ibar{position:absolute;left:15.5px;top:113.8px;width:756px;height:29.6px;border-top:1.3px solid #000;border-bottom:1.3px solid #000;display:flex;align-items:center;padding:0 3px 0 9px;font:16px/1 var(--times)}
-.sheet .ibar span{flex:1;white-space:nowrap}
-.sheet .ibar span:nth-child(2){flex:2;text-align:center;text-transform:uppercase}
-.sheet .ibar span:nth-child(3){text-align:right}
-.sheet .blk{position:absolute;overflow:hidden}
-.sheet .blk.fl{z-index:2}
-.sheet .tx{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;font-size:16px;line-height:1.15;text-align:justify;white-space:pre-wrap;overflow-wrap:break-word;outline:none;color:#000}
-.sheet .tx div{min-height:1px}
-.sheet .tx img.em{display:inline;height:.92em;width:auto;vertical-align:-.12em;margin-left:.1em}
-.sheet .blk.p img{position:absolute;max-width:none;display:block}
-.sheet .lns i{position:absolute;background:#000;display:block}
-
-/* live-only page bits */
-.live .tx[contenteditable=true]{cursor:text}
-.live .tx div.e[data-ph]{position:relative}
-.live .tx div.e[data-ph]::before{content:attr(data-ph);position:absolute;left:0;top:0;right:0;opacity:.42;pointer-events:none;white-space:nowrap;overflow:hidden}
-.live .blk.p .ph{position:absolute;left:0;top:0;right:0;bottom:0;background:#eef1f5;border:2px dashed #b4bccb;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font:600 15px/1.2 -apple-system,sans-serif;color:#6b778a;text-align:center}
-.live .blk.p .ph svg{width:34px;height:34px;stroke:currentColor;fill:none;stroke-width:1.6}
-.live .meta{cursor:pointer}
-.live .ibar .th:empty::before{content:'Tap to set the theme';opacity:.35;text-transform:none;font-style:italic}
-body.write .live .blk.p{cursor:pointer}
-body.write .live .blk.sel{outline:3px solid #2f7cf6;outline-offset:2px}
-body.write .live .blk.ed{outline:1.5px dashed #2f7cf6;outline-offset:3px;overflow:visible}
-body.write .live .blk.ed .tx{overflow:visible}
-.ovl{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
-.ovl b{position:absolute;pointer-events:auto;cursor:pointer;transform:translate(-50%,0);background:var(--red);color:#fff;font:700 11px/1 -apple-system,sans-serif;padding:4px 8px;border-radius:20px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.35)}
-.ovl b i{font-style:normal;opacity:.85;margin-left:4px}
-.ovl s{position:absolute;height:0;border-bottom:2px dashed var(--red)}
-.gridov{position:absolute;left:9.5px;top:141px;width:768px;height:976px;pointer-events:none;display:none;background-image:repeating-linear-gradient(90deg,rgba(47,124,246,.07) 0 52px,transparent 52px 64px);background-position:6px 0}
-body.arr .gridov{display:block}
-body.arr .live .blk{outline:1.5px dashed #8fa6c8;outline-offset:-1px;background:rgba(47,124,246,.05)}
-body.arr .live .blk .tx{pointer-events:none}
-body.arr .live .blk.bad{outline:2px solid var(--red)}
-body.arr .live .blk.fl{outline-color:#9b51e0;background:rgba(155,81,224,.06)}
-body.write .live .blk.p.sel{touch-action:none;cursor:move}
-body.arr .live .blk.mv{opacity:.55;z-index:3}
-.selov{position:absolute;border:2.5px solid #2f7cf6;pointer-events:none;z-index:5;--k:1}
-.selov b{position:absolute;width:calc(30px*var(--k));height:calc(30px*var(--k));margin:calc(-15px*var(--k)) 0 0 calc(-15px*var(--k));border-radius:50%;background:#2f7cf6;border:calc(3px*var(--k)) solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3);pointer-events:auto;touch-action:none}
-.selov b[data-h=n]{left:50%;top:0;margin-top:calc(-34px*var(--k))}.selov b[data-h=s]{left:50%;top:100%;margin-top:calc(4px*var(--k))}.selov b[data-h=w]{left:0;top:50%;margin-left:calc(-34px*var(--k))}.selov b[data-h=e]{left:100%;top:50%;margin-left:calc(4px*var(--k))}.selov b[data-h=se]{left:100%;top:100%;margin:calc(4px*var(--k)) 0 0 calc(4px*var(--k));border-radius:4px}
-.ghost{position:absolute;border:2.5px dashed #18a058;background:rgba(24,160,88,.10);pointer-events:none;z-index:6}
-.ghost.no{border-color:var(--red);background:rgba(255,107,107,.15)}
-.ghost span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(var(--k,1));font:700 13px -apple-system,sans-serif;color:#fff;background:rgba(16,22,31,.85);padding:5px 9px;border-radius:8px;white-space:nowrap}
-
-/* bottom bar */
-#bb{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:8px 10px calc(8px + var(--bot));min-height:calc(62px + var(--bot));background:var(--bar);border-top:1px solid var(--line);display:flex;align-items:center;gap:8px}
-#bb .hint{flex:1;font-size:13px;color:var(--dim);line-height:1.3}
-.btn{height:44px;padding:0 14px;border-radius:10px;background:var(--card);border:0;font-weight:600;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
-.btn:active{filter:brightness(1.25)}
-.btn.pri{background:var(--acc);color:#0b1422}
-.btn.dng{color:var(--red)}
-.btn.on{background:var(--txt);color:var(--bar)}
-.btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-#bb .btn{flex:1;padding:0 8px}
-#bb .btn.sm{flex:0 0 auto}
-
-/* format toolbar */
-#fmt{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--bar);border-top:1px solid var(--line);padding-bottom:var(--bot);touch-action:manipulation;-webkit-user-select:none;user-select:none}
-body.kb #fmt{padding-bottom:0}
-.frow{display:flex;align-items:stretch;height:50px;padding:0 4px;gap:2px}
-.frow button{flex:1;min-width:0;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;margin:5px 0}
-.frow button.on{background:var(--card);color:#fff}
-.frow button.act{background:var(--txt);color:var(--bar)}
-.frow button.act img{filter:none!important}
-.frow button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.frow .w2{flex:1.3;font-size:14px;font-weight:600}
-.frow .w2 small{font-size:10px;margin-left:1px;opacity:.7}
-.frow .done{flex:1.35;background:var(--acc);color:#0b1422;font-size:15px;font-weight:700}
-#ffam{font-family:var(--times);font-size:16px}
-#ffam.a{font-family:var(--anton);letter-spacing:.03em}
-.fpan{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line);min-height:56px}
-.fpan .stp{width:44px;height:44px;border-radius:10px;background:var(--card);font-size:24px;font-weight:500;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
-.fpan .val{flex:1;text-align:center;font-weight:700;font-size:16px}
-.fpan .val small{display:block;font-size:11px;font-weight:500;color:var(--dim)}
-.scrub{flex:1;position:relative;height:52px;overflow:hidden;border-radius:10px;background:#0b1018;touch-action:none;cursor:ew-resize}
-.scrub .rul{position:absolute;left:50%;top:24px;height:24px;pointer-events:none;background:repeating-linear-gradient(90deg,#c9d3e1 0 2px,transparent 2px 40px) 0 0/100% 24px no-repeat,repeating-linear-gradient(90deg,#5d6b80 0 1px,transparent 1px 8px) 0 10px/100% 14px no-repeat}
-.scrub .ndl{position:absolute;left:50%;top:20px;bottom:0;width:2px;margin-left:-1px;background:var(--acc);border-radius:1px}
-.scrub .sv{position:absolute;left:0;right:0;top:4px;text-align:center;font-weight:700;font-size:14px;pointer-events:none}
-.scrub .sv small{font-weight:500;color:var(--dim);margin-left:4px;font-size:12px}
-.scrub::before,.scrub::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:1;pointer-events:none}
-.scrub::before{left:0;background:linear-gradient(90deg,#0b1018,transparent)}.scrub::after{right:0;background:linear-gradient(-90deg,#0b1018,transparent)}
-.chips{display:flex;gap:6px;overflow-x:auto;padding:0 10px 8px;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chips button{flex:1 0 auto;height:32px;min-width:42px;padding:0 10px;border-radius:16px;background:var(--card);font-size:14px;font-weight:600}
-.stl{flex:1;height:42px;border-radius:10px;background:var(--card);font-size:15px}
-
-/* sheets */
-.scrim{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;animation:fi .15s}
-@keyframes fi{from{opacity:0}}
-.panel{width:100%;max-width:560px;max-height:88vh;overflow:auto;background:#1c2533;border:0;border-radius:16px 16px 0 0;padding:16px 16px calc(18px + var(--bot));animation:up .2s ease-out}
-@media (min-width:700px){.scrim{align-items:center}.panel{border-radius:16px}}
-@keyframes up{from{transform:translateY(30px);opacity:.5}}
-.panel h3{margin:0 0 12px;font:700 19px/1.2 -apple-system,BlinkMacSystemFont,sans-serif;display:flex;align-items:center;justify-content:space-between}
-.panel h3 .x{width:34px;height:34px;border-radius:50%;background:var(--card);font:600 18px -apple-system,sans-serif}
-.panel p{margin:0 0 12px;color:var(--dim)}
-.panel label{display:block;font-size:13px;color:var(--dim);margin:10px 0 4px}
-.panel input,.panel textarea{width:100%;font:16px/1.3 -apple-system,sans-serif;color:var(--txt);background:#121924;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-.panel textarea{resize:none}
-.row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.row .btn{flex:1}
-.err{color:var(--red)!important}
-.ilist{list-style:none;margin:12px 0;padding:0}
-.ilist li{display:flex;align-items:center;gap:10px;padding:10px 6px 10px 12px;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;cursor:pointer}
-.ilist li.cur{border-color:var(--acc)}
-.ilist .n{font:700 17px/1 -apple-system,sans-serif;min-width:48px}
-.ilist .m{flex:1;min-width:0}
-.ilist .m b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
-.ilist .m small{color:var(--dim)}
-.tag{font-size:11px;font-weight:700;background:var(--acc);color:#0b1422;border-radius:5px;padding:1px 5px;vertical-align:2px}
-.ilist .del{width:40px;height:40px;border-radius:10px;color:var(--dim)}
-.ilist .del svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2}
-.acct{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
-.lays{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;margin:8px 0 4px}
-.lays button{padding:8px 6px;border:1px solid var(--line);border-radius:12px;font-size:12.5px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:6px}
-.lays button:active,.lays button.on{border-color:var(--acc)}
-.mini{position:relative;width:72px;height:102px;background:#fff;border-radius:2px}
-.mini i{position:absolute;border:1px solid #9aa6b8}
-.mini i.p{background:#c9d1dc}
-.mini u{position:absolute;left:4px;right:4px;top:4px;height:14px;border-bottom:1px solid #000}
-.lnsw{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.big{width:100%;height:52px;font-size:16px}
-.note{font-size:13px;color:var(--dim)}
-.pubx{margin-top:14px;padding:12px;border-radius:12px;background:#151d29}.pubx>b{display:block;margin-bottom:4px}.pubx .note{margin:0 0 8px}
-
-/* crop */
-#crop{position:fixed;inset:0;z-index:60;background:#0b0f15;display:flex;flex-direction:column;-webkit-user-select:none;user-select:none}
-#crop .ct{padding:calc(14px + var(--top)) 16px 8px;text-align:center;color:var(--dim);font-size:14px}
-#crop .cst{flex:1;position:relative;overflow:hidden;touch-action:none}
-#crop .cfr{position:absolute;box-shadow:0 0 0 100vmax rgba(11,15,21,.75);outline:2px solid #fff;pointer-events:none}
-#crop .cfr::before,#crop .cfr::after{content:'';position:absolute;inset:0;border:solid rgba(255,255,255,.35);border-width:0 1px}
-#crop .cfr::before{left:33.33%;right:33.33%}
-#crop .cfr::after{border-width:1px 0;top:33.33%;bottom:33.33%}
-#crop img{position:absolute;max-width:none;pointer-events:none}
-#crop .crect{position:absolute;box-shadow:0 0 0 100vmax rgba(11,15,21,.72);outline:2px solid #fff;cursor:move;touch-action:none}
-#crop .crect::before,#crop .crect::after{content:'';position:absolute;inset:0;pointer-events:none;border:solid rgba(255,255,255,.35);border-width:0 1px;left:33.33%;right:33.33%}
-#crop .crect::after{border-width:1px 0;left:0;right:0;top:33.33%;bottom:33.33%}
-#crop .crect b{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;touch-action:none;z-index:1}
-#crop .crect b::after{content:'';position:absolute;left:13px;top:13px;width:18px;height:18px;border:4px solid #fff;border-radius:3px;background:rgba(0,0,0,.25)}
-#crop .crect b[data-h=nw]{left:0;top:0}#crop .crect b[data-h=n]{left:50%;top:0}#crop .crect b[data-h=ne]{left:100%;top:0}#crop .crect b[data-h=e]{left:100%;top:50%}
-#crop .crect b[data-h=se]{left:100%;top:100%}#crop .crect b[data-h=s]{left:50%;top:100%}#crop .crect b[data-h=sw]{left:0;top:100%}#crop .crect b[data-h=w]{left:0;top:50%}
-#crop .crect.lock b[data-h=n],#crop .crect.lock b[data-h=e],#crop .crect.lock b[data-h=s],#crop .crect.lock b[data-h=w]{display:none}
-#crop .asp{padding:0}#crop .asp button{flex:0 0 auto}#crop .asp button.on{background:var(--txt);color:var(--bar)}
-.rotr{display:flex;align-items:center;gap:8px}.rotr input{flex:1;accent-color:var(--acc);height:32px}.rotr span{min-width:44px;text-align:center;font-size:13px;color:var(--dim)}.rotr .btn{height:38px;padding:0 10px;font-size:14px}
-#crop img{transform-origin:50% 50%}
-#crop .cnote{margin:0;text-align:center;font-size:13px;color:var(--dim);min-height:18px}
-#crop .cb{padding:10px 12px calc(12px + var(--bot));display:flex;flex-direction:column;gap:10px;background:var(--bar)}
-#crop .zr{display:flex;align-items:center;gap:10px;color:var(--dim)}
-#crop input[type=range]{flex:1;accent-color:var(--acc);height:30px}
-
-#toast{position:fixed;left:50%;bottom:calc(80px + var(--bot));transform:translateX(-50%);z-index:70;background:#eef2f7;color:#10161f;padding:10px 14px;border-radius:12px;font-weight:600;font-size:14px;box-shadow:0 6px 24px rgba(0,0,0,.4);display:flex;gap:12px;align-items:center;max-width:92vw}
-#toast button{color:#1d63d8;font-weight:800}
-#printhost{position:absolute;left:0;top:0;z-index:-10;pointer-events:none}
-.busy{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font:600 18px -apple-system,sans-serif}
-
-/* ================= Printing Department theme: retro, utilitarian, a little corporate ================= */
-@font-face{font-family:'Plex Mono';font-weight:400;src:url(fonts/ibm-plex-mono-latin-400-normal.woff2) format('woff2');font-display:swap}
-@font-face{font-family:'Plex Mono';font-weight:500;src:url(fonts/ibm-plex-mono-latin-500-normal.woff2) format('woff2');font-display:swap}
-@font-face{font-family:'Plex Mono';font-weight:600;src:url(fonts/ibm-plex-mono-latin-600-normal.woff2) format('woff2');font-display:swap}
-@font-face{font-family:'Plex Sans';font-weight:400;src:url(fonts/ibm-plex-sans-latin-400-normal.woff2) format('woff2');font-display:swap}
-@font-face{font-family:'Plex Sans';font-weight:500;src:url(fonts/ibm-plex-sans-latin-500-normal.woff2) format('woff2');font-display:swap}
-@font-face{font-family:'Plex Sans';font-weight:600;src:url(fonts/ibm-plex-sans-latin-600-normal.woff2) format('woff2');font-display:swap}
-:root{--desk:#002454;--desk2:#00183c;--bone:#ece6d6;--bone2:#e2dac6;--paper:#f6f2e8;--ink:#00183c;--teal:#00609c;--teal2:#006ca8;--green:#3c7830;--green2:#488430;--mint:#a6dc84;--gold:#d8c060;--rule:#b9b09a;--mut:#6a6352;--red:#c2410c;
- --ui:'Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:'Plex Mono',ui-monospace,Menlo,Consolas,monospace;--txt:var(--ink);--dim:var(--mut);--acc:var(--teal);--card:var(--bone2);--bar:var(--bone);--line:var(--rule)}
-html{background:var(--desk)}
-body{font-family:var(--ui);color:var(--ink);background:var(--desk)}
-.mono,.lbl{font-family:var(--mono)}
-#view{background:radial-gradient(ellipse at 50% 35%,#003c6c 0%,var(--desk) 55%,var(--desk2) 100%) fixed}
-#view::before{content:'';position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(166,220,132,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(166,220,132,.045) 1px,transparent 1px);background-size:24px 24px}
-#view::after{content:'';position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.08) 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
-#wrap{z-index:1}
-#pg{box-shadow:0 0 0 1px rgba(0,0,0,.5),0 22px 60px rgba(0,0,0,.55)}
-
-/* header: a control strip */
-#hd{background:var(--bone);border-bottom:2px solid var(--ink);box-shadow:0 3px 0 var(--teal),0 6px 0 var(--green);color:var(--ink);gap:6px}
-.brand{display:flex;align-items:center;gap:9px;padding:0 4px 0 2px;flex:0 0 auto}
-.brand img{width:32px;height:32px;border-radius:7px;box-shadow:0 0 0 1.5px var(--ink)}
-.brand .bt{display:flex;flex-direction:column;line-height:1.05}
-.brand b{font:600 13px var(--mono);letter-spacing:.22em}
-.brand small{font:500 9.5px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--teal)}
-.hb{color:var(--ink);border-radius:6px}
-.hb:active{background:var(--bone2)}
-#isb{font:600 15px var(--mono);letter-spacing:.04em;white-space:nowrap;flex:0 0 auto;padding:0 6px;gap:4px}
-#isb .dot{width:8px;height:8px;background:#a39a84;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
-#isb .dot.ok{background:#488430;box-shadow:0 0 6px #6aa84a}#isb .dot.wait{background:#d8c060;box-shadow:0 0 6px #d8c060}
-.seg>div{background:var(--bone2);border:1.5px solid var(--ink);border-radius:7px;padding:2px}
-.seg button{font:600 11.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);height:32px;border-radius:5px;padding:0 11px}
-.seg button.on{background:var(--green);color:#fff;box-shadow:inset 0 0 0 1.5px var(--ink)}
-#xb{background:var(--teal);color:var(--paper);border:1.5px solid var(--ink);box-shadow:0 2px 0 var(--ink);height:36px}
-#xb:active{transform:translateY(2px);box-shadow:none}
-#xb .lbl{display:none;font:600 11.5px var(--mono);letter-spacing:.14em;text-transform:uppercase}
-#hd>*{flex-shrink:0}#hd>.seg{flex:1 1 auto;min-width:0}
-@media (max-width:560px){.brand .bt{display:none}}
-@media (max-width:440px){.brand{display:none}#hd{gap:4px;padding-left:4px;padding-right:6px}.seg button{padding:0 9px;letter-spacing:.08em}.hb{min-width:34px;padding:0 4px}#isb{padding:0 4px}}
-@media (max-width:350px){.seg button{padding:0 6px;letter-spacing:.03em;font-size:11px}#isb{font-size:14px}}
-
-/* buttons: typewriter keys */
-.btn{background:var(--paper);color:var(--ink);border:1.5px solid var(--ink);border-radius:6px;box-shadow:0 2px 0 var(--ink);font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
-.btn:active{transform:translateY(2px);box-shadow:none;filter:none}
-.btn.pri{background:var(--teal);color:var(--paper)}
-.btn.dng{color:var(--red)}
-.btn.on{background:var(--green);color:#fff}
-.btn:disabled{opacity:.5}
-
-/* bottom control panel */
-#bb{background:var(--bone);border-top:2px solid var(--ink);box-shadow:0 -3px 0 var(--teal),0 -6px 0 var(--green)}
-#bb .hint{font:500 11.5px/1.35 var(--mono);color:var(--mut);letter-spacing:.02em}
-#bb .hint::before{content:'▸ ';color:var(--green)}
-
-/* typing toolbar */
-#fmt{background:var(--bone);border-top:2px solid var(--ink);box-shadow:0 -3px 0 var(--teal),0 -6px 0 var(--green);color:var(--ink)}
-.frow button{color:var(--ink);border-radius:5px}
-.frow button.on{background:var(--bone2);box-shadow:inset 0 0 0 1.5px var(--ink)}
-.frow button.act{background:var(--green);color:#fff}
-.frow button.act img{filter:invert(1)!important}
-.frow .w2{font-family:var(--mono)}
-.frow .done{background:var(--teal);color:var(--paper);border:1.5px solid var(--ink);font:600 12px var(--mono);letter-spacing:.1em;text-transform:uppercase}
-.frow [data-f=em] img{filter:none!important}
-.frow{padding:0 8px 0 6px}.frow .done{white-space:nowrap;padding:0 4px}
-@media (max-width:400px){.frow{gap:1px}.frow .done{letter-spacing:.04em;font-size:11px}.frow .w2{font-size:12.5px}}
-.fpan{border-bottom:1px solid var(--rule)}
-.fpan .stp{background:var(--paper);border:1.5px solid var(--ink);box-shadow:0 2px 0 var(--ink);color:var(--ink);font-family:var(--mono)}
-.fpan .stp:active{transform:translateY(2px);box-shadow:none}
-.chips button,.stl{background:var(--paper);border:1.5px solid var(--ink);color:var(--ink);font-family:var(--mono);font-size:12.5px}
-.stl.inv{background:var(--ink);color:#fff}
-.chips button:active,.stl:active{background:var(--bone2)}
-/* scrubber: a little CRT readout */
-.scrub{background:#001230;border:1.5px solid var(--ink);border-radius:6px;box-shadow:inset 0 0 14px rgba(0,0,0,.7)}
-.scrub .rul{background:repeating-linear-gradient(90deg,rgba(166,220,132,.95) 0 2px,transparent 2px 40px) 0 0/100% 24px no-repeat,repeating-linear-gradient(90deg,rgba(166,220,132,.45) 0 1px,transparent 1px 8px) 0 10px/100% 14px no-repeat}
-.scrub .ndl{background:var(--gold);box-shadow:0 0 6px var(--gold)}
-.scrub .sv{color:var(--mint);font-family:var(--mono);text-shadow:0 0 6px rgba(166,220,132,.6)}
-.scrub .sv small{color:rgba(166,220,132,.6)}
-.scrub::before{background:linear-gradient(90deg,#001230,transparent)}.scrub::after{background:linear-gradient(-90deg,#001230,transparent)}
-
-/* sheets */
-.scrim{background:rgba(0,14,36,.62)}
-.panel{background:var(--bone);color:var(--ink);border:2px solid var(--ink);border-bottom:0;box-shadow:0 -6px 30px rgba(0,0,0,.35)}
-@media (min-width:700px){.panel{border-bottom:2px solid var(--ink);box-shadow:8px 8px 0 rgba(0,0,0,.35)}}
-.panel h3{font:600 13px var(--mono);letter-spacing:.18em;text-transform:uppercase;padding-bottom:10px;border-bottom:3px double var(--ink)}
-.panel h3 .x{background:var(--paper);border:1.5px solid var(--ink);color:var(--ink);font-size:14px}
-.panel p{color:var(--mut)}
-.panel label{font:600 10.5px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
-.panel input,.panel textarea{background:#fbf8f0;border:1.5px solid var(--ink);border-radius:5px;color:var(--ink);font-family:var(--ui)}
-.panel input:focus,.panel textarea:focus{outline:2px solid var(--teal);outline-offset:1px}
-.note{color:var(--mut)}.err{color:var(--red)!important}
-.pubx{background:var(--bone2);border:1.5px solid var(--rule)}
-.ilist li{background:var(--paper);border:1.5px solid var(--rule);border-radius:7px}
-.ilist li.cur{border-color:var(--ink);box-shadow:inset 4px 0 0 var(--teal),inset 8px 0 0 var(--green)}
-.ilist .n{font:600 15px var(--mono)}
-.ilist .m small{color:var(--mut);font-family:var(--mono);font-size:11px}
-.ilist .del{color:var(--mut)}
-.tag{background:var(--green);color:var(--paper);font-family:var(--mono);border-radius:3px}
-.lays button{background:var(--paper);border:1.5px solid var(--rule);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink)}
-.lays button:active,.lays button.on{border-color:var(--ink)}
-.mini{box-shadow:0 0 0 1px var(--ink)}
-.acct{border-top:1px solid var(--rule)}
-.motto{margin:18px 0 4px;text-align:center;font:500 10px/1.6 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
-.motto i{font:italic 13px var(--times);letter-spacing:0;text-transform:none}
-
-/* toasts and busy screen: terminal messages */
-#toast{background:var(--ink);color:var(--mint);font:500 12.5px var(--mono);letter-spacing:.03em;border:1.5px solid var(--green2);border-radius:6px;text-shadow:0 0 6px rgba(166,220,132,.45);box-shadow:0 8px 24px rgba(0,0,0,.45)}
-#toast button{color:var(--gold);text-transform:uppercase;font-size:11.5px;letter-spacing:.1em}
-.busy{background:rgba(0,20,52,.88);color:var(--mint);font:600 14px var(--mono);letter-spacing:.2em;text-transform:uppercase;text-shadow:0 0 8px rgba(166,220,132,.6)}
-.busy::after{content:'▌';margin-left:4px;animation:blink 1s steps(2) infinite}
-@keyframes blink{50%{opacity:0}}
-
-/* crop screen */
-#crop{background:var(--desk2)}
-#crop .ct{color:var(--mint);font:500 12px var(--mono);letter-spacing:.06em}
-#crop .cb{background:var(--bone);border-top:2px solid var(--ink)}
-.rotr span{color:var(--ink);font-family:var(--mono)}
-.rotr input{accent-color:var(--teal)}
-#crop .asp button.on{background:var(--green);color:#fff}
-#crop .cnote{color:var(--mut);font-family:var(--mono);font-size:11.5px}
-
-/* arranging boxes */
-.selov{border-color:var(--teal2)}
-.selov b{background:var(--teal2)}
-body.arr .live .blk{outline-color:rgba(0,96,156,.6)}
-
-/* phones: typing toolbar docks under the header, clear of the keyboard */
-body:not(.desk) #fmt{top:calc(54px + var(--top));bottom:auto;padding-bottom:0;border-top:0;border-bottom:2px solid var(--ink);box-shadow:0 3px 0 var(--teal),0 6px 0 var(--green);display:flex;flex-direction:column}
-body:not(.desk) #fmt[hidden]{display:none}
-body:not(.desk) #fmt .frow{order:-1}
-body:not(.desk) #fmt .fpan{border-bottom:0;border-top:1px solid var(--rule)}
-body.typing:not(.desk) #view{padding-top:var(--fmh,0px)}
-
-/* zoom control */
-#zm{position:fixed;z-index:25;right:12px;bottom:calc(78px + var(--bot));display:none;align-items:center;gap:4px;background:var(--bone);border:1.5px solid var(--ink);border-radius:8px;padding:3px;box-shadow:0 3px 0 var(--ink)}
-#zm button{height:30px;min-width:30px;padding:0 8px;border-radius:5px;font:600 13px var(--mono);color:var(--ink)}
-#zm button:active{background:var(--bone2)}
-#zm span{font:600 11.5px var(--mono);min-width:44px;text-align:center}
-#zm .zf{background:var(--green);color:#fff;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
-#zm.on{display:flex}
-#zm.on>button:not(.zf),#zm.on>span{display:none}
-body.kb #zm{display:none!important}
-
-/* ================= desktop: issues on the left, page in the middle, tools on the right ================= */
-#rail{display:none}
-body.desk #rail{display:block;position:fixed;z-index:20;left:0;top:calc(54px + var(--top));bottom:0;width:280px;overflow:auto;background:var(--bone2);border-right:2px solid var(--ink);padding:14px 14px 20px}
-#rail .rh{font:600 12px var(--mono);letter-spacing:.2em;text-transform:uppercase;margin:2px 0 12px;padding-bottom:8px;border-bottom:3px double var(--ink)}
-#rail .btn.big{width:100%}
-#rail input{display:block;width:100%;font:15px var(--ui);color:var(--ink);background:#fbf8f0;border:1.5px solid var(--ink);border-radius:5px;padding:9px 10px;margin:0}
-#rail input:focus{outline:2px solid var(--teal);outline-offset:1px}
-#rail .acct .btn{width:100%;margin-top:8px}
-#rail .ilist li{cursor:pointer}
-#rail .ilist li:hover{border-color:var(--ink)}
-body.desk #isb{display:none}
-body.desk #xb .lbl{display:inline}
-body.desk #view{left:280px;right:300px;padding-bottom:20px}
-body.desk #bb,body.desk #fmt{top:calc(54px + var(--top));left:auto;right:0;bottom:0;width:300px;min-height:0;border-top:0;border-left:2px solid var(--ink);box-shadow:none;transform:none!important;overflow:auto;padding:16px 14px 20px}
-body.desk #bb{flex-direction:column;align-items:stretch;justify-content:flex-start;gap:10px}
-body.desk #bb .btn{flex:0 0 auto;width:100%;height:46px}
-body.desk #bb .hint{flex:0 0 auto;font-size:12px;padding:10px 12px;background:var(--bone2);border:1.5px solid var(--rule);border-radius:7px}
-body.desk #bb::before{content:'Control panel';font:600 12px var(--mono);letter-spacing:.2em;text-transform:uppercase;padding-bottom:8px;border-bottom:3px double var(--ink)}
-body.desk #fmt{display:flex;flex-direction:column}
-body.desk #fmt[hidden]{display:none!important}
-body.desk #fmt::before{content:'Typesetting';order:-2;font:600 12px var(--mono);letter-spacing:.2em;text-transform:uppercase;padding-bottom:8px;margin-bottom:10px;border-bottom:3px double var(--ink)}
-body.desk .frow{order:-1;flex-wrap:wrap;height:auto;padding:0;gap:6px}
-body.desk .frow button{flex:1 1 calc(25% - 6px);height:42px;margin:0;border:1.5px solid var(--ink);background:var(--paper)}
-body.desk .frow .w2,body.desk .frow .done{flex-basis:calc(50% - 6px)}
-body.desk .frow .done{background:var(--teal);color:var(--paper);box-shadow:0 2px 0 var(--ink)}
-body.desk .frow [data-f=size],body.desk .frow [data-f=ls],body.desk .frow [data-f=lh],body.desk .frow [data-f=st],body.desk .frow [data-f=em]{display:none}
-body.desk #fpan{margin-top:8px}
-body.desk .fpan{padding:4px 0 6px;border:0}
-body.desk .chips{padding:0 0 4px;flex-wrap:wrap}
-body.desk .chips button{flex:1 1 auto}
-.dsec{margin:10px 0 6px}
-.dl{font:600 10.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin-bottom:2px}
-.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
-.dgrid .stl{height:40px}
-.dfoot{font:500 11px/1.45 var(--mono);color:var(--mut);margin:14px 0 0}
-body.desk #zm{display:flex;right:316px;bottom:18px}
-body.desk #zm.on>button:not(.zf),body.desk #zm.on>span{display:inline-flex;align-items:center;justify-content:center}
-body.desk #toast{bottom:28px;left:calc(280px + (100vw - 580px)/2)}
-</style>
-</head>
-<body class="write">
-<header id="hd">
- <div class="brand"><img src="icon-192.png" alt=""><div class="bt"><b>RAG&nbsp;PRESS</b><small>Printing Dept.</small></div></div>
- <button class="hb" id="isb" aria-label="Issues"><svg viewBox="0 0 24 24" style="width:20px"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span id="isn">№ 1</span><i class="dot" id="sdot"></i></button>
- <div class="seg"><div><button id="mw" class="on">Write</button><button id="ma">Arrange</button></div></div>
- <button class="hb" id="ub" aria-label="Undo" disabled><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
- <button class="hb" id="rb" aria-label="Redo" disabled><svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></svg></button>
- <button class="hb" id="xb" aria-label="Export"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg><span class="lbl">Export</span></button>
-</header>
-<aside id="rail" aria-label="Issues"></aside>
-<div id="view"><div id="wrap"><div id="pg"></div></div></div>
-<div id="zm"><button data-z="out" aria-label="Zoom out">−</button><span id="zv">100%</span><button data-z="in" aria-label="Zoom in">+</button><button data-z="fit" class="zf">Fit page</button></div>
-<div id="bb"></div>
-<div id="fmt" hidden>
- <div id="fpan" hidden></div>
- <div class="frow">
-  <button data-f="b" aria-label="Bold"><b style="font-family:var(--times);font-size:19px">B</b></button>
-  <button data-f="i" aria-label="Italic"><i style="font-family:var(--times);font-size:19px">I</i></button>
-  <button data-f="font" class="w2" aria-label="Font"><span id="ffam">Times</span></button>
-  <button data-f="size" class="w2" aria-label="Font size"><span id="fsz">11</span><small>pt</small></button>
-  <button data-f="ls" aria-label="Letter spacing"><svg viewBox="0 0 24 24"><path d="M7 4l-3 9h6l-3-9zM5 10h4M14 4v9M14 4h3a2.5 2.5 0 0 1 0 5h-3M14 9h3.5a2 2 0 0 1 0 4H14"/><path d="M3 19h18M6 17l-3 2 3 2M18 17l3 2-3 2"/></svg></button>
-  <button data-f="lh" aria-label="Line spacing"><svg viewBox="0 0 24 24"><path d="M11 6h10M11 12h10M11 18h10M5 4v16M2.5 6.5 5 4l2.5 2.5M2.5 17.5 5 20l2.5-2.5"/></svg></button>
-  <button data-f="al" aria-label="Alignment"><svg viewBox="0 0 24 24" id="alic"><path d="M3 6h18M3 10h18M3 14h18M3 18h18"/></svg></button>
-  <button data-f="st" aria-label="Paragraph styles" style="font-family:var(--times);font-size:21px">¶</button>
-  <button data-f="em" aria-label="End mark"><img src="emblem.png" alt="" style="height:20px;filter:invert(1)"></button>
-  <button data-f="done" class="done">Done</button>
- </div>
-</div>
-<input type="file" id="fi" accept="image/*" hidden><input type="file" id="fp" accept="application/pdf,.pdf" hidden>
-<div id="printhost"></div>
-
-<script src="lib/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-'use strict';
-// The Riley Rag's own Supabase project (the same one the Rag app signs in to)
-const RAG={url:'https://vikxpnxnbmhmawhnwxzl.supabase.co',key:'sb_publishable_0WwmJLwgxP4uSQF8TDdaOw_vrL-XU6x'};
-// ---------- page geometry (A4 at 96 px per inch) ----------
-const PW=794,PH=1123,COLS=12,ROWS=52,GX=9.5,GY=141,CU=64,RH=976/52,HG=12,VG=10;
-const TIMES="'Times New Roman',Tinos,Times,serif",ANTON='Anton,Impact,sans-serif';
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const uid=()=>crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c=='x'?r:r&3|8).toString(16)});
-const now=()=>Date.now(),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-const box=b=>({l:GX+b.x*CU+HG/2,t:GY+b.y*RH+VG/2,w:b.w*CU-HG,h:b.h*RH-VG});
-const MONTHS=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
-const pd=d=>{const[y,m,dd]=(d||'').split('-').map(Number);return y?{y,m,d:dd}:null};
-const longDate=d=>{const p=pd(d);return p?`${p.d} ${MONTHS[p.m-1][0]+MONTHS[p.m-1].slice(1).toLowerCase()} ${p.y}`:''};
-const dotDate=d=>{const p=pd(d);return p?`${String(p.d).padStart(2,'0')}.${String(p.m).padStart(2,'0')}.${p.y}`:''};
-const iso=dt=>`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+// ====== 1. PASTE YOUR SUPABASE VALUES (Project Settings > API) ======
+const SUPABASE_URL = 'https://vikxpnxnbmhmawhnwxzl.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_0WwmJLwgxP4uSQF8TDdaOw_vrL-XU6x';
+// ====================================================================
+const recoveryAtLoad = /type=recovery/.test(location.hash);
+// Own sign-in slot: other apps on joshp523.github.io use this Supabase project too, and must not overwrite the Rag's login.
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { storageKey: 'riley-rag-auth' } });
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const $ = s => document.querySelector(s), app = $('#app');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pub = p => sb.storage.from('issues').getPublicUrl(p).data.publicUrl;
+let me = null, signup = false, greeted = false, recovering = recoveryAtLoad;
 
-// ---------- story templates ----------
-const PAR=(st,ph)=>`<div style="${st}" data-ph="${ph}"><br></div>`;
-const ST={
- head:`font-family:${ANTON};font-size:32px;line-height:1;text-align:left;font-style:normal;letter-spacing:0em`,
- big:`font-family:${ANTON};font-size:60px;line-height:1;text-align:left;font-style:normal;letter-spacing:0em`,
- by:`font-family:${TIMES};font-size:13.33px;line-height:1.15;text-align:left;font-style:italic;letter-spacing:0em`,
- body:`font-family:${TIMES};font-size:16px;line-height:1.15;text-align:justify;font-style:normal;letter-spacing:0em`};
-const storyHTML=()=>PAR(ST.head,'HEADLINE')+PAR(ST.by,'By Name, Title')+PAR(ST.body,'Tap here and start writing.');
-const headHTML=()=>PAR(ST.big,'BIG HEADLINE');
+// ====== Phones: add to home screen + new-issue alerts ======
+const VAPID_PUBLIC_KEY = 'BNRong9iomykb8ezl4BbbuNyNzjkCB5Rhm8wJXmezro4y1-ni-9B7Ro0QqLZGmh8YVh_ed8wRwgyyKCMFgVYDjg'; // same key as Word Games
+const UA = navigator.userAgent, IOS = /iPhone|iPad|iPod/.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1), PHONE = IOS || /Android/i.test(UA);
+const IN_APP = /FBAN|FBAV|Instagram|Line\/|GSA\/|Snapchat|LinkedInApp|Twitter/i.test(UA);   // Facebook, Instagram, Google app, etc.
+const IOS_OK = IOS && !IN_APP && (/Safari\//.test(UA) || /CriOS|EdgiOS|FxiOS/.test(UA));   // browsers that can add to the iPhone home screen
+const STANDALONE = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const CAN_PUSH = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+let BIP = null; addEventListener('beforeinstallprompt', e => { e.preventDefault(); BIP = e; });
+const snoozed = k => +(localStorage.getItem('rr_snooze_'+k) || 0) > Date.now(), snooze = (k, d) => localStorage.setItem('rr_snooze_'+k, Date.now() + d*864e5);
+const ICO = {
+ share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M7 10H5v11h14V10h-2"/></svg>',
+ plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>',
+ dots:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>',
+ home:'<img src="icon-192.png" alt="" style="width:30px;height:30px;border-radius:7px;margin-left:auto">',
+ compass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>'};
+function sheet(h){ closeSheet(); const d = document.createElement('div'); d.id = 'sheet';
+ d.innerHTML = `<div class="bk" data-x></div><div class="sh" role="dialog" aria-modal="true">${h}</div>`; document.body.append(d);
+ d.addEventListener('click', e => { if(e.target.closest('[data-x]')) closeSheet(); }); requestAnimationFrame(() => d.classList.add('on')); return d; }
+const closeSheet = () => $('#sheet')?.remove();
 
-const LAYOUTS={
- classic:{name:'Classic',b:[['p',0,0,4,21],['s',4,0,4,52,'lr'],['s',8,0,4,26],['s',0,21,4,31],['p',8,26,4,11],['s',8,37,4,15,'t']]},
- photo:{name:'Big photo',b:[['p',0,0,8,22],['h',0,22,8,4],['s',0,26,4,26,'r'],['s',4,26,4,26],['s',8,0,4,30,'l'],['p',8,30,4,12,'l'],['s',8,42,4,10,'l']]},
- three:{name:'Three columns',b:[['h',0,0,12,4],['s',0,4,4,48,'r'],['s',4,4,4,48,'r'],['s',8,4,4,48]]},
- blank:{name:'Blank page',b:[]}};
-function mkBlocks(spec,t){const o={};for(const[k,x,y,w,h,ln]of spec){const id=uid();o[id]={id,k:k=='h'?'s':k,x,y,w,h,ln:ln||'',html:k=='s'?storyHTML():k=='h'?headHTML():'',im:null,t}}return o}
+function installSheet(){
+ let how;
+ if(IOS && !IOS_OK) how = `<p>This page is open inside another app, which can’t save it. Open it in Safari first:</p>
+  <ol class="steps"><li><span>Tap <b>Copy link</b> below.</span></li><li><span>Open <b>Safari</b> and paste it in the address bar.</span></li><li><span>Then come back to these steps.</span></li></ol>
+  <div class="btns"><button class="btn solid" id="cpl">Copy link</button><button class="btn ghost" data-x>Not now</button></div>`;
+ else if(IOS) how = `<ol class="steps"><li><span>Tap the <b>Share</b> button${/CriOS|EdgiOS|FxiOS/.test(UA)?' at the top, next to the address':' at the bottom of the screen'}.</span>${ICO.share}</li>
+  <li><span>Scroll down and tap <b>Add to Home Screen</b>.</span>${ICO.plus}</li><li><span>Tap <b>Add</b>. The Rag appears on your home screen.</span>${ICO.home}</li></ol>
+  <div class="btns"><button class="btn ghost" data-x>Got it</button></div>`;
+ else if(BIP) how = `<p>One tap and it sits on your home screen, next to your other apps.</p><div class="btns"><button class="btn solid" id="ins">Add to home screen</button><button class="btn ghost" data-x>Not now</button></div>`;
+ else how = `<ol class="steps"><li><span>Tap the <b>menu</b> button at the top right.</span>${ICO.dots}</li><li><span>Tap <b>Add to Home screen</b> or <b>Install app</b>.</span>${ICO.plus}</li><li><span>Tap <b>Add</b>.</span>${ICO.home}</li></ol><div class="btns"><button class="btn ghost" data-x>Got it</button></div>`;
+ const d = sheet(`<h2 class="gilt">Keep the Rag on your phone</h2><p>Save it to your home screen and it opens like an app, full screen, with one tap.${me?' You can also get a note when a new issue comes out.':''}</p>${how}`);
+ d.querySelector('#ins')?.addEventListener('click', async () => { BIP.prompt(); await BIP.userChoice; BIP = null; closeSheet(); });
+ d.querySelector('#cpl')?.addEventListener('click', async e => { try{ await navigator.clipboard.writeText(location.href.split('#')[0]); e.target.textContent = 'Copied!'; }catch(x){ prompt('Copy this link:', location.href.split('#')[0]); } });
+}
+async function pushSub(){ if(!CAN_PUSH()) return null; const r = await navigator.serviceWorker.getRegistration(); return r && r.pushManager.getSubscription(); }
+async function alertsOn(){
+ try{
+  const reg = await navigator.serviceWorker.register('sw.js'); await navigator.serviceWorker.ready;
+  if(await Notification.requestPermission() !== 'granted') return 'Your phone said no to alerts. You can allow them later in Settings → Notifications → Riley Rag.';
+  const u = VAPID_PUBLIC_KEY.replace(/-/g,'+').replace(/_/g,'/'), raw = atob(u + '='.repeat((4 - u.length % 4) % 4));
+  const sub = await reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:Uint8Array.from(raw, c => c.charCodeAt(0))}), j = sub.toJSON();
+  const { error } = await sb.from('rr_push_subs').upsert({endpoint:j.endpoint, user_id:me.id, sub:j}, {onConflict:'endpoint'});
+  return error ? error.message : null;
+ }catch(x){ return x.message || 'Could not turn on alerts.'; }
+}
+async function alertsOff(){ const s = await pushSub(); if(s){ await sb.from('rr_push_subs').delete().eq('endpoint', s.endpoint); await s.unsubscribe(); } }
+function alertsSheet(){
+ const d = sheet(`<h2 class="gilt">Hear about new issues</h2><p>We’ll send one short note to this phone whenever a new Riley Rag comes out. Nothing else, ever.</p><p class="err" id="ae" role="alert"></p><div class="btns"><button class="btn solid" id="aon">Yes, tell me</button><button class="btn ghost" id="anot">Not now</button></div>`);
+ d.querySelector('#anot').onclick = () => { snooze('alerts', 14); closeSheet(); };
+ d.querySelector('#aon').onclick = async e => { e.target.disabled = true; e.target.textContent = 'One moment…'; const er = await alertsOn();
+  if(er){ $('#ae').textContent = er; e.target.hidden = true; snooze('alerts', 30); }
+  else { d.querySelector('.sh').innerHTML = '<h2 class="gilt">You’re on the list</h2><p>The next issue will tap you on the shoulder.</p><div class="btns"><button class="btn ghost" data-x>Lovely</button></div>'; if(location.hash==='#charter') charterView(); } };
+}
+async function nudge(){   // gentle, once in a while, phones only
+ if(!PHONE || $('#sheet')) return;
+ if(!STANDALONE()){ if(!snoozed('install')){ snooze('install', 7); installSheet(); } return; }
+ if(!me || !CAN_PUSH() || Notification.permission === 'denied' || await pushSub()) return;
+ if(Notification.permission === 'granted'){ await alertsOn(); return; }   // allowed before: switch on quietly
+ if(!snoozed('alerts')) alertsSheet();
+}
+async function phonePanel(){   // "On your phone" section on the Us page
+ const el = $('#phn'); if(!el) return;
+ const sub = await pushSub(), parts = [];
+ if(!STANDALONE()) parts.push(`<p>${PHONE?'Save the Rag to your home screen and it opens like an app.':'On your phone, you can save the Rag to your home screen so it opens like an app.'}</p>${PHONE?'<button class="btn solid" id="gap">Add to home screen</button>':''}`);
+ if(CAN_PUSH() && (STANDALONE() || !IOS)) parts.push(sub ? `<p>New-issue alerts are <b>on</b> for this ${PHONE?'phone':'device'}.</p><button class="btn ghost" id="aof">Turn alerts off</button>`
+  : Notification.permission === 'denied' ? '<p>Alerts are blocked. To allow them: Settings → Notifications → Riley Rag.</p>'
+  : '<p>Get a short note whenever a new issue comes out.</p><button class="btn solid" id="aop">Turn on new-issue alerts</button>');
+ else if(IOS) parts.push('<p>Once the Rag is on your home screen, open it from there to turn on new-issue alerts.</p>');
+ el.innerHTML = parts.length ? `<h2 class="hd gilt ph">On your phone</h2>${parts.join('')}` : '';
+ $('#gap') && ($('#gap').onclick = installSheet);
+ $('#aop') && ($('#aop').onclick = alertsSheet);
+ $('#aof') && ($('#aof').onclick = async () => { await alertsOff(); phonePanel(); });
+}
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
 
-// ---------- state ----------
-let UZ=false,DOCS={},I=null,MODE='w',SEL=null,ED=null,S=1,FIT=1,ZB=null,U=[],R=[],pendSnap=null,IMG={},DRAG=null;
-const blocks=()=>Object.values(I.b);
+// Custom reaction icons (stroke = currentColor)
+const S = 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
+const stk = k => `<img src="stickers/${k}.png" alt="" width="46" height="46">`;
+const RX = {
+ love:['Love it',stk('love')], silly:['Silly!',stk('silly')], more:['Tell me more',stk('more')],
+ sleepy:['So sleepy',stk('sleepy')], object:['I object',stk('object')]
+};
 
-// ---------- local storage (IndexedDB) ----------
-let DBP=null;
-const idb=()=>DBP||(DBP=new Promise((res,rej)=>{const r=indexedDB.open('ragpress',1);r.onupgradeneeded=()=>{const d=r.result;d.createObjectStore('docs',{keyPath:'id'});d.createObjectStore('imgs',{keyPath:'id'})};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}));
-const ost=(st,mode,fn)=>idb().then(db=>new Promise((res,rej)=>{const t=db.transaction(st,mode),q=fn(t.objectStore(st));t.oncomplete=()=>res(q&&q.result);t.onerror=t.onabort=()=>rej(t.error)}));
-const dbGet=(st,k)=>ost(st,'readonly',s=>s.get(k)),dbPut=(st,v)=>ost(st,'readwrite',s=>s.put(v)),dbAll=st=>ost(st,'readonly',s=>s.getAll()),dbDel=(st,k)=>ost(st,'readwrite',s=>s.delete(k));
-let saveT=null,pushT=null;
-function saveSoon(){clearTimeout(saveT);saveT=setTimeout(saveNow,150)}
-function saveNow(){clearTimeout(saveT);if(!I)return;DOCS[I.id]=I;try{localStorage.setItem('rp_cur',I.id)}catch(e){}dbPut('docs',JSON.parse(JSON.stringify(I))).catch(()=>toast('Couldn’t save on this device. Export a copy to be safe.'))}
-function changed(){I.t=now();saveSoon();syncSoon();updUndo()}
+// ---- Remembering readers: name + email are kept on this device (and in a cookie as a backup),
+// so if the browser ever forgets the session we sign them straight back in without asking.
+const WHO_K = 'rr_who';
+function who(){ try{ const v = localStorage.getItem(WHO_K); if(v) return JSON.parse(v); }catch(e){}
+ const m = document.cookie.match(/(?:^|; )rr_who=([^;]*)/); try{ return m ? JSON.parse(decodeURIComponent(m[1])) : null; }catch(e){ return null; } }
+function saveWho(name, email){ const v = JSON.stringify({name, email}); try{ localStorage.setItem(WHO_K, v); }catch(e){}
+ document.cookie = `rr_who=${encodeURIComponent(v)}; max-age=${400*864e2}; path=/RileyRag/; SameSite=Lax; Secure`;
+ try{ navigator.storage && navigator.storage.persist && navigator.storage.persist(); }catch(e){} }
+function forgetWho(){ try{ localStorage.removeItem(WHO_K); }catch(e){} document.cookie = 'rr_who=; max-age=0; path=/RileyRag/'; }
+async function quickLogin(name, email){   // true, 'editor', or an error message
+ try{
+  const { data, error } = await sb.functions.invoke('rr-login', { body:{ name, email } });
+  if(error){ let m = error.message; try{ const j = await error.context.json(); if(j.editor) return 'editor'; m = j.error || m; }catch(x){} return m; }
+  if(data.editor) return 'editor';
+  let v = await sb.auth.verifyOtp({ token_hash:data.token_hash, type:'magiclink' });
+  if(v.error) v = await sb.auth.verifyOtp({ token_hash:data.token_hash, type:'email' });
+  if(v.error) return v.error.message;
+  saveWho(name, email); return true;
+ }catch(x){ return navigator.onLine === false ? 'You’re offline. Connect to the internet and try again.' : (x.message || 'Couldn’t sign in. Please try again.'); }
+}
+let switching = false;
+// ---- Tell the editors what readers are doing (the server function sends the alerts; readers are never pinged for this) ----
+let TOKEN = null;
+sb.auth.onAuthStateChange((ev, ses) => { TOKEN = ses ? ses.access_token : null; });
+function act(kind, d){ if(!me || me.is_editor || !TOKEN) return; send('rr-activity', {kind, d}); }
+function send(fn, body){ try{ fetch(`${SUPABASE_URL}/functions/v1/${fn}`, {method:'POST', keepalive:true, headers:{'Content-Type':'application/json', Authorization:'Bearer '+TOKEN, apikey:SUPABASE_ANON_KEY}, body:JSON.stringify(body)}).catch(() => {}); }catch(e){} }
+// any link a reader taps (other apps, Word Games, QuipRash, the photo gallery, PDF downloads, links in the charter)
+document.addEventListener('click', e => { const a = e.target.closest && e.target.closest('a[href]'); if(!a) return; const h = a.getAttribute('href') || '';
+ if(!h || h.startsWith('#') || h.startsWith('mailto:') || h.startsWith('javascript:')) return;
+ const label = (a.id === 'lbpdf' ? 'the PDF of an issue' : (a.textContent || '').replace(/\s+/g,' ').trim()) || h;
+ act('link', {key:a.href, label}); }, true);
+async function boot(){
+ let { data:{ session } } = await sb.auth.getSession();
+ if(!session && !switching){ const w = who(); if(w && w.email && await quickLogin(w.name, w.email) === true) session = (await sb.auth.getSession()).data.session; }
+ if(!session){ $('#nav').hidden = true; setTimeout(nudge, 2500); return authView(); }
+ if(recovering) return recoveryView();
+ const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
+ if(!data){ await sb.auth.signOut({ scope:'local' }); $('#nav').hidden = true; return authView(); } // signed in, but not as a Rag member
+ me = data; TOKEN = session.access_token; if(session.user.email && !who()) saveWho(me.name, session.user.email);
+ sb.rpc('touch_me').then(() => {}, () => {});
+ $('#nav').hidden = false; route(); setTimeout(nudge, 2500);
+}
+sb.auth.onAuthStateChange(ev => { if(ev==='PASSWORD_RECOVERY'){ recovering = true; recoveryView(); } if(ev==='SIGNED_OUT'){ me = null; boot(); } });
+addEventListener('hashchange', () => { if(me) route(); });
 
-// ---------- undo ----------
-function snap(){U.push(JSON.stringify(I));if(U.length>80)U.shift();R=[];updUndo()}
-function updUndo(){$('#ub').disabled=!U.length&&!pendSnap;$('#rb').disabled=!R.length}
-const metaKey=d=>JSON.stringify([d.n,d.date,d.theme,d.addr,d.by]);
-function restore(js){const o=JSON.parse(js),t=now();
- for(const id in o.b){const a=o.b[id],c=I.b[id];if(!c||JSON.stringify({...a,t:0})!==JSON.stringify({...c,t:0})){a.t=t;delete o.del[id]}else a.t=c.t}
- for(const id in I.b)if(!o.b[id])o.del[id]=t;
- if(metaKey(o)!==metaKey(I))o.mt=t;
- o._sync=I._sync;I=o;DOCS[I.id]=I;SEL=null;changed();render()}
-function undo(){if(ED){ED.blur();commitEdit()}if(!U.length)return;R.push(JSON.stringify(I));restore(U.pop());U.length||updUndo();toast('Undone')}
-function redo(){if(!R.length)return;U.push(JSON.stringify(I));restore(R.pop());toast('Redone')}
+function authView(msg){
+ const w = who() || {};
+ app.innerHTML = `<form class="panel" id="af"><h2 class="gilt">Welcome to the Rag</h2><p style="margin:6px 0 4px">Just tell us who you are. No password needed, and this phone will remember you.</p>
+ <label for="n">Your name (as the family knows you)</label><input id="n" required maxlength="60" autocomplete="name" value="${esc(w.name||'')}">
+ <label for="e">Your email</label><input id="e" type="email" required autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" value="${esc(w.email||'')}">
+ <div id="pw" hidden><label for="p">Editor password</label><input id="p" type="password" autocomplete="current-password"></div>
+ <p class="err" id="er" role="alert">${esc(msg||'')}</p>
+ <button class="btn solid" id="go" style="width:100%;padding:12px">Open the paper</button>
+ <button type="button" class="btn ghost" id="fg" hidden>Forgot your editor password?</button></form>${PHONE&&!STANDALONE()?'<button class="btn ghost getapp" id="ga">📲 Put the Rag on your phone</button>':''}`;
+ $('#ga') && ($('#ga').onclick = installSheet);
+ $('#fg').onclick = forgotView;
+ $('#af').onsubmit = async e => {
+  e.preventDefault(); const name = $('#n').value.trim(), email = $('#e').value.trim().toLowerCase(), er = $('#er'), go = $('#go');
+  er.textContent = ''; go.disabled = true; go.textContent = 'Opening…';
+  try{
+   if(!$('#pw').hidden){
+    const r = await sb.auth.signInWithPassword({ email, password:$('#p').value });
+    if(r.error){ er.textContent = r.error.message; return; }
+    saveWho(name, email); switching = false; return boot();
+   }
+   const r = await quickLogin(name, email);
+   if(r === 'editor'){ $('#pw').hidden = false; $('#fg').hidden = false; er.textContent = 'You’re an editor, so please add your password too.'; $('#p').focus(); return; }
+   if(r !== true){ er.textContent = r; return; }
+   switching = false; boot();
+  }finally{ go.disabled = false; go.textContent = 'Open the paper'; }
+ };
+}
 
-// ---------- images ----------
-async function ingest(file){
- const url=URL.createObjectURL(file);
- const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>rej(new Error('That photo couldn’t be opened.'));i.src=url});
- const M=2200,k=Math.min(1,M/Math.max(img.naturalWidth,img.naturalHeight)),w=Math.round(img.naturalWidth*k),h=Math.round(img.naturalHeight*k);
- const cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(url);
- const png=/png|gif|webp/.test(file.type),blob=await new Promise(r=>cv.toBlob(r,png?'image/png':'image/jpeg',.88));const id=uid();
- await dbPut('imgs',{id,blob,up:0});IMG[id]=URL.createObjectURL(blob);upSoon();
- return{id,w,h,z:1,fx:.5,fy:.5,tint:0}}
-const loading={};
-async function loadImg(id,ext='jpg'){if(IMG[id]||loading[id])return;loading[id]=1;
- try{let r=await dbGet('imgs',id);
-  if(!r&&RAG){const x=await fetch(`${RAG.url}/storage/v1/object/public/issues/drafts/${id}.${ext}`);if(x.ok){r={id,blob:await x.blob(),up:1};await dbPut('imgs',r)}}
-  if(r){IMG[id]=URL.createObjectURL(r.blob);BLOB[id]=r.blob;render()}}catch(e){}finally{delete loading[id]}}
-const BLOB={};
-// rotation: the photo is turned inside a larger upright canvas; crops live in that canvas
-const dimsOf=im=>{const a=(im.rot||0)*Math.PI/180,c=Math.abs(Math.cos(a)),n=Math.abs(Math.sin(a));return{w:im.w*c+im.h*n,h:im.w*n+im.h*c}};
-const imKey=im=>im.id+(im.rot?'~r'+(+im.rot).toFixed(1):'')+(im.tint?'~t':'');
-const DER={};
-function derive(im){const k=imKey(im);if(IMG[k])return Promise.resolve();if(!IMG[im.id])return loadImg(im.id).then(()=>IMG[im.id]&&derive(im));
- return DER[k]||(DER[k]=(async()=>{const i=new Image();i.src=IMG[im.id];await i.decode();const D=dimsOf(im),cv=document.createElement('canvas');cv.width=Math.round(D.w);cv.height=Math.round(D.h);const c=cv.getContext('2d');
-  const png=BLOB[im.id]&&/png/.test(BLOB[im.id].type);if(!png){c.fillStyle='#fff';c.fillRect(0,0,cv.width,cv.height)}
-  c.translate(cv.width/2,cv.height/2);c.rotate((im.rot||0)*Math.PI/180);c.drawImage(i,-im.w/2,-im.h/2,im.w,im.h);c.setTransform(1,0,0,1,0,0);
-  if(im.tint){const d=c.getImageData(0,0,cv.width,cv.height),p=d.data;for(let j=0;j<p.length;j+=4){const L=.299*p[j]+.587*p[j+1]+.114*p[j+2];p[j]=p[j+1]=p[j+2]=L}c.putImageData(d,0,0)}
-  const bl=await new Promise(r=>cv.toBlob(r,png?'image/png':'image/jpeg',.9));IMG[k]=URL.createObjectURL(bl);render()})().finally(()=>delete DER[k]))}
-function imgSrc(im){if(!IMG[im.id]){loadImg(im.id);return null}const k=imKey(im);if(k===im.id)return IMG[im.id];if(IMG[k])return IMG[k];derive(im);return null}
-// is a crop rectangle (0..1 of the upright canvas) fully on the photo?
-function okRect(im,c){const e=1e-4;if(c.x<-e||c.y<-e||c.x+c.w>1+e||c.y+c.h>1+e)return false;if(!im.rot)return true;const D=dimsOf(im),a=-im.rot*Math.PI/180,co=Math.cos(a),si=Math.sin(a);
- for(const[px,py]of[[c.x,c.y],[c.x+c.w,c.y],[c.x,c.y+c.h],[c.x+c.w,c.y+c.h]]){const X=(px-.5)*D.w,Y=(py-.5)*D.h,x=X*co-Y*si,y=X*si+Y*co;if(Math.abs(x)>im.w/2+.5||Math.abs(y)>im.h/2+.5)return false}return true}
-function visRect(im,W,H){if(im.c)return im.c;const s0=Math.max(W/im.w,H/im.h),s=s0*(im.z||1),dw=im.w*s,dh=im.h*s;let l=W/2-(im.fx??.5)*dw,t=H/2-(im.fy??.5)*dh;l=clamp(l,W-dw,0);t=clamp(t,H-dh,0);return{x:-l/dw,y:-t/dh,w:W/dw,h:H/dh}}
-function cropBox(im,W,H){const D=dimsOf(im),c=visRect(im,W,H),s=Math.max(W/(c.w*D.w),H/(c.h*D.h)),dw=D.w*s,dh=D.h*s;let l=W/2-(c.x+c.w/2)*dw,t=H/2-(c.y+c.h/2)*dh;l=clamp(l,W-dw,0);t=clamp(t,H-dh,0);return{l,t,dw,dh}}
-const rectOf=(c,W,H)=>({x:-c.l/c.dw,y:-c.t/c.dh,w:W/c.dw,h:H/c.dh});
-const withCrop=(im,c)=>{const o={...im,c};delete o.z;delete o.fx;delete o.fy;return o};
+async function feedView(){
+ const hello = !greeted; greeted = true;
+ app.innerHTML = `${hello?`<p class="hi" id="hi">Welcome, ${esc(me.name)}</p>`:''}${me.is_editor?'<div class="bar ed"><button class="btn ghost" id="eb">Email draft</button><button class="btn ghost" id="mb">Members</button></div>':''}<div id="tools"></div><div id="feed">Loading issues…</div><div class="foot"><button class="btn ghost" id="so">Not ${esc(me.name)}? Switch reader</button></div>`;
+ if(hello) setTimeout(() => $('#hi')?.classList.add('off'), 3500);
+ $('#so').onclick = () => { if(!confirm('Sign out so someone else can read here?')) return; switching = true; forgetWho(); sb.auth.signOut(); };
+ if(me.is_editor){ $('#mb').onclick = () => $('#mp') ? closeMembers() : members(); $('#eb').onclick = () => emailDraft(); memberCount(); }
+ const [i,c,r] = await Promise.all([
+  sb.from('issues').select('*').order('issue_date',{ascending:false}).order('number',{ascending:false}),
+  sb.from('comments').select('*,profiles(name)').order('created_at'),
+  me.is_editor ? sb.from('reactions').select('issue_id,kind,user_id,profiles(name)') : sb.from('reactions').select('issue_id,kind,user_id').eq('user_id', me.id)]);
+ const [cn, vw] = await Promise.all([sb.rpc('reaction_counts'), me.is_editor ? sb.from('issue_views').select('issue_id,last_at,n,profiles(name)') : Promise.resolve({data:null})]);
+ RXC = {}; (cn.data||[]).forEach(x => RXC[x.issue_id+'|'+x.kind] = x.n);
+ VIEWS = vw.data || [];
+ if(i.error) return $('#feed').textContent = i.error.message;
+ $('#feed').innerHTML = i.data.length ? '' : '<p style="text-align:center">No issues yet. The press is warming up.</p>';
+ i.data.forEach(is => $('#feed').append(issueEl(is, c.data||[], r.data||[])));
+}
 
-// ---------- building the page ----------
-function metaHTML(d,live){
- const th=esc(d.theme||'');
- return{addr:esc(d.addr||''),
-  bar:`<span>Issue № ${esc(d.n)}</span><span class="th">${th}</span><span>${longDate(d.date)}</span>`}}
-function sheetEl(d,live){const e=document.createElement('div');e.className='sheet'+(live?' live':'');
- e.innerHTML=`<img class="mast" src="masthead.png" alt="The Riley Rag"><img class="stamp" src="emblem.png" alt=""><div class="addr meta"></div><div class="ibar meta"></div>${live?'<div class="gridov"></div>':''}<div class="bls"></div><div class="lns"></div>${live?'<div class="ovl"></div>':''}`;
- const m=metaHTML(d,live);e.querySelector('.addr').innerHTML=m.addr;e.querySelector('.ibar').innerHTML=m.bar;return e}
-function place(e,b){const B=box(b);Object.assign(e.style,{left:B.l+'px',top:B.t+'px',width:B.w+'px',height:B.h+'px'})}
-function photoInner(b,live){const B=box(b);
- if(b.im){const src=imgSrc(b.im);if(!src)return live?'<div class="ph" style="border-style:solid;opacity:.6">Loading photo…</div>':'';const c=cropBox(b.im,B.w,B.h);return`<img src="${src}" alt="" style="left:${c.l}px;top:${c.t}px;width:${c.dw}px;height:${c.dh}px">`}
- return live?`<div class="ph"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Tap to add a photo</div>`:''}
-function blockEl(b,live){const e=document.createElement('div');e.className='blk '+b.k+(b.fl?' fl':'');e.dataset.id=b.id;place(e,b);
- if(b.k=='s'){const t=document.createElement('div');t.className='tx';t.innerHTML=b.html||'';if(live){t.contentEditable=MODE=='w'?'true':'false';t.spellcheck=true;markPh(t);if(!hasText(t))e.classList.add('empty')}e.appendChild(t)}
- else e.innerHTML=photoInner(b,live);
- e._j=JSON.stringify(b)+(b.k=='p'&&b.im?imgSrc(b.im):'');return e}
-function linesHTML(d){let h='';const L=1.3;
- for(const b of Object.values(d.b)){if(!b.ln)continue;const B=box(b);
-  if(b.ln.includes('l'))h+=`<i style="left:${GX+b.x*CU-L/2}px;top:${B.t}px;width:${L}px;height:${B.h}px"></i>`;
-  if(b.ln.includes('r'))h+=`<i style="left:${GX+(b.x+b.w)*CU-L/2}px;top:${B.t}px;width:${L}px;height:${B.h}px"></i>`;
-  if(b.ln.includes('t'))h+=`<i style="left:${B.l}px;top:${GY+b.y*RH-L/2}px;width:${B.w}px;height:${L}px"></i>`;
-  if(b.ln.includes('b'))h+=`<i style="left:${B.l}px;top:${GY+(b.y+b.h)*RH-L/2}px;width:${B.w}px;height:${L}px"></i>`}
- return h}
-const hasText=t=>/\S/.test(t.textContent);
+let RXC = {}, VIEWS = [];
+const seen = new Set(), viewObs = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const id = +en.target.dataset.iss;
+ if(en.isIntersecting && !seen.has(id)){ seen.add(id); viewObs.unobserve(en.target); sb.rpc('saw_issue', {iid:id}).then(() => {}, () => {}); act('read', {key:id, n:en.target.dataset.n}); } }), {threshold:.5}) : null;
+const ago = t => { const d = (Date.now() - new Date(t)) / 864e5; return d < 1 ? 'today' : d < 2 ? 'yesterday' : d < 30 ? Math.floor(d)+' days ago' : new Date(t).toLocaleDateString(); };
+function issueEl(is, cs, rs){
+ const el = document.createElement('article'); el.className='issue';
+ const d = new Date(is.issue_date+'T00:00').toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
+ el.innerHTML = `<button class="sheet" aria-label="Open issue ${is.number} full size"><img loading="lazy" src="${pub(is.img_path)}" alt="The Riley Rag, Issue ${is.number}, ${d}"></button>
+ <div class="rxs"></div><div class="who" hidden></div>${me.is_editor?'<button class="btn ghost seen"></button><div class="who seenl" hidden></div>':''}<div class="cms"></div>
+ <form><label class="sr" for="c${is.id}">Leave a comment</label><textarea id="c${is.id}" rows="2" maxlength="1000" placeholder="Leave a comment…" required></textarea><button class="btn">Post comment</button><p class="err"></p></form>`;
+ el.querySelector('.sheet').onclick = () => { $('#lbimg').src = pub(is.img_path); $('#lbpdf').href = pub(is.pdf_path); $('#lb').classList.add('on'); if(!me.is_editor){ sb.rpc('saw_issue', {iid:is.id}).then(() => {}, () => {}); act('read', {key:is.id, n:is.number}); } };
+ if(!me.is_editor && viewObs){ el.querySelector('.sheet').dataset.iss = is.id; el.querySelector('.sheet').dataset.n = is.number; viewObs.observe(el.querySelector('.sheet')); }
+ if(me.is_editor){   // who has read this issue
+  const v = VIEWS.filter(x => x.issue_id === is.id).sort((a,b) => new Date(b.last_at) - new Date(a.last_at)), sb2 = el.querySelector('.seen'), sl = el.querySelector('.seenl');
+  sb2.textContent = v.length ? `👁 Read by ${v.length} ${v.length===1?'person':'people'} ▾` : '👁 Nobody has opened this one yet';
+  sl.innerHTML = v.map(x => `<div><b>${esc(x.profiles?.name||'Someone')}</b><small>${ago(x.last_at)}${x.n>1?` · ${x.n} times`:''}</small></div>`).join('');
+  sb2.onclick = () => { if(v.length){ sl.hidden = !sl.hidden; sb2.textContent = sb2.textContent.replace(/[▾▴]$/, sl.hidden?'▾':'▴'); } };
+ }
+ const rx = el.querySelector('.rxs'), whoBox = el.querySelector('.who');
+ let openKind = null;
+ const drawRx = () => {
+  rx.innerHTML = '';
+  Object.entries(RX).forEach(([k,[label,svg]]) => {
+   const mine = rs.some(x => x.issue_id===is.id && x.kind===k && x.user_id===me.id);
+   const n = RXC[is.id+'|'+k] || 0;
+   const b = document.createElement('button'); b.className='rx'; b.setAttribute('aria-pressed',mine);
+   b.setAttribute('aria-label',label+(n?`, ${n}`:'')); b.title = label;
+   b.innerHTML = `${svg}${n?`<span>${n}</span>`:''}`;
+   if(me.is_editor){   // editors don't react; they see who did
+    b.setAttribute('aria-pressed', openKind===k); b.setAttribute('aria-expanded', openKind===k);
+    b.onclick = () => { openKind = openKind===k ? null : k; drawRx(); };
+    rx.append(b); return;
+   }
+   b.onclick = async () => {
+    b.disabled = true;
+    const {error} = mine ? await sb.from('reactions').delete().match({issue_id:is.id,user_id:me.id,kind:k}) : await sb.from('reactions').insert({issue_id:is.id,kind:k});
+    if(error){ b.disabled = false; return alert(error.message); }
+    if(mine){ const i = rs.findIndex(x => x.issue_id===is.id && x.kind===k && x.user_id===me.id); if(i>-1) rs.splice(i,1); RXC[is.id+'|'+k] = Math.max(0, n-1); }
+    else { rs.push({issue_id:is.id, user_id:me.id, kind:k}); RXC[is.id+'|'+k] = n+1; act('react', {n:is.number, label}); }
+    drawRx(); [...rx.children].find(c => c.title===label)?.focus({preventScroll:true});
+   };
+   rx.append(b);
+  });
+  if(me.is_editor){
+   const names = openKind ? rs.filter(x => x.issue_id===is.id && x.kind===openKind).map(x => x.profiles?.name || 'Someone').sort((a,b) => a.localeCompare(b)) : [];
+   whoBox.hidden = !openKind;
+   if(openKind) whoBox.innerHTML = `<div class="whoh">${RX[openKind][1]}<span>${esc(RX[openKind][0])}</span></div>` + (names.length ? names.map(n => `<div>${esc(n)}</div>`).join('') : '<div><i>Nobody yet</i></div>');
+  }
+ };
+ drawRx();
+ const box = el.querySelector('.cms');
+ const addComment = x => {
+  const c = document.createElement('div'); c.className='cm';
+  c.innerHTML = `${me.is_editor?'<button class="del" aria-label="Delete comment">Delete</button>':''}<b>${esc(x.profiles?.name||'Someone')}</b><small>${new Date(x.created_at).toLocaleDateString()}</small><div>${esc(x.body)}</div>`;
+  if(me.is_editor) c.querySelector('.del').onclick = async () => { if(confirm('Delete this comment?')){ const {error} = await sb.from('comments').delete().eq('id',x.id); if(error) alert(error.message); else c.remove(); } };
+  box.append(c);
+ };
+ cs.filter(x => x.issue_id===is.id).forEach(addComment);
+ el.querySelector('form').onsubmit = async e => {
+  e.preventDefault(); const ta = el.querySelector('textarea'), er = el.querySelector('.err'); er.textContent = '';
+  const {data, error} = await sb.from('comments').insert({issue_id:is.id, body:ta.value.trim()}).select('*,profiles(name)').single();
+  if(error) return er.textContent = error.message;
+  act('comment', {n:is.number, text:ta.value.trim()}); ta.value = ''; addComment(data);
+ };
+ return el;
+}
 
-let SH=null;
-function render(){
- if(!I)return;if(I.pdf)return renderPdf();$('.seg').style.visibility='';
- if(!SH||SH._id!==I.id){$('#pg').innerHTML='';SH=sheetEl(I,true);SH._id=I.id;$('#pg').appendChild(SH)}
- const m=metaHTML(I,true);SH.querySelector('.addr').innerHTML=m.addr;SH.querySelector('.ibar').innerHTML=m.bar;
- const bl=SH.querySelector('.bls'),have={};
- for(const e of [...bl.children])have[e.dataset.id]=e;
- for(const b of blocks()){let e=have[b.id];delete have[b.id];
-  const j=JSON.stringify(b)+(b.k=='p'&&b.im?imgSrc(b.im):'');
-  if(e&&e.contains(document.activeElement)&&b.k=='s'){place(e,b);e._j=j;continue}
-  if(!e||e._j!==j){const n=blockEl(b,true);e?e.replaceWith(n):bl.appendChild(n);e=n}
-  const tx=e.querySelector('.tx');if(tx)tx.contentEditable=MODE=='w'?'true':'false';
-  e.classList.toggle('sel',MODE=='w'&&SEL==b.id);e.classList.toggle('fl',!!b.fl);e.classList.toggle('bad',MODE=='a'&&overlaps(b))}
- for(const id in have)have[id].remove();
- SH.querySelector('.lns').innerHTML=linesHTML(I);
- $('#isn').textContent='№ '+I.n;renderRail();
- selOverlay();overflow();
- if(!DRAG)bar()}
-// "too long": measure where the last visible line really ends (empty lines and spacing at the end don't count)
-const hashH=h=>{let x=0;h=h||'';for(let i=0;i<h.length;i++)x=(x*31+h.charCodeAt(i))|0;return x};
-function overBy(t){const top=t.getBoundingClientRect().top,w=document.createTreeWalker(t,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT),nodes=[];let n;
- while(n=w.nextNode())if((n.nodeType==3&&/\S/.test(n.data))||n.nodeName=='IMG')nodes.push(n);
- if(!nodes.length)return{px:0,lh:18};const last=nodes[nodes.length-1],el=last.nodeType==3?last.parentElement:last,cs=getComputedStyle(el.nodeName=='IMG'?el.parentElement:el);
- let lh=parseFloat(cs.lineHeight);if(!lh)lh=parseFloat(cs.fontSize)*1.15;let bottom;
- if(last.nodeType==3){const r=document.createRange();r.selectNodeContents(last);const rs=[...r.getClientRects()].filter(q=>q.width>0);const q=rs[rs.length-1]||r.getBoundingClientRect();bottom=(q.top+q.height/2-top)/S+lh/2}
- else bottom=(last.getBoundingClientRect().bottom-top)/S;
- return{px:bottom,lh}}
-function overflow(){if(!SH||!I||I.pdf)return;let h='';
- for(const e of SH.querySelectorAll('.blk.s')){const t=e.querySelector('.tx'),b=I.b[e.dataset.id];if(!b)continue;const B=box(b);
-  if(t.scrollHeight<=B.h+1)continue;               // nothing below the box at all
-  const o=overBy(t),extra=o.px-B.h;if(extra<=1.5)continue;  // only trailing blank lines spill over
-  if(b.dz===hashH(b.html))continue;                // dismissed for this exact text
-  const n=Math.max(1,Math.ceil((extra-1.5)/o.lh)),k=1/S,sc=Math.max(1,k*.8),tagTop=B.t+B.h+3+24*sc>PH-4?B.t+B.h-4-24*sc:B.t+B.h+3;
-  h+=`<s style="left:${B.l}px;top:${B.t+B.h-1}px;width:${B.w}px"></s><b data-ov="${b.id}" style="left:${B.l+B.w/2}px;top:${tagTop}px;transform:translate(-50%,0) scale(${sc});transform-origin:50% 0">${n} line${n>1?'s':''} too long <i>✕</i></b>`}
- SH.querySelector('.ovl').innerHTML=h}
-// tap the red tag to hide it for this story (it comes back if the story changes)
-document.addEventListener('pointerdown',e=>{const t=e.target.closest&&e.target.closest('.ovl b[data-ov]');if(!t||!I)return;e.preventDefault();e.stopPropagation();const b=I.b[t.dataset.ov];if(!b)return;
- if(ED&&ED.parentNode.dataset.id===b.id)edited(ED);b.dz=hashH(b.html);b.t=now();changed();overflow();toast('Warning hidden for this story',['Undo',()=>{delete b.dz;b.t=now();changed();overflow()}])},true);
+function publishForm(){
+ $('#tools').innerHTML = `<form class="panel" id="pf"><h2 class="gilt">Publish a new issue</h2>
+ <label for="pn">Issue number</label><input id="pn" type="number" min="1" required>
+ <label for="pd">Date</label><input id="pd" type="date" required>
+ <label for="pt">Tagline</label><input id="pt" maxlength="120">
+ <label for="pp">Newspaper PDF (one page)</label><input id="pp" type="file" accept="application/pdf" required>
+ <p class="err" id="pe" role="alert"></p><button class="btn">Publish</button> <button type="button" class="btn ghost" id="pc">Cancel</button></form>`;
+ $('#pd').valueAsDate = new Date(); $('#pc').onclick = () => $('#tools').innerHTML = '';
+ $('#pf').onsubmit = async e => {
+  e.preventDefault(); const err = $('#pe'); err.textContent = 'Publishing…';
+  try{
+   const file = $('#pp').files[0];
+   const pdf = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise;
+   const pg = await pdf.getPage(1), vp = pg.getViewport({scale: 1600/pg.getViewport({scale:1}).width});
+   const cv = document.createElement('canvas'); cv.width = vp.width; cv.height = vp.height;
+   await pg.render({canvasContext: cv.getContext('2d'), viewport: vp}).promise;
+   const img = await new Promise(r => cv.toBlob(r,'image/jpeg',.85));
+   const id = crypto.randomUUID(), pdfPath = `${id}.pdf`, imgPath = `${id}.jpg`;
+   let u = await sb.storage.from('issues').upload(pdfPath, file, {contentType:'application/pdf'}); if(u.error) throw u.error;
+   u = await sb.storage.from('issues').upload(imgPath, img, {contentType:'image/jpeg'}); if(u.error) throw u.error;
+   const {error} = await sb.from('issues').insert({number:+$('#pn').value, issue_date:$('#pd').value, tagline:$('#pt').value.trim()||null, pdf_path:pdfPath, img_path:imgPath});
+   if(error) throw error; const nn = +$('#pn').value, tt = $('#pt').value.trim();
+   sb.functions.invoke('rr-notify', {body:{number:nn}}).catch(() => {});   // new-issue alerts to everyone else
+   await feedView(); emailDraft({number:nn, tagline:tt});
+  }catch(x){ err.textContent = x.message || String(x); }
+ };
+}
 
-// ---------- scale and zoom ----------
-function heights(){return{top:$('#hd').offsetHeight,bot:($('#fmt').hidden?$('#bb').offsetHeight:0)}}
-const isDesk=()=>document.body.classList.contains('desk');
-function fitScale(){const W=VIEW.clientWidth||innerWidth,H=(VIEW.clientHeight||innerHeight)-(isDesk()?28:Math.max($('#bb').offsetHeight,62))-16;return Math.min((W-(isDesk()?56:16))/PW,H/PH,isDesk()?1.6:1.4)}
-function setScale(s){S=s;$('#pg').style.transform=`scale(${s})`;$('#wrap').style.width=PW*s+'px';$('#wrap').style.height=PH*s+'px';
- const k=1/s;if(SH)SH.style.setProperty('--k',k);$$('.selov,.ghost').forEach(e=>e.style.setProperty('--k',k));overflow()}
-const VIEW=$('#view');
-function fit(){FIT=fitScale();ZB=null;UZ=false;setScale(FIT);VIEW.scrollTo(0,0);zoomUI()}
-function zoomTo(id){const b=I.b[id];if(!b)return;const B=box(b);if(UZ){ZB=id;return}
- if(FIT>=.75||isDesk()){ZB=id;return}
- const s=innerWidth<700?Math.min(1.35,(innerWidth-20)/B.w):1;
- if(ZB!==id||Math.abs(S-s)>.01){ZB=id;setScale(s)}
- requestAnimationFrame(()=>{const w=$('#wrap');VIEW.scrollLeft=Math.max(0,w.offsetLeft+B.l*s-10);VIEW.scrollTop=Math.max(0,w.offsetTop+B.t*s-10);setTimeout(keepCaret,60)})}
-function keepCaret(){if(!ED)return;const r=rng();if(!r)return;let rc=r.getClientRects()[0]||r.getBoundingClientRect();
- if(!rc||(!rc.height&&!rc.top)){const n=r.startContainer.nodeType==1?r.startContainer:r.startContainer.parentElement;rc=n.getBoundingClientRect()}
- const vv=window.visualViewport,ot=vv&&!isDesk()?vv.offsetTop:0,vh=(vv?vv.height:innerHeight)+ot,top=$('#hd').offsetHeight+(isDesk()?0:($('#fmt').offsetHeight||0))+8+ot,bot=vh-(!isDesk()&&document.body.classList.contains('kb')?56:0)-12;
- if(rc.bottom>bot)VIEW.scrollTop+=rc.bottom-bot+40;else if(rc.top<top)VIEW.scrollTop+=rc.top-top-40}
-
-// ---------- modes ----------
-function setMode(m){if(ED)ED.blur();MODE=m;SEL=null;document.body.classList.toggle('write',m=='w');document.body.classList.toggle('arr',m!='w');$('#mw').classList.toggle('on',m=='w');$('#ma').classList.toggle('on',m=='a');render();bar();fit()}
-$('#mw').onclick=()=>setMode('w');$('#ma').onclick=()=>setMode('a');
-$('#ub').onclick=undo;$('#rb').onclick=redo;
-
-const ICON={
- story:'<svg viewBox="0 0 24 24"><path d="M4 5h16M4 9h16M4 13h16M4 17h10"/></svg>',
- photo:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-8 8"/></svg>',
- lines:'<svg viewBox="0 0 24 24"><path d="M3 3v18M21 3v18"/><rect x="7" y="7" width="10" height="10" rx="1" stroke-dasharray="2 2"/></svg>',
- trash:'<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>',
- crop:'<svg viewBox="0 0 24 24"><path d="M6 2v14a2 2 0 0 0 2 2h14M2 6h14a2 2 0 0 1 2 2v14"/></svg>',
- swap:'<svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg>',
- layer:'<svg viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg>',
- info:'<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/></svg>'};
-function bar(){const bb=$('#bb');if(!I)return;
- if(I.pdf){bb.innerHTML=`<div class="hint">Finished PDF${I.pdf.pages>1?` (${I.pdf.pages} pages, first shown)`:''}. Set the number and date in Details, then Export to publish.</div><button class="btn sm" id="b-det">${ICON.info}Details</button>`;$('#b-det').onclick=details;return}
- if(MODE=='w'){const b=SEL&&I.b[SEL];
-  if(b&&b.k=='p'){bb.innerHTML=`<button class="btn" id="b-rep">${ICON.photo}${b.im?'Replace':'Add photo'}</button>${b.im?`<button class="btn" id="b-crop">${ICON.crop}Crop</button><button class="btn ${b.im.tint?'on':''}" id="b-tint">B&amp;W</button>`:''}<button class="btn pri sm" id="b-ok">Done</button>`;
-   $('#b-rep').onclick=()=>pick(b.id);if(b.im){$('#b-crop').onclick=()=>cropUI(b.id);$('#b-tint').onclick=()=>{snap();b.im.tint=b.im.tint?0:1;b.t=now();changed();render();toast(b.im.tint?'Black and white':'Colour')}}
-   $('#b-ok').onclick=()=>{SEL=null;render()};return}
-  bb.innerHTML=`<div class="hint">Tap a story to write. Tap a photo to change or crop it.</div><button class="btn sm" id="b-det">${ICON.info}Details</button>`;$('#b-det').onclick=details;return}
- const b=SEL&&I.b[SEL];
- if(b){bb.innerHTML=`<button class="btn" id="b-ln">${ICON.lines}Lines</button><button class="btn ${b.fl?'on':''}" id="b-top">${ICON.layer}On top</button><button class="btn" id="b-kind">${ICON.swap}${b.k=='s'?'Photo':'Story'}</button><button class="btn dng sm" id="b-del">${ICON.trash}</button><button class="btn pri sm" id="b-ok">Done</button>`;
-  $('#b-ln').onclick=()=>linesUI(b.id);$('#b-top').onclick=()=>toggleTop(b);$('#b-del').onclick=()=>delBlock(b.id);$('#b-ok').onclick=()=>{SEL=null;render()};
-  $('#b-kind').onclick=()=>{const has=b.k=='s'?hasTextHTML(b.html):!!b.im;const go=()=>{snap();if(b.k=='s'){b.k='p';b.html='';b.im=null}else{b.k='s';b.im=null;b.html=storyHTML()}b.t=now();changed();render()};if(has)ask(`This box has ${b.k=='s'?'writing':'a photo'} in it. Swap it for an empty ${b.k=='s'?'photo':'story'} box?`,'Swap',go);else go()};return}
- bb.innerHTML=`<button class="btn" id="b-as">${ICON.story}Story</button><button class="btn" id="b-ah">${ICON.story.replace('M4 5h16','M4 5h16" stroke-width="4')}Headline</button><button class="btn" id="b-ap">${ICON.photo}Photo</button>`;
- $('#b-as').onclick=()=>addBlock('s');$('#b-ah').onclick=()=>addBlock('h');$('#b-ap').onclick=()=>addBlock('p')}
-const hasTextHTML=h=>{const d=document.createElement('div');d.innerHTML=h||'';return/\S/.test(d.textContent)};
-
-// ---------- arrange: collisions, add, delete ----------
-const hit=(a,b)=>a.x<b.x+b.w&&b.x<a.x+a.w&&a.y<b.y+b.h&&b.y<a.y+a.h;
-const inside=r=>r.x>=0&&r.y>=0&&r.x+r.w<=COLS&&r.y+r.h<=ROWS;
-const free=(r,ex,fl)=>inside(r)&&(fl||blocks().every(b=>b.id===ex||b.fl||!hit(r,b)));
-const overlaps=b=>!b.fl&&blocks().some(o=>o.id!==b.id&&!o.fl&&hit(o,b));
-function biggestFree(minW,minH){const occ=Array.from({length:ROWS},()=>new Array(COLS).fill(0));for(const b of blocks())if(!b.fl)for(let y=b.y;y<b.y+b.h;y++)for(let x=b.x;x<b.x+b.w;x++)if(occ[y])occ[y][x]=1;
- let best=null;for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){if(occ[y][x])continue;let maxW=COLS-x;for(let h=1;y+h<=ROWS;h++){let w=0;while(w<maxW&&!occ[y+h-1][x+w])w++;maxW=w;if(!w)break;const a=Math.min(w,8)*Math.min(h,30);if(w>=minW&&h>=minH&&(!best||a>best.a))best={x,y,w:Math.min(w,8),h:Math.min(h,30),a}}}
- return best}
-function addBlock(k,r){const given=!!r;r=r||biggestFree(2,k=='h'?2:3);let fl=0;
- if(!r){fl=1;r={x:4,y:18,w:4,h:k=='h'?4:k=='p'?10:12}}
- if(k=='h'&&!given)r.h=Math.min(r.h,4);
- snap();const id=uid();I.b[id]={id,k:k=='h'?'s':k,x:r.x,y:r.y,w:r.w,h:r.h,ln:'',html:k=='s'?storyHTML():k=='h'?headHTML():'',im:null,fl,t:now()};delete I.del[id];
- SEL=id;changed();render();toast(fl?'No empty space, so this box floats on top. Drag it where you want.':k=='p'?'Photo box added. Switch to Write to put a photo in it.':'Box added. Drag it or its handles to fit.')}
-function toggleTop(b){if(b.fl){const r={x:Math.round(b.x),y:Math.round(b.y),w:Math.max(1,Math.round(b.w)),h:Math.max(1,Math.round(b.h))};r.x=clamp(r.x,0,COLS-r.w);r.y=clamp(r.y,0,ROWS-r.h);
-  if(!free(r,b.id))return toast('It’s overlapping other boxes. Move it to an empty spot first.');snap();Object.assign(b,r,{fl:0,t:now()});changed();render();toast('Back in the grid')}
- else{snap();b.fl=1;b.t=now();changed();render();toast('This box now sits on top. Drag it over a photo or story.')}}
-function delBlock(id){snap();delete I.b[id];I.del[id]=now();SEL=null;changed();render();toast('Box deleted',['Undo',undo])}
-function linesUI(id){const b=I.b[id];const p=sheet(`<h3>Lines around this box<button class="x">✕</button></h3><p>Lines sit in the gap beside the box and move with it.</p><div class="lnsw">${[['l','Left'],['r','Right'],['t','Top'],['b','Bottom']].map(([k,n])=>`<button class="btn big ${b.ln.includes(k)?'on':''}" data-k="${k}">${n}</button>`).join('')}</div>`);
- p.querySelectorAll('[data-k]').forEach(x=>x.onclick=()=>{snap();const k=x.dataset.k;b.ln=b.ln.includes(k)?b.ln.replace(k,''):b.ln+k;b.t=now();x.classList.toggle('on');changed();render()})}
-
-// selection overlay and dragging
-function selOverlay(){if(!SH)return;SH.querySelectorAll('.selov').forEach(e=>e.remove());if(MODE!='a'||!SEL||!I.b[SEL])return;
- const o=document.createElement('div');o.className='selov';o.style.setProperty('--k',1/S);o.innerHTML='<b data-h="n"></b><b data-h="s"></b><b data-h="w"></b><b data-h="e"></b><b data-h="se"></b>';posOv(o,I.b[SEL]);SH.appendChild(o)}
-function posOv(o,r){const B=box(r);Object.assign(o.style,{left:B.l-3+'px',top:B.t-3+'px',width:B.w+6+'px',height:B.h+6+'px'})}
-function pagePt(e){const r=$('#pg').getBoundingClientRect();return{x:(e.clientX-r.left)/S,y:(e.clientY-r.top)/S}}
-function ghost(r,ok,label){let g=SH.querySelector('.ghost');if(!g){g=document.createElement('div');g.className='ghost';SH.appendChild(g)}g.style.setProperty('--k',1/S);g.classList.toggle('no',!ok);const B=box(r);Object.assign(g.style,{left:B.l+'px',top:B.t+'px',width:B.w+'px',height:B.h+'px'});g.innerHTML=label?`<span>${label}</span>`:''}
-$('#pg').addEventListener('pointerdown',e=>{if(MODE!='a'||e.button>0)return;const p=pagePt(e),h=e.target.closest('.selov b'),el=e.target.closest('.blk');
- if(h&&SEL){const b=I.b[SEL];DRAG={k:'rs',h:h.dataset.h,b,o:{...b},p,id:e.pointerId}}
- else if(el){const id=el.dataset.id;if(SEL!==id){SEL=id;render();DRAG={k:'none'};return}DRAG={k:'mv',b:I.b[id],o:{...I.b[id]},p,el,id:e.pointerId}}
- else{const cx=Math.floor((p.x-GX)/CU),cy=Math.floor((p.y-GY)/RH);if(SEL){SEL=null;render()}if(cx<0||cy<0||cx>=COLS||cy>=ROWS){DRAG={k:'none'};return}DRAG={k:'dr',c:{x:cx,y:cy},p,id:e.pointerId}}
- try{$('#pg').setPointerCapture(e.pointerId)}catch(_){}
- e.preventDefault()});
-$('#pg').addEventListener('pointermove',e=>{if(!DRAG||DRAG.k=='none')return;const p=pagePt(e),dx=p.x-DRAG.p.x,dy=p.y-DRAG.p.y;
- if(!DRAG.moved&&Math.hypot(dx,dy)*S<6)return;DRAG.moved=1;const st=DRAG.b&&DRAG.b.fl?.25:1,mn=st<1?1:2,cx=Math.round(dx/CU/st)*st,cy=Math.round(dy/RH/st)*st;let r;
- if(DRAG.k=='mv'){const o=DRAG.o;r={x:clamp(o.x+cx,0,COLS-o.w),y:clamp(o.y+cy,0,ROWS-o.h),w:o.w,h:o.h};DRAG.el.classList.add('mv');DRAG.el.style.transform=`translate(${dx}px,${dy}px)`;SH.querySelector('.selov')?.remove()}
- else if(DRAG.k=='rs'){const o=DRAG.o,h=DRAG.h;r={...o};
-  if(h.includes('e'))r.w=clamp(o.w+cx,mn,COLS-o.x);
-  if(h=='w'){r.x=clamp(o.x+cx,0,o.x+o.w-mn);r.w=o.w+o.x-r.x}
-  if(h.includes('s'))r.h=clamp(o.h+cy,mn,ROWS-o.y);
-  if(h=='n'){r.y=clamp(o.y+cy,0,o.y+o.h-mn);r.h=o.h+o.y-r.y}
-  const ov=SH.querySelector('.selov');if(ov)posOv(ov,r)}
- else{const c2={x:clamp(Math.floor((p.x-GX)/CU),0,COLS-1),y:clamp(Math.floor((p.y-GY)/RH),0,ROWS-1)};r={x:Math.min(DRAG.c.x,c2.x),y:Math.min(DRAG.c.y,c2.y)};r.w=Math.abs(c2.x-DRAG.c.x)+1;r.h=Math.abs(c2.y-DRAG.c.y)+1}
- const ok=free(r,DRAG.b&&DRAG.b.id,DRAG.b&&DRAG.b.fl)&&(DRAG.k!='dr'||(r.w>=2&&r.h>=2));DRAG.r=r;DRAG.ok=ok;
- ghost(r,ok,!ok?(DRAG.k=='dr'&&free(r)?'Keep dragging':'Overlaps a box'):(DRAG.k=='dr'?'New box':''))});
-function endDrag(e){if(!DRAG)return;const d=DRAG;DRAG=null;SH&&SH.querySelector('.ghost')?.remove();
- if(d.el){d.el.classList.remove('mv');d.el.style.transform=''}
- if(d.k=='none'||!d.moved){render();return}
- if(d.ok&&d.r){if(d.k=='dr'){chooseKind(d.r);render();return}
-  const b=d.b,r=d.r;if(r.x!==d.o.x||r.y!==d.o.y||r.w!==d.o.w||r.h!==d.o.h){snap();Object.assign(b,{x:r.x,y:r.y,w:r.w,h:r.h,t:now()});changed()}}
- else if(d.k!='dr')toast('That spot overlaps another box, so it stayed put.');
- render()}
-$('#pg').addEventListener('pointerup',endDrag);$('#pg').addEventListener('pointercancel',endDrag);
-function chooseKind(r){const p=sheet(`<h3>New box<button class="x">✕</button></h3><p>What goes in it?</p><div class="row"><button class="btn big" data-k="s">${ICON.story}Story</button><button class="btn big" data-k="h">Headline</button><button class="btn big" data-k="p">${ICON.photo}Photo</button></div>`);
- p.querySelectorAll('[data-k]').forEach(x=>x.onclick=()=>{close();addBlock(x.dataset.k,r)})}
-
-// ---------- write mode: photos ----------
-let pickFor=null;
-function pick(id){pickFor=id;$('#fi').value='';$('#fi').click()}
-$('#fi').onchange=async()=>{const f=$('#fi').files[0],id=pickFor;if(!f||!I.b[id])return;busy('Developing photo…');
- try{const im=await ingest(f);snap();const b=I.b[id];b.im=im;b.t=now();SEL=id;changed();render()}catch(x){toast(x.message||'That photo couldn’t be used.')}finally{busy()}};
-$('#pg').addEventListener('click',e=>{if(MODE!='w'||noClick)return;
- const el=e.target.closest('.blk.p');if(el){const id=el.dataset.id;if(!I.b[id].im){SEL=id;render();pick(id);return}SEL=SEL==id?null:id;render();if(SEL)toast('Drag or pinch the photo to adjust it. Crop changes its shape.');return}
- if(e.target.closest('.meta')){details();return}
- if(!e.target.closest('.blk')&&SEL){SEL=null;render()}});
-
-// adjust a selected photo right on the page: drag to move it, pinch to zoom
-let PZ=null,noClick=0;
-const gst=P=>{const a=[...P.values()];return a.length>1?{x:(a[0].x+a[1].x)/2,y:(a[0].y+a[1].y)/2,d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),n:2}:{x:a[0].x,y:a[0].y,d:0,n:1}};
-function pzApply(){const{img,c}=PZ;if(img)Object.assign(img.style,{left:c.l+'px',top:c.t+'px',width:c.dw+'px',height:c.dh+'px'})}
-function pzMove(dx,dy,f,cx,cy){const{B,b}=PZ,im=b.im,D=dimsOf(im);let{l,t,dw,dh}=PZ.c;
- if(f&&f!==1){const mn=Math.max(B.w/D.w,B.h/D.h);let ndw=clamp(dw*f,D.w*mn,D.w*mn*10);const g=ndw/dw;l=cx-(cx-l)*g;t=cy-(cy-t)*g;dw=ndw;dh=dh*g}
- l=clamp(l+dx,B.w-dw,0);t=clamp(t+dy,B.h-dh,0);const n={l,t,dw,dh};if(!okRect(im,rectOf(n,B.w,B.h)))return;PZ.c=n;PZ.moved=1;pzApply()}
-function pzEnd(){if(!PZ)return;const{b,B,c,moved}=PZ;PZ=null;if(moved){noClick=1;setTimeout(()=>noClick=0,350);snap();b.im=withCrop(b.im,rectOf(c,B.w,B.h));b.t=now();changed();render()}}
-$('#pg').addEventListener('pointerdown',e=>{if(MODE!='w')return;const el=e.target.closest('.blk.p.sel');if(!el)return;const b=I.b[el.dataset.id];if(!b||!b.im)return;
- if(!PZ){const B=box(b);PZ={b,el,B,img:el.querySelector('img'),c:cropBox(b.im,B.w,B.h),P:new Map(),moved:0}}
- PZ.P.set(e.pointerId,{x:e.clientX,y:e.clientY});PZ.g=gst(PZ.P);try{el.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
-$('#pg').addEventListener('pointermove',e=>{if(!PZ||!PZ.P.has(e.pointerId))return;PZ.P.set(e.pointerId,{x:e.clientX,y:e.clientY});const g=gst(PZ.P);if(g.n!==PZ.g.n){PZ.g=g;return}
- const r=$('#pg').getBoundingClientRect(),cx=(g.x-r.left)/S-PZ.B.l,cy=(g.y-r.top)/S-PZ.B.t;
- pzMove((g.x-PZ.g.x)/S,(g.y-PZ.g.y)/S,g.n==2&&PZ.g.d>10?g.d/PZ.g.d:1,cx,cy);PZ.g=g});
-const pzUp=e=>{if(!PZ||!PZ.P.has(e.pointerId))return;PZ.P.delete(e.pointerId);if(PZ.P.size)PZ.g=gst(PZ.P);else pzEnd()};
-$('#pg').addEventListener('pointerup',pzUp);$('#pg').addEventListener('pointercancel',pzUp);
-$('#pg').addEventListener('wheel',e=>{if(MODE!='w')return;const el=e.target.closest('.blk.p.sel');if(!el)return;const b=I.b[el.dataset.id];if(!b||!b.im)return;e.preventDefault();
- const B=box(b);PZ={b,el,B,img:el.querySelector('img'),c:cropBox(b.im,B.w,B.h),P:new Map(),moved:0};const p=pagePt(e);pzMove(0,0,e.deltaY<0?1.08:1/1.08,p.x-B.l,p.y-B.t);pzEnd()},{passive:false});
-
-// crop screen: free crop rectangle over the whole photo, with shape presets
-const ASPECTS=[['box','Box shape'],['free','Free'],['orig','Original'],['1','Square'],['1.333','4:3'],['0.75','3:4'],['1.778','16:9']];
-function cropUI(id){const b=I.b[id];if(!b||!b.im)return;const B=box(b),im0=b.im,iw=im0.w,ih=im0.h,MIN=Math.min(iw,ih)*.06;if(!IMG[im0.id])return toast('Photo still loading…');
- let rot=im0.rot||0,q=Math.round(rot/90),fine=rot-q*90;const IM=()=>({...im0,rot});let D=dimsOf(IM());
- const v=rectOf(cropBox(im0,B.w,B.h),B.w,B.h);let r={x:v.x*D.w,y:v.y*D.h,w:v.w*D.w,h:v.h*D.h},mode='box',A=B.w/B.h;
- const ov=document.createElement('div');ov.id='crop';
- ov.innerHTML=`<div class="ct">Drag the corners to crop. Drag inside the frame to move it.</div><div class="cst"><img src="${IMG[im0.id]}" alt=""><div class="crect">${['nw','n','ne','e','se','s','sw','w'].map(h=>`<b data-h="${h}"></b>`).join('')}</div></div>
- <div class="cb"><div class="rotr"><button class="btn sm" id="c-l" aria-label="Turn left">⟲ 90°</button><input type="range" id="c-a" min="-45" max="45" step="0.5" aria-label="Straighten"><span id="c-av"></span><button class="btn sm" id="c-rr" aria-label="Turn right">90° ⟳</button></div>
- <div class="chips asp">${ASPECTS.map(([k,n])=>`<button data-a="${k}">${n}</button>`).join('')}</div><p class="cnote" id="c-n"></p><div class="row" style="margin:0"><button class="btn" id="c-x">Cancel</button><button class="btn" id="c-r">Whole photo</button><button class="btn pri" id="c-ok">Done</button></div></div>`;
- document.body.appendChild(ov);const st=ov.querySelector('.cst'),img=ov.querySelector('img'),cr=ov.querySelector('.crect'),ang=ov.querySelector('#c-a');let k=1,IX=0,IY=0;
- const norm=x=>({x:x.x/D.w,y:x.y/D.h,w:x.w/D.w,h:x.h/D.h}),ok=x=>okRect(IM(),norm(x));
- const lay=()=>{k=Math.min((st.clientWidth-44)/D.w,(st.clientHeight-44)/D.h);IX=(st.clientWidth-D.w*k)/2;IY=(st.clientHeight-D.h*k)/2;
-  Object.assign(img.style,{left:IX+(D.w-iw)*k/2+'px',top:IY+(D.h-ih)*k/2+'px',width:iw*k+'px',height:ih*k+'px',transform:`rotate(${rot}deg)`});draw()};
- const note=()=>{const same=Math.abs((r.w/r.h)/(B.w/B.h)-1)<.04;ov.querySelector('#c-n').textContent=same?'Fits the box exactly.':'The box will change shape to match this crop.'};
- const draw=()=>{Object.assign(cr.style,{left:IX+r.x*k+'px',top:IY+r.y*k+'px',width:r.w*k+'px',height:r.h*k+'px'});cr.classList.toggle('lock',!!A);ov.querySelectorAll('[data-a]').forEach(x=>x.classList.toggle('on',x.dataset.a==mode));ang.value=fine;ov.querySelector('#c-av').textContent=(Math.round(rot*2)/2)+'°';note()};
- // biggest rectangle of aspect a, centred at (cx,cy), that stays on the photo
- const biggest=(a,cx,cy)=>{let w=D.w,h=w/a;if(h>D.h){h=D.h;w=h*a}let lo=0,hi=1;const at=s=>({x:cx-w*s/2,y:cy-h*s/2,w:w*s,h:h*s});if(ok(at(1)))return at(1);for(let n=0;n<22;n++){const m=(lo+hi)/2;ok(at(m))?lo=m:hi=m}return at(lo)};
- const setRot=()=>{const a=r.w/r.h,cx=(r.x+r.w/2)/D.w,cy=(r.y+r.h/2)/D.h;rot=q*90+fine;rot=((rot+180)%360+360)%360-180;D=dimsOf(IM());let n=biggest(a,cx*D.w,cy*D.h);if(n.w<MIN)n=biggest(a,D.w/2,D.h/2);r=n;lay()};
- ang.oninput=()=>{fine=+ang.value;setRot()};ov.querySelector('#c-l').onclick=()=>{q--;setRot()};ov.querySelector('#c-rr').onclick=()=>{q++;setRot()};
- const fitA=()=>{if(!A)return;const cx=r.x+r.w/2,cy=r.y+r.h/2;let w=Math.sqrt(r.w*r.h*A),h=w/A;let n={x:clamp(cx-w/2,0,D.w-w),y:clamp(cy-h/2,0,D.h-h),w,h};if(!ok(n)||w>D.w||h>D.h)n=biggest(A,cx,cy);r=n};
- ov.querySelectorAll('[data-a]').forEach(x=>x.onclick=()=>{mode=x.dataset.a;A=mode=='box'?B.w/B.h:mode=='orig'?(Math.abs(q)%2?ih/iw:iw/ih):mode=='free'?null:+mode;fitA();draw()});
- const calc=(o,h,dx,dy)=>{if(h=='mv')return{...o,x:clamp(o.x+dx,0,D.w-o.w),y:clamp(o.y+dy,0,D.h-o.h)};
-  if(!A){let x1=o.x,y1=o.y,x2=o.x+o.w,y2=o.y+o.h;if(h.includes('w'))x1=clamp(x1+dx,0,x2-MIN);if(h.includes('e'))x2=clamp(x2+dx,x1+MIN,D.w);if(h.includes('n'))y1=clamp(y1+dy,0,y2-MIN);if(h.includes('s'))y2=clamp(y2+dy,y1+MIN,D.h);return{x:x1,y:y1,w:x2-x1,h:y2-y1}}
-  const E=h.includes('e'),Sd=h.includes('s'),ax=E?o.x:o.x+o.w,ay=Sd?o.y:o.y+o.h;let w=Math.max(Math.abs((E?o.x+o.w:o.x)+dx-ax),Math.abs((Sd?o.y+o.h:o.y)+dy-ay)*A);w=Math.min(w,E?D.w-ax:ax,(Sd?D.h-ay:ay)*A);w=Math.max(w,MIN);const hh=w/A;return{x:E?ax:ax-w,y:Sd?ay:ay-hh,w,h:hh}};
- let d=null;
- st.addEventListener('pointerdown',e=>{const h=e.target.closest('.crect b'),inR=e.target.closest('.crect');if(!h&&!inR)return;e.preventDefault();st.setPointerCapture(e.pointerId);d={h:h?h.dataset.h:'mv',r0:{...r},x0:e.clientX,y0:e.clientY,id:e.pointerId}});
- st.addEventListener('pointermove',e=>{if(!d||e.pointerId!==d.id)return;const dx=(e.clientX-d.x0)/k,dy=(e.clientY-d.y0)/k;let n=calc(d.r0,d.h,dx,dy);
-  if(!ok(n)){let lo=0,hi=1;for(let j=0;j<16;j++){const m=(lo+hi)/2;ok(calc(d.r0,d.h,dx*m,dy*m))?lo=m:hi=m}n=calc(d.r0,d.h,dx*lo,dy*lo);if(!ok(n))return}r=n;draw()});
- const up=e=>{if(d&&e.pointerId===d.id)d=null};st.addEventListener('pointerup',up);st.addEventListener('pointercancel',up);
- const done=()=>{ov.remove();removeEventListener('resize',lay)};
- ov.querySelector('#c-x').onclick=done;
- ov.querySelector('#c-r').onclick=()=>{r=biggest(A||(Math.abs(q)%2?ih/iw:iw/ih),D.w/2,D.h/2);draw()};
- ov.querySelector('#c-ok').onclick=()=>{snap();const n=norm(r);let im={...withCrop(im0,n),rot};if(!rot)delete im.rot;b.im=im;const ca=r.w/r.h;let msg='';
-  if(Math.abs(ca/(B.w/B.h)-1)>.04)msg=reshape(b,ca)?'Box reshaped to fit your crop.':'There isn’t room to reshape the box, so the photo fills it. Make room in Arrange, then crop again.';
-  b.t=now();changed();render();done();if(msg)toast(msg)};
- addEventListener('resize',lay);if(img.complete)lay();else img.onload=lay;requestAnimationFrame(lay)}
-function reshape(b,ca){const st=b.fl?.25:1,ok=r=>b.fl?inside(r):free(r,b.id);
- const hFor=w=>Math.max(st,Math.round(((w*CU-HG)/ca+VG)/RH/st)*st),wFor=h=>Math.max(st,Math.round(((h*RH-VG)*ca+HG)/CU/st)*st);
- const tries=[{x:b.x,y:b.y,w:b.w,h:hFor(b.w)},{x:b.x,y:b.y,w:wFor(b.h),h:b.h},{x:b.x+b.w-wFor(b.h),y:b.y,w:wFor(b.h),h:b.h}];
- for(let w=b.w-st;w>=st*2;w-=st)tries.push({x:b.x,y:b.y,w,h:hFor(w)});
- for(const r of tries)if(ok(r)){Object.assign(b,r);return true}return false}
-
-// ---------- write mode: text ----------
-function rng(){const s=getSelection();if(!s.rangeCount||!ED)return null;const r=s.getRangeAt(0);return ED.contains(r.commonAncestorContainer)?r:null}
-function fixTop(){let bad=[...ED.childNodes].some(n=>!(n.nodeType==1&&n.nodeName=='DIV'));if(!bad)return;const off=getOff();let cur=null;
- for(const n of [...ED.childNodes]){if(n.nodeType==1&&n.nodeName=='DIV'){cur=null;continue}if(n.nodeType==3&&!n.data.trim()&&!cur){if(!n.data)n.remove();continue}
-  if(!cur){cur=document.createElement('div');cur.setAttribute('style',ST.body);ED.insertBefore(cur,n)}cur.appendChild(n)}
- if(off)setOff(off)}
-function getOff(){const r=rng();if(!r)return null;const a=document.createRange();a.selectNodeContents(ED);a.setEnd(r.startContainer,r.startOffset);const s=a.toString().length;a.setEnd(r.endContainer,r.endOffset);return[s,a.toString().length]}
-function setOff([s,e]){const w=document.createTreeWalker(ED,NodeFilter.SHOW_TEXT);let n,pos=0,sn=null,so=0,en=null,eo=0,last=null;
- while(n=w.nextNode()){const L=n.length;last=n;if(!sn&&(s<pos+L||(s==e&&s<=pos+L))){sn=n;so=s-pos}if(!en&&e<=pos+L&&(e>pos||L===0||e===0)){en=n;eo=e-pos}pos+=L}
- if(!last)return;if(!sn){sn=last;so=last.length}if(!en){en=last;eo=last.length}
- const r=document.createRange();try{r.setStart(sn,clamp(so,0,sn.length));r.setEnd(en,clamp(eo,0,en.length))}catch(_){r.setStart(en,clamp(eo,0,en.length))}const sel=getSelection();sel.removeAllRanges();sel.addRange(r)}
-function paras(r){fixTop();r=rng()||r;const out=[...ED.children].filter(p=>r.intersectsNode(p));if(!out.length&&ED.firstElementChild)out.push(ED.lastElementChild);return out}
-function splitR(r){let sc=r.startContainer,so=r.startOffset,ec=r.endContainer,eo=r.endOffset;
- if(ec.nodeType==3&&eo>0&&eo<ec.length)ec.splitText(eo);
- if(sc.nodeType==3&&so>0&&so<sc.length){const n=sc.splitText(so);if(ec===sc){ec=n;eo-=so}sc=n;so=0}
- else if(sc.nodeType==3&&so>0&&so===sc.length){}
- r.setStart(sc,so);r.setEnd(ec,eo)}
-function textsIn(r){const w=document.createTreeWalker(ED,NodeFilter.SHOW_TEXT),out=[];let n;
- while(n=w.nextNode()){if(!n.length||!r.intersectsNode(n))continue;if(n===r.endContainer&&r.endOffset===0)continue;if(n===r.startContainer&&r.startOffset>=n.length)continue;out.push(n)}return out}
-function tidy(){ED.querySelectorAll('span').forEach(s=>{if(!s.style.length)s.replaceWith(...s.childNodes)});
- ED.querySelectorAll('span').forEach(s=>{if(!s.parentNode)return;let n=s.nextSibling;while(n&&n.nodeName=='SPAN'&&n.getAttribute('style')===s.getAttribute('style')){s.append(...n.childNodes);n.remove();n=s.nextSibling}});
- ED.normalize()}
-function charStyle(prop,val){let r=rng();if(!r)return;editSnap();const off=getOff();
- if(r.collapsed){const inText=r.startContainer.nodeType==3;for(const p of paras(r)){p.style.setProperty(prop,val);p.querySelectorAll('[style]').forEach(x=>x.style.removeProperty(prop))}tidy();if(inText&&off)setOff(off)}
- else{fixTop();r=rng();splitR(r);for(const t of textsIn(r)){const par=t.parentNode;if(par.nodeName=='SPAN'&&par.childNodes.length===1)par.style.setProperty(prop,val);else{const sp=document.createElement('span');sp.style.setProperty(prop,val);par.insertBefore(sp,t);sp.appendChild(t)}}
-  tidy();if(off)setOff(off)}
- edited();readState()}
-function paraStyle(props){const r=rng();if(!r)return;editSnap();const off=getOff();const ps=paras(r);
- for(const p of ps){for(const[k,v]of Object.entries(props)){p.style.setProperty(k,v);if(k!='text-align'&&k!='line-height')p.querySelectorAll('[style]').forEach(x=>x.style.removeProperty(k))}}
- tidy();if(off&&r.startContainer.nodeType==3)setOff(off);edited();readState()}
-function presetStyle(k){const m={};ST[k].split(';').forEach(x=>{const i=x.indexOf(':');if(i>0)m[x.slice(0,i)]=x.slice(i+1)});const r=rng();if(!r)return;
- editSnap();const off=getOff();for(const p of paras(r)){p.querySelectorAll('b,i,strong,em').forEach(x=>x.replaceWith(...x.childNodes))}if(off)setOff(off);paraStyle(m)}
-function cur(){const r=rng();if(!r)return null;let n=r.startContainer;if(n.nodeType==3)n=n.parentElement;else if(n.childNodes[r.startOffset]&&n.childNodes[r.startOffset].nodeType==1&&n.childNodes[r.startOffset].nodeName!='BR')n=n.childNodes[r.startOffset];return n}
-function paraOf(n){while(n&&n.parentNode!==ED)n=n.parentNode;return n}
-let FS={pt:11,ls:0,lh:1.2,al:'justify',an:false};
-function readState(){const n=cur();if(!n||!ED)return;const cs=getComputedStyle(n),fs=parseFloat(cs.fontSize),p=paraOf(n)||ED,pc=getComputedStyle(p);
- FS.pt=Math.round(fs*.75*2)/2;FS.ls=cs.letterSpacing=='normal'?0:Math.round(parseFloat(cs.letterSpacing)/fs*1000);
- const lh=p.style&&p.style.lineHeight;FS.lh=lh&&!/px|%/.test(lh)?parseFloat(lh):(parseFloat(pc.lineHeight)/parseFloat(pc.fontSize)||1.2);FS.lh=Math.round(FS.lh*100)/100;
- FS.al=({start:'left',left:'left',justify:'justify',center:'center',right:'right',end:'right'})[pc.textAlign]||'left';FS.an=/anton/i.test(cs.fontFamily);
- $('#fsz').textContent=FS.pt;$('#ffam').textContent=FS.an?'Anton':'Times';$('#ffam').classList.toggle('a',FS.an);
- let b=false,i=false;try{b=document.queryCommandState('bold');i=document.queryCommandState('italic')}catch(_){}
- $('[data-f=b]').classList.toggle('on',b);$('[data-f=i]').classList.toggle('on',i);
- $('#alic').innerHTML={left:'<path d="M3 6h18M3 10h12M3 14h18M3 18h12"/>',justify:'<path d="M3 6h18M3 10h18M3 14h18M3 18h18"/>',center:'<path d="M3 6h18M6 10h12M3 14h18M6 18h12"/>',right:'<path d="M3 6h18M9 10h12M3 14h18M9 18h12"/>'}[FS.al];
- pan(PANEL,true)}
-// end marks: the little stamp, or the author's initials in bold small caps
-function initials(){if(!ED)return'';for(const p of ED.children){const m=p.textContent.trim().match(/^by\s+([^,]+)/i);if(m){const w=m[1].trim().split(/\s+/).filter(x=>/^[A-ZÀ-Ý]/.test(x));if(w.length)return w.map(x=>x[0]).join('').slice(0,3).toUpperCase()}}let v='';try{v=localStorage.getItem('rp_ini')||''}catch(e){}return v}
-function endMark(kind){if(!ED)return;let r=rng();if(!r){const n=ED.lastElementChild||ED;r=document.createRange();r.selectNodeContents(n);r.collapse(false);const s2=getSelection();s2.removeAllRanges();s2.addRange(r)}
- editSnap();let html;if(kind=='stamp')html='&nbsp;<img class="em" src="emblem.png" alt="">';
- else{let ini=initials();if(!ini){ini=(prompt('Initials for the end mark (e.g. MR)')||'').trim().toUpperCase().slice(0,4);if(!ini)return;try{localStorage.setItem('rp_ini',ini)}catch(e){}}
-  html=`&nbsp;<b style="font-size:0.78em;letter-spacing:0.04em">${esc(ini)}</b>`}
- document.execCommand('insertHTML',false,html);edited();pan(null);$$('.frow button').forEach(b=>b.classList.remove('act'));toast('End mark added')}
-function editSnap(){if(pendSnap){U.push(pendSnap);if(U.length>80)U.shift();R=[];pendSnap=null;updUndo()}}
-
-// sanitise stored HTML
-const KEEP=['font-family','font-size','letter-spacing','line-height','text-align','font-weight','font-style','color'];
-function clean(html){const t=document.createElement('template');t.innerHTML=html;
- (function walk(n){for(const c of [...n.childNodes]){if(c.nodeType==3)continue;if(c.nodeType!=1){c.remove();continue}
-  let tg=c.nodeName;if(tg=='IMG'){if(/emblem\.png/.test(c.getAttribute('src')||'')){const m=document.createElement('img');m.setAttribute('class','em');m.setAttribute('src','emblem.png');m.setAttribute('alt','');c.replaceWith(m)}else c.remove();continue}
-  if(!['DIV','P','BR','SPAN','B','STRONG','I','EM'].includes(tg)){walk(c);c.replaceWith(...c.childNodes);continue}
-  let el=c;if(tg=='P'||tg=='STRONG'||tg=='EM'){el=document.createElement(tg=='P'?'div':tg=='STRONG'?'b':'i');for(const a of c.attributes)el.setAttribute(a.name,a.value);el.append(...c.childNodes);c.replaceWith(el)}
-  const css=[];for(const k of KEEP){let v=el.style.getPropertyValue(k);if(!v)continue;if(k=='font-family')v=/anton/i.test(v)?ANTON:TIMES;if(k=='color')v=/255,\s*255,\s*255|#fff/i.test(v)?'#fff':'#000';css.push(`${k}:${v}`)}
-  const ph=el.getAttribute('data-ph');for(const a of [...el.attributes])el.removeAttribute(a.name);if(css.length)el.setAttribute('style',css.join(';'));if(ph&&el.nodeName=='DIV')el.setAttribute('data-ph',ph);
-  walk(el)}})(t.content);
- // wrap loose top-level runs into paragraphs
- let curP=null;for(const n of [...t.content.childNodes]){if(n.nodeName=='DIV'){curP=null;continue}if(!curP){curP=document.createElement('div');t.content.insertBefore(curP,n)}curP.appendChild(n)}
- return t.innerHTML}
-
-let edT=null;
-function markPh(t){const seen=new Set();for(const p of t.children){const ph=p.getAttribute('data-ph');if(ph){if(seen.has(ph))p.removeAttribute('data-ph');else seen.add(ph)}p.classList.toggle('e',!/\S/.test(p.textContent)&&!p.querySelector('img'))}}
-function edited(t){t=t||ED;if(!t)return;const e=t.parentNode,b=I.b[e.dataset.id];if(!b)return;markPh(t);const h=clean(t.innerHTML);
- e.classList.toggle('empty',!hasText(t));if(h!==b.html){b.html=h;b.t=now();e._j=JSON.stringify(b);changed()}overflow()}
-function commitEdit(){clearTimeout(edT);if(ED)edited(ED)}
-document.addEventListener('input',e=>{const t=e.target.closest&&e.target.closest('.tx');if(!t)return;editSnap();markPh(t);t.parentNode.classList.toggle('empty',!hasText(t));clearTimeout(edT);edT=setTimeout(()=>edited(t),300);overflow();requestAnimationFrame(keepCaret)});
-document.addEventListener('paste',e=>{const t=e.target.closest&&e.target.closest('.tx');if(!t)return;e.preventDefault();const txt=(e.clipboardData||window.clipboardData).getData('text/plain').replace(/\r/g,'');const ls=txt.split('\n');
- ls.forEach((l,i)=>{if(i)document.execCommand('insertParagraph');if(l)document.execCommand('insertText',false,l)})});
-document.addEventListener('drop',e=>{if(e.target.closest&&e.target.closest('.tx'))e.preventDefault()});
-let unzT=null;
-document.addEventListener('focusin',e=>{const t=e.target.closest&&e.target.closest('.tx');if(!t||MODE!='w')return;clearTimeout(unzT);
- if(ED!==t){if(ED)edited(ED);ED=t;pendSnap=JSON.stringify(I);updUndo()}
- if(!hasText(t)&&t.firstElementChild){const home=()=>{if(hasText(t)||document.activeElement!==t)return;const r=document.createRange();r.setStart(t.firstElementChild,0);r.collapse(true);const sl=getSelection();sl.removeAllRanges();sl.addRange(r);readState()};home();setTimeout(home,0);setTimeout(home,80)}
- if(SEL){SEL=null;render()}
- $$('.blk.ed').forEach(x=>x.classList.remove('ed'));t.parentNode.classList.add('ed');
- showFmt();zoomTo(t.parentNode.dataset.id);setTimeout(readState,30)});
-document.addEventListener('focusout',e=>{const t=e.target.closest&&e.target.closest('.tx');if(!t)return;clearTimeout(edT);edited(t);
- unzT=setTimeout(()=>{const a=document.activeElement;if(a&&a.closest&&a.closest('.tx'))return;ED=null;pendSnap=null;updUndo();$$('.blk.ed').forEach(x=>x.classList.remove('ed'));hideFmt();if(!UZ)fit();render()},220)});
-document.addEventListener('selectionchange',()=>{if(ED&&rng())readState()});
-
-// format toolbar
-let PANEL=null;
-function showFmt(){$('#fmt').hidden=false;$('#bb').hidden=true;if(isDesk())deskPan();placeBars()}
-function hideFmt(){$('#fmt').hidden=true;$('#bb').hidden=false;fmtSpace();PANEL=null;const fp=$('#fpan');fp.hidden=true;fp.innerHTML='';fp.dataset.k='';$$('.frow button').forEach(b=>b.classList.remove('act'))}
-function stepSize(d){let v=FS.pt;if(d>0)v=v<24?v+.5:v+2;else v=v<=24?v-.5:v-2;return clamp(v,5,120)}
-function deskPan(){const fp=$('#fpan');fp.hidden=false;
- if(fp.dataset.k==='desk'){updScrub();return}fp.dataset.k='desk';const ini=initials();
- const sc=(k,lab,chips)=>`<div class="dsec"><div class="dl">${lab}</div><div class="fpan"><button class="stp" data-s="-1" data-sk="${k}">−</button><div class="scrub" data-k="${k}"><div class="rul"></div><i class="ndl"></i><div class="sv"></div></div><button class="stp" data-s="1" data-sk="${k}">+</button></div>${chips||''}</div>`;
- fp.innerHTML=sc('size','Text size')+sc('ls','Letter spacing',`<div class="chips"><button data-l="-30">Tight</button><button data-l="0">Normal</button><button data-l="50">Wide</button><button data-l="150">Wider</button></div>`)+sc('lh','Line spacing',`<div class="chips">${[1,1.15,1.3,1.5,2].map(v=>`<button data-h="${v}">${v.toFixed(2)}</button>`).join('')}</div>`)
-  +`<div class="dsec"><div class="dl">Paragraph style</div><div class="dgrid"><button class="stl" data-st="head" style="font-family:var(--anton);letter-spacing:.03em">Headline</button><button class="stl" data-st="big" style="font-family:var(--anton)">BIG</button><button class="stl" data-st="by" style="font-family:var(--times);font-style:italic">Byline</button><button class="stl" data-st="body" style="font-family:var(--times)">Body</button><button class="stl" data-c="#000">Black text</button><button class="stl inv" data-c="#fff">White text</button></div></div>
-  <div class="dsec"><div class="dl">End mark</div><div class="dgrid"><button class="stl" data-em="stamp"><img src="emblem.png" alt="" style="height:16px;vertical-align:-3px"> Stamp</button><button class="stl" data-em="ini"><b>${esc(ini||'AB')}</b> Initials</button></div></div>
-  <p class="dfoot">Select words to style just those. With nothing selected, changes apply to the whole paragraph.</p>`;
- updScrub()}
-function pan(k,refresh){const fp=$('#fpan');if(isDesk()){PANEL=null;deskPan();return}if(!refresh){PANEL=PANEL===k?null:k;$$('.frow button').forEach(b=>b.classList.toggle('act',b.dataset.f===PANEL&&PANEL!=null))}
- k=PANEL;if(!k){fp.hidden=true;fp.innerHTML='';placeBars();return}fp.hidden=false;
- if(refresh&&fp.dataset.k===k){updScrub();placeBars();return}
- fp.dataset.k=k;
- if(k=='em'){const ini=initials();fp.innerHTML=`<div class="fpan" style="border:0"><span class="note" style="flex:0 0 auto">End mark</span><button class="stl" data-em="stamp"><img src="emblem.png" alt="" style="height:18px;vertical-align:-3px;filter:invert(1)"> Stamp</button><button class="stl" data-em="ini"><b>${esc(ini||'AB')}</b> Initials</button></div>${ini?'':'<p class="note" style="margin:0 12px 8px">No byline found, so you’ll be asked for initials.</p>'}`}
- else if(k=='st')fp.innerHTML=`<div class="fpan" style="border:0"><button class="stl" data-st="head" style="font-family:var(--anton);letter-spacing:.03em">Headline</button><button class="stl" data-st="big" style="font-family:var(--anton);font-size:18px">BIG</button><button class="stl" data-st="by" style="font-family:var(--times);font-style:italic">Byline</button><button class="stl" data-st="body" style="font-family:var(--times)">Body</button></div><div class="fpan" style="border:0;padding-top:0"><button class="stl" data-c="#000" style="background:#fff;color:#000">Black text</button><button class="stl" data-c="#fff" style="background:#000;color:#fff;border:1px solid #444">White text</button></div>`;
- else fp.innerHTML=`<div class="fpan"><button class="stp" data-s="-1">−</button><div class="scrub" data-k="${k}"><div class="rul"></div><i class="ndl"></i><div class="sv"></div></div><button class="stp" data-s="1">+</button></div>`+(k=='ls'?`<div class="chips"><button data-l="-30">Tight</button><button data-l="0">Normal</button><button data-l="50">Wide</button><button data-l="150">Wider</button></div>`:k=='lh'?`<div class="chips">${[1,1.15,1.3,1.5,2].map(v=>`<button data-h="${v}">${v.toFixed(2)}</button>`).join('')}</div>`:'');
- updScrub();
- placeBars()}
-// drag scrubbers for size, letter spacing and line spacing
-const SCR={size:{min:5,max:100,ppu:8,step:.5,get:()=>FS.pt,txt:v=>`${v} pt<small>size</small>`},
- ls:{min:-100,max:800,ppu:.8,step:5,get:()=>FS.ls,txt:v=>`${v>0?'+':''}${v}<small>letter spacing</small>`},
- lh:{min:.5,max:3,ppu:160,step:.01,get:()=>FS.lh,txt:v=>`${v.toFixed(2)}<small>line spacing</small>`}};
-function updScrub(v,only){for(const el of $$('#fpan .scrub')){if(only&&el.dataset.k!==only)continue;updOne(el,v)}}
-function updOne(el,v){const c=SCR[el.dataset.k];if(v==null)v=c.get();const r=el.querySelector('.rul');r.style.width=(c.max-c.min)*c.ppu+'px';r.style.transform=`translateX(${-(v-c.min)*c.ppu}px)`;el.querySelector('.sv').innerHTML=c.txt(v)}
-function setVal(k,v){if(k=='size'){FS.pt=v;charStyle('font-size',+(v/.75).toFixed(2)+'px')}else if(k=='ls'){FS.ls=v;charStyle('letter-spacing',v/1000+'em')}else{FS.lh=v;paraStyle({'line-height':String(v)})}}
-(()=>{let sd=null,raf=0;
- document.addEventListener('pointerdown',e=>{const el=e.target.closest&&e.target.closest('#fpan .scrub');if(!el)return;e.preventDefault();const c=SCR[el.dataset.k];try{el.setPointerCapture(e.pointerId)}catch(_){}sd={el,c,k:el.dataset.k,x0:e.clientX,v0:c.get(),v:c.get(),id:e.pointerId}});
- document.addEventListener('pointermove',e=>{if(!sd||e.pointerId!==sd.id)return;const c=sd.c;let v=sd.v0-(e.clientX-sd.x0)/c.ppu;v=clamp(Math.round(v/c.step)*c.step,c.min,c.max);v=+v.toFixed(2);updOne(sd.el,v);
-  if(v!==sd.v){sd.v=v;if(!raf)raf=requestAnimationFrame(()=>{raf=0;if(sd)setVal(sd.k,sd.v)})}});
- const end=e=>{if(!sd||e.pointerId!==sd.id)return;const d=sd;sd=null;if(raf){cancelAnimationFrame(raf);raf=0}if(d.v!==d.c.get())setVal(d.k,d.v);updScrub()};
- document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end)})();
-function valTxt(k){return k=='size'?`${FS.pt} pt<small>Text size</small>`:k=='ls'?`${FS.ls>0?'+':''}${FS.ls}<small>Letter spacing</small>`:`${FS.lh.toFixed(2)}<small>Line spacing</small>`}
-function applyStep(k,d){if(k=='size'){FS.pt=stepSize(d);charStyle('font-size',+(FS.pt/.75).toFixed(2)+'px')}
- else if(k=='ls'){FS.ls=clamp(FS.ls+d*10,-100,800);charStyle('letter-spacing',FS.ls/1000+'em')}
- else{FS.lh=clamp(Math.round((FS.lh+d*.05)*100)/100,.7,3);paraStyle({'line-height':String(FS.lh)})}}
-function fmtAct(el){const f=el.dataset.f;
- if(f=='b'){editSnap();document.execCommand('bold');edited();readState()}
- else if(f=='i'){editSnap();document.execCommand('italic');edited();readState()}
- else if(f=='font'){charStyle('font-family',FS.an?TIMES:ANTON)}
- else if(f=='al'){const o=['left','justify','center','right'],n=o[(o.indexOf(FS.al)+1)%4];paraStyle({'text-align':n});toast({left:'Aligned left',justify:'Justified',center:'Centred',right:'Aligned right'}[n])}
- else if(f=='done'){ED&&ED.blur();getSelection().removeAllRanges()}
- else if(f)pan(f);
- if(el.dataset.s)applyStep(el.dataset.sk||PANEL,+el.dataset.s);
-  if(el.dataset.l!=null&&el.dataset.l!==undefined&&el.closest('#fpan')&&(PANEL=='ls'||isDesk())){FS.ls=+el.dataset.l;charStyle('letter-spacing',FS.ls/1000+'em')}
- if(el.dataset.h&&(PANEL=='lh'||isDesk())){FS.lh=+el.dataset.h;paraStyle({'line-height':String(FS.lh)})}
- if(el.dataset.st)presetStyle(el.dataset.st);
- if(el.dataset.c)charStyle('color',el.dataset.c);
- if(el.dataset.em)endMark(el.dataset.em)}
-// keep the keyboard and selection while tapping toolbar buttons
-(()=>{const f=$('#fmt');let down=null,rep=null,rt=null;
- const stop=()=>{clearTimeout(rt);clearInterval(rep);rt=rep=null};
- f.addEventListener('touchstart',e=>{if(e.target.closest('button,.scrub'))e.preventDefault()},{passive:false});
- f.addEventListener('mousedown',e=>e.preventDefault());
- f.addEventListener('pointerdown',e=>{const b=e.target.closest('button');if(!b)return;e.preventDefault();down=b;
-  if(b.dataset.s){rt=setTimeout(()=>{rep=setInterval(()=>applyStep(b.dataset.sk||PANEL,+b.dataset.s),110)},420)}});
- f.addEventListener('pointerup',e=>{const b=e.target.closest('button');const held=!!rep;stop();if(b&&b===down&&!held)fmtAct(b);down=null});
- f.addEventListener('pointercancel',()=>{stop();down=null});
- f.addEventListener('pointerleave',stop)})();
-/* Typing toolbar vs the iPhone keyboard.
-   The cause of the jumping: when the keyboard opens, iOS slides the whole page up to show the
-   caret, so anything pinned to the screen edges (header, toolbar) moves with it. We stop that
-   slide (the page itself never needs to scroll here; only the paper scroller does), which
-   leaves one simple measurement: the keyboard's height. The paper scroller then keeps the
-   caret in view above the toolbar. */
-function pinPage(){if(isDesk())return;const vv=window.visualViewport;if(vv&&vv.scale>1.02)return;
- if(scrollY||document.documentElement.scrollTop||(vv&&vv.offsetTop>0.5))scrollTo(0,0)}
-function fmtSpace(){const b=document.body,f=$('#fmt'),on=!isDesk()&&!f.hidden,h=on?f.offsetHeight:0,old=parseFloat(b.style.getPropertyValue('--fmh'))||0;
- if(h===old&&b.classList.contains('typing')===on)return;b.style.setProperty('--fmh',h+'px');b.classList.toggle('typing',on);if(h!==old){VIEW.scrollTop+=h-old;keepCaret()}}
-function placeBars(){const vv=window.visualViewport;const f=$('#fmt'),h=$('#hd');fmtSpace();
- if(isDesk()||!vv){f.style.transform='';h.style.transform='';return}
- const top=Math.max(0,Math.round(vv.offsetTop)),kb=Math.max(0,Math.round(innerHeight-vv.height-vv.offsetTop));
- document.body.classList.toggle('kb',kb>60);
- const t=top?`translateY(${top}px)`:'';f.style.transform=t;h.style.transform=t}
-function settleBars(){pinPage();placeBars();keepCaret()}
-if(window.visualViewport){visualViewport.addEventListener('resize',settleBars);visualViewport.addEventListener('scroll',()=>{pinPage();placeBars()})}
-addEventListener('scroll',()=>{pinPage();placeBars()},{passive:true});
-document.addEventListener('focusin',()=>{pinPage();[120,350,700].forEach(t=>setTimeout(settleBars,t))});
-document.addEventListener('focusout',()=>[120,400].forEach(t=>setTimeout(()=>{pinPage();placeBars()},t)));
-addEventListener('resize',()=>{deskMode();if(!isDesk()&&(document.body.classList.contains('kb')||document.activeElement?.isContentEditable))return;if(!ED&&!UZ)fit();else{FIT=fitScale();zoomUI()}});
-
-// ---------- sheets, toasts ----------
-function sheet(html){close();const s=document.createElement('div');s.className='scrim';s.innerHTML=`<div class="panel">${html}</div>`;s.onclick=e=>{if(e.target===s||e.target.closest('.x'))close()};document.body.appendChild(s);return s.firstChild}
-function close(){$$('.scrim').forEach(s=>s.remove())}
-function ask(msg,yes,fn){const p=sheet(`<h3>Are you sure?<button class="x">✕</button></h3><p>${esc(msg)}</p><div class="row"><button class="btn" id="a-n">Cancel</button><button class="btn pri" id="a-y">${esc(yes)}</button></div>`);p.querySelector('#a-n').onclick=close;p.querySelector('#a-y').onclick=()=>{close();fn()}}
-let toT=null;
-function toast(m,act){let t=$('#toast');if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t)}t.innerHTML=`<span>${esc(m)}</span>${act?`<button>${esc(act[0])}</button>`:''}`;if(act)t.querySelector('button').onclick=()=>{t.remove();act[1]()};clearTimeout(toT);toT=setTimeout(()=>t.remove(),act?5000:2400)}
-function busy(m){$$('.busy').forEach(b=>b.remove());if(m){const b=document.createElement('div');b.className='busy';b.textContent=m;document.body.appendChild(b)}}
-
-function details(){const d=I;const p=sheet(`<h3>Issue details<button class="x">✕</button></h3>
- <div class="row" style="margin:0"><div style="flex:1"><label for="d-n">Issue number</label><input id="d-n" type="number" inputmode="numeric" min="1" value="${esc(d.n)}"></div><div style="flex:1.4"><label for="d-d">Date</label><input id="d-d" type="date" value="${esc(d.date)}"></div></div>
- <label for="d-t">Theme</label><input id="d-t" maxlength="60" value="${esc(d.theme)}" placeholder="e.g. Literature Review">
- <label for="d-a">Address (top left)</label><textarea id="d-a" rows="3">${esc(d.addr)}</textarea>
- <div class="row"><button class="btn pri" id="d-ok">Done</button></div>`);
- let sn=false;const up=()=>{if(!sn){snap();sn=true}d.n=Math.max(1,parseInt(p.querySelector('#d-n').value)||d.n);d.date=p.querySelector('#d-d').value||d.date;d.theme=p.querySelector('#d-t').value;d.addr=p.querySelector('#d-a').value;d.mt=now();changed();render()};
- p.querySelectorAll('input,textarea').forEach(x=>x.oninput=up);p.querySelector('#d-ok').onclick=close}
-
-// ---------- issues ----------
-const isEd=()=>!!(ME&&ME.ed);
-const live=()=>Object.values(DOCS).filter(d=>!d.gone&&(isEd()||!d._sync)).sort((a,b)=>b.n-a.n||b.t-a.t);
-// drop shared drafts from this device when the person here isn't a Rag editor
-function purgeShared(){let gone=false;for(const d of Object.values(DOCS))if(d._sync){delete DOCS[d.id];dbDel('docs',d.id).catch(()=>{});gone=true}
- if(gone&&I&&!DOCS[I.id]){const n=live()[0];openDoc(n?n.id:makeDoc('classic').id)}}
-const hasContent=d=>!!d.pdf||Object.values(d.b).some(b=>b.im||hasTextHTML(b.html));
-let askedShare=false;
-function offerShare(){const P=Object.values(DOCS).filter(d=>d.play&&!d.gone&&hasContent(d));if(!isEd()||askedShare||!P.length)return;askedShare=true;
- ask(`You made ${P.length} issue${P.length>1?'s':''} on this phone before signing in as an editor. Share ${P.length>1?'them':'it'} with the other editors as drafts?`,'Share',()=>{for(const d of P){delete d.play;d.t=now();dbPut('docs',JSON.parse(JSON.stringify(d)));dirty.add(d.id)}sync();toast('Shared with the other editors')})}
-function ago(t){const s=(now()-t)/1000;return s<60?'just now':s<3600?Math.round(s/60)+' min ago':s<86400?Math.round(s/3600)+' h ago':new Date(t).toLocaleDateString()}
-const SIGNOFF='<p class="motto">The Riley Rag · Printing Department</p>';
-function issuesHTML(){const L=live();
- return `${isEd()?'':'<p class="note pubx" style="margin:0 0 12px">You’re exploring in practice mode: anything you make stays on this device. Real drafts are only visible to Rag editors once they sign in.</p>'}<button class="btn pri big" data-i="new">＋ New issue</button>
- <ul class="ilist">${L.map(d=>`<li data-id="${d.id}" class="${I&&d.id==I.id?'cur':''}"><span class="n">№ ${esc(d.n)}</span><span class="m"><b>${d.play&&isEd()?'<span class="tag">Practice</span> ':''}${d.pdf?'<span class="tag">PDF</span> ':''}${esc(d.theme||(d.pdf?d.pdf.name:'No theme yet'))}</b><small>${longDate(d.date).toLowerCase()} · edited ${ago(d.t)}</small></span><button class="del" aria-label="Delete issue">${ICON.trash}</button></li>`).join('')}</ul>`}
-function wireIssues(root,inSheet){root.querySelector('[data-i=new]').onclick=newIssue;
- root.querySelectorAll('li[data-id]').forEach(li=>{li.onclick=e=>{const id=li.dataset.id;if(e.target.closest('.del')){const d=DOCS[id];ask(`Delete Issue № ${d.n}${d.theme?' ('+d.theme+')':''}? This can’t be undone.`,'Delete',()=>{d.gone=now();d.t=now();dbPut('docs',d);syncSoon(id);if(id==I.id){const n=live()[0];n?openDoc(n.id):openDoc(makeDoc('classic').id)}renderRail(true);toast('Issue deleted')});return}if(inSheet)close();openDoc(id)}})}
-function issues(){if(ED)ED.blur();if(isDesk()){renderRail(true);return}
- const p=sheet(`<h3>Issues<button class="x">✕</button></h3><div id="ilw">${issuesHTML()}</div><div id="pin"></div><div class="acct" id="acct"></div>${SIGNOFF}`);
- wireIssues(p,true);acct();pinHint()}
-let railSig='';
-function renderRail(force){const r=$('#rail');if(!isDesk()){if(r.innerHTML){r.innerHTML='';railSig=''}return}
- const sig=JSON.stringify(live().map(d=>[d.id,d.n,d.theme,d.date,Math.floor(d.t/60000),d.play,!!d.pdf]))+(I&&I.id)+isEd()+(ME&&ME.name);
- if(!force&&sig===railSig)return;railSig=sig;
- r.innerHTML=`<div class="rh">Issues</div><div id="ilw">${issuesHTML()}</div><div id="pin"></div><div class="acct" id="acct"></div>${SIGNOFF}`;wireIssues(r,false);acct();pinHint()}
-function pinHint(){const el=$('#pin');if(!el)return;let hide=false;try{hide=localStorage.getItem('rp_home')=='1'||localStorage.getItem('rp_pinhide')=='1'}catch(e){}if(hide)return;
- el.innerHTML=`<div class="pubx" style="margin-top:4px"><b>Put Rag Press on your home screen</b><p class="note">Open <b>joshp523.github.io/RileyRag/press</b> in Safari, tap Share <span style="font-size:15px">⇪</span>, then <b>Add to Home Screen</b>.</p><div class="row" style="margin-top:6px"><button class="btn" id="pin-c">Copy link</button><button class="btn" id="pin-h">Hide</button></div></div>`;
- el.querySelector('#pin-c').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText('https://joshp523.github.io/RileyRag/press/').then(()=>toast('Link copied. Paste it into Safari.'),()=>toast('joshp523.github.io/RileyRag/press'))};
- el.querySelector('#pin-h').onclick=()=>{try{localStorage.setItem('rp_pinhide','1')}catch(e){}el.innerHTML=''}}
-try{if(/[?&]home=1/.test(location.search))localStorage.setItem('rp_home','1')}catch(e){}
-function openDoc(id){if(ED)ED.blur();I=DOCS[id];if(I.pdf&&MODE!='w'){MODE='w';document.body.classList.add('write');document.body.classList.remove('arr');$('#mw').classList.add('on');$('#ma').classList.remove('on')}U=[];R=[];SEL=null;SH=null;updUndo();try{localStorage.setItem('rp_cur',id)}catch(e){}render();fit()}
-function makeDoc(lay,from){const L=live(),last=from||L[0],t=now();let date=iso(new Date());
- if(last&&last.date){const p=pd(last.date),nd=new Date(p.y,p.m-1,p.d+7);if(nd>new Date())date=iso(nd)}
- const d={id:uid(),v:1,t,mt:t,...(isEd()?{}:{play:1}),n:last?(Math.max(...L.map(x=>+x.n||0))+1):7,date,theme:'',addr:last?last.addr:'Boulevard de\nl’Empereur,\nBrussels',by:last?last.by:'J. & M. Riley',b:{},del:{},gone:0};
- if(lay=='copy'&&last){for(const b of Object.values(last.b)){const id=uid();d.b[id]={...b,id,t,im:null,html:b.k=='s'?blankLike(b.html):''}}}
- else d.b=mkBlocks(LAYOUTS[lay].b,t);
- DOCS[d.id]=d;dbPut('docs',d);syncSoon(d.id);return d}
-function blankLike(h){const t=document.createElement('template');t.innerHTML=h||'';const ps=[...t.content.children].slice(0,3);if(!ps.length)return storyHTML();return ps.map(p=>{const st=p.getAttribute('style')||ST.body;const ff=/anton/i.test(st);const fs=parseFloat((st.match(/font-size:\s*([\d.]+)px/)||[])[1]||15);return PAR(st,ff?(fs>36?'BIG HEADLINE':'HEADLINE'):/italic/.test(st)?'By Name, Title':'Tap here and start writing.')}).join('')}
-function mini(spec){return`<span class="mini"><u></u>${spec.map(([k,x,y,w,h])=>`<i class="${k=='p'?'p':''}" style="left:${(x/12*64+4).toFixed(1)}px;top:${(y/52*78+20).toFixed(1)}px;width:${(w/12*64-2).toFixed(1)}px;height:${(h/52*78-2).toFixed(1)}px"></i>`).join('')}</span>`}
-function newIssue(){const last=live().find(d=>!d.pdf);const cs=last?Object.values(last.b).map(b=>[b.k,b.x,b.y,b.w,b.h]):null;
- const p=sheet(`<h3>New issue<button class="x">✕</button></h3><p>Pick a starting layout. You can change it any time in Arrange.</p><div class="lays">${cs&&cs.length?`<button data-l="copy">${mini(cs)}Same as № ${esc(last.n)}</button>`:''}${Object.entries(LAYOUTS).map(([k,l])=>`<button data-l="${k}">${mini(l.b)}${l.name}</button>`).join('')}</div>
- <p style="margin-top:16px">Already have the finished paper as a PDF?</p><button class="btn big" style="width:100%" id="i-pdf">Upload a finished PDF</button>`);
- p.querySelector('#i-pdf').onclick=()=>{$('#fp').value='';$('#fp').click()};
- p.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const d=makeDoc(b.dataset.l);close();openDoc(d.id);toast(`Issue № ${d.n} is ready`)})}
-$('#isb').onclick=issues;
-function needPdf(){return need('lib/pdf.min.js',()=>window.pdfjsLib).then(()=>{pdfjsLib.GlobalWorkerOptions.workerSrc='lib/pdf.worker.min.js'})}
-async function pageImg(pg,width,type){const vp=pg.getViewport({scale:width/pg.getViewport({scale:1}).width});const cv=document.createElement('canvas');cv.width=Math.round(vp.width);cv.height=Math.round(vp.height);const c=cv.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,cv.width,cv.height);await pg.render({canvasContext:c,viewport:vp}).promise;return new Promise(r=>cv.toBlob(r,type,.9))}
-async function pdfBlob(){if(!BLOB[I.pdf.id])await loadImg(I.pdf.id,'pdf');if(!BLOB[I.pdf.id])throw new Error('The PDF isn’t on this device yet. Connect to the internet once and try again.');return BLOB[I.pdf.id]}
-async function pdfPage(width,type){await needPdf();const doc=await pdfjsLib.getDocument({data:await (await pdfBlob()).arrayBuffer()}).promise;return pageImg(await doc.getPage(1),width,type)}
-$('#fp').onchange=async()=>{const file=$('#fp').files[0];if(!file)return;busy('Opening PDF…');
- try{await needPdf();const buf=await file.arrayBuffer(),doc=await pdfjsLib.getDocument({data:buf.slice(0)}).promise,pg=await doc.getPage(1),pv=await pageImg(pg,1588,'image/jpeg');
-  let n=null,date=null;try{const txt=(await pg.getTextContent()).items.map(i=>i.str).join(' ');const m=txt.match(/Issue\s*(?:№|No\.?|#)\s*(\d+)/i);if(m)n=+m[1];
-   const dm=txt.match(/(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})/i);if(dm)date=iso(new Date(+dm[3],MONTHS.indexOf(dm[2].toUpperCase()),+dm[1]))}catch(e){}
-  const pid=uid(),vid=uid(),pb=new Blob([buf],{type:'application/pdf'});await dbPut('imgs',{id:pid,blob:pb,up:0});await dbPut('imgs',{id:vid,blob:pv,up:0});
-  IMG[pid]=URL.createObjectURL(pb);BLOB[pid]=pb;IMG[vid]=URL.createObjectURL(pv);BLOB[vid]=pv;
-  const d=makeDoc('blank');d.b={};d.pdf={id:pid,pv:vid,name:file.name,pages:doc.numPages};if(n)d.n=n;if(date)d.date=date;d.t=d.mt=now();DOCS[d.id]=d;await dbPut('docs',JSON.parse(JSON.stringify(d)));
-  syncSoon(d.id);upSoon();close();openDoc(d.id);toast(`Added as Issue № ${d.n}. Check Details, then Export to publish.`)}
- catch(x){toast('Couldn’t open that PDF: '+(x.message||x))}finally{busy()}};
-function renderPdf(){SH=null;const src=IMG[I.pdf.pv];if(!src)loadImg(I.pdf.pv);
- $('#pg').innerHTML=`<div class="sheet">${src?`<img src="${src}" alt="" style="position:absolute;left:0;top:0;width:794px;height:auto">`:'<p style="padding:60px;text-align:center;color:#777;font:16px -apple-system,sans-serif">Loading the PDF…</p>'}</div>`;
- $('#isn').textContent='№ '+I.n;$('.seg').style.visibility='hidden';renderRail();bar()}
-
-// ---------- export ----------
-async function canvasOf(scale){if(ED)ED.blur();
- const fams=['400 15px Anton','400 15px Tinos','700 15px Tinos','italic 400 15px Tinos','italic 700 15px Tinos'];try{await Promise.all(fams.map(f=>document.fonts.load(f,'Aa№')))}catch(_){}await document.fonts.ready;
- for(const b of blocks())if(b.im){if(!IMG[b.im.id])await loadImg(b.im.id);if(imKey(b.im)!==b.im.id)await derive(b.im)}
- const host=$('#printhost');host.innerHTML='';const sh=sheetEl(I,false),bl=sh.querySelector('.bls');for(const b of blocks())bl.appendChild(blockEl(b,false));sh.querySelector('.lns').innerHTML=linesHTML(I);host.appendChild(sh);
- await Promise.all([...sh.querySelectorAll('img')].map(i=>i.decode?i.decode().catch(()=>{}):null));
- try{return await html2canvas(sh,{scale,backgroundColor:'#ffffff',useCORS:true,logging:false,scrollX:0,scrollY:0,windowWidth:Math.max(innerWidth,PW),windowHeight:Math.max(innerHeight,PH)})}finally{host.innerHTML=''}}
-const lib={};
-function need(src,test){if(test())return Promise.resolve();return lib[src]||(lib[src]=new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>{delete lib[src];rej(new Error('Couldn’t load the exporter. Check your connection once, then it works offline.'))};document.head.appendChild(s)}))}
-const fname=ext=>`The Riley Rag No. ${I.n}${I.theme?' – '+I.theme.replace(/[\\/:*?"<>|]/g,''):''}.${ext}`;
-async function makeFile(kind){
- if(I.pdf){if(kind=='pdf')return new File([await pdfBlob()],fname('pdf'),{type:'application/pdf'});return new File([await pdfPage(2382,'image/png')],fname('png'),{type:'image/png'})}
- await need('lib/html2canvas.min.js',()=>window.html2canvas);
- const cv=await canvasOf(3);
- if(kind=='png'){const bl=await new Promise(r=>cv.toBlob(r,'image/png'));return new File([bl],fname('png'),{type:'image/png'})}
- await need('lib/jspdf.umd.min.js',()=>window.jspdf);const pdf=new jspdf.jsPDF({unit:'pt',format:'a4',compress:true});
- pdf.addImage(cv.toDataURL('image/jpeg',.92),'JPEG',0,0,595.28,841.89,undefined,'FAST');pdf.setProperties({title:`The Riley Rag No. ${I.n}`,creator:'Rag Press'});
- return new File([pdf.output('blob')],fname('pdf'),{type:'application/pdf'})}
-function deliver(f){const touch=matchMedia('(pointer:coarse)').matches;
- if(touch&&navigator.canShare&&navigator.canShare({files:[f]}))return navigator.share({files:[f]}).catch(()=>{});
- const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
-function exportUI(){if(ED)ED.blur();
- setTimeout(()=>{overflow();const over=SH?SH.querySelectorAll('.ovl b').length:0,emptyPh=blocks().filter(b=>b.k=='p'&&!b.im).length;
- const p=sheet(`<h3>Export № ${esc(I.n)}<button class="x">✕</button></h3>
- ${over?`<p class="err">${over} stor${over>1?'ies run':'y runs'} past ${over>1?'their boxes':'its box'}. The hidden lines won’t show up.</p>`:''}${emptyPh?`<p class="note">${emptyPh} empty photo box${emptyPh>1?'es':''} will print as blank space.</p>`:''}
- <div class="row"><button class="btn big" id="x-png">PNG image</button><button class="btn big" id="x-pdf">PDF</button></div>
- <div id="x-pub"></div><p class="note" id="x-msg" style="margin-top:10px"></p>`);
- const files={};
- const go=async(kind,btn)=>{if(files[kind]){deliver(files[kind]);return}const msg=p.querySelector('#x-msg');btn.disabled=true;const old=btn.textContent;btn.textContent='Preparing…';
-  try{files[kind]=await makeFile(kind);const touch=matchMedia('(pointer:coarse)').matches;
-   if(touch&&navigator.canShare&&navigator.canShare({files:[files[kind]]})){btn.textContent=kind=='png'?'Save PNG ⇪':'Save PDF ⇪';btn.classList.add('pri');msg.textContent='Ready. Tap again to save it to Photos or Files, print it, or send it.'}
-   else{btn.textContent=old;deliver(files[kind]);msg.textContent='Downloaded.'}}
-  catch(x){btn.textContent=old;msg.textContent=x.message||String(x);msg.classList.add('err')}finally{btn.disabled=false}};
- p.querySelector('#x-png').onclick=e=>go('png',e.currentTarget);p.querySelector('#x-pdf').onclick=e=>go('pdf',e.currentTarget);
- const xp=p.querySelector('#x-pub');pubBtn(xp);who().then(()=>{if(xp.isConnected)pubBtn(xp)})},250)}
-$('#xb').onclick=exportUI;
-
-function pubBtn(el){
- if(!sb){el.innerHTML='<p class="note" style="margin-top:12px">Publishing needs an internet connection.</p>';return}
- if(!ME){el.innerHTML=`<div class="pubx"><b>Publish to The Riley Rag</b><p class="note">Sign in with your Riley Rag account.</p><form id="pl"><input id="pl-e" type="email" autocomplete="username" placeholder="Email" required><input id="pl-p" type="password" autocomplete="current-password" placeholder="Password" required style="margin-top:8px"><p class="err note" id="pl-x"></p><button class="btn pri big">Sign in</button></form></div>`;
-  el.querySelector('#pl').onsubmit=async e=>{e.preventDefault();const x=el.querySelector('#pl-x');x.textContent='Signing in…';const{error}=await sb.auth.signInWithPassword({email:el.querySelector('#pl-e').value.trim(),password:el.querySelector('#pl-p').value});if(error){x.textContent=error.message;return}await who();pubBtn(el);sync()};return}
- if(!ME.ed){el.innerHTML=`<div class="pubx"><b>Publish to The Riley Rag</b><p class="note">You’re signed in as ${esc(ME.name)}${ME.email&&ME.email!==ME.name?' ('+esc(ME.email)+')':''}, but this account isn’t showing as a Rag editor.${ME.err?' Details: '+esc(ME.err):''}</p><div class="row"><button class="btn" id="pl-c">Check again</button><button class="btn" id="pl-o">Use another account</button></div></div>`;
-  el.querySelector('#pl-c').onclick=async()=>{el.querySelector('#pl-c').textContent='Checking…';await who();pubBtn(el);if(ME&&ME.ed)sync()};
-  el.querySelector('#pl-o').onclick=async()=>{await sb.auth.signOut({scope:'local'});ME=null;localStorage.removeItem('rp_me');dot('');purgeShared();pubBtn(el)};return}
- el.innerHTML=`<button class="btn pri big" style="margin-top:12px" id="x-go">Publish to The Riley Rag</button><p class="note" style="margin-top:6px">Signed in as ${esc(ME.name)} (editor).</p>`;
- el.querySelector('#x-go').onclick=()=>ask(`Publish Issue № ${I.n}${I.theme?' ('+I.theme+')':''} to The Riley Rag? Everyone gets the new-issue alert.`,'Publish',publish)}
-async function publish(){busy('Printing Issue № '+I.n+'…');
- try{const f=await makeFile('pdf');let img;if(I.pdf)img=await pdfPage(1600,'image/jpeg');else{await need('lib/html2canvas.min.js',()=>window.html2canvas);const cv=await canvasOf(1600/PW);img=await new Promise(r=>cv.toBlob(r,'image/jpeg',.85))}
-  const id=uid(),pp=`${id}.pdf`,ip=`${id}.jpg`;let u=await sb.storage.from('issues').upload(pp,f,{contentType:'application/pdf'});if(u.error)throw u.error;
-  u=await sb.storage.from('issues').upload(ip,img,{contentType:'image/jpeg'});if(u.error)throw u.error;
-  const{error}=await sb.from('issues').insert({number:+I.n,issue_date:I.date,tagline:I.theme.trim()||null,pdf_path:pp,img_path:ip});if(error)throw error;
-  sb.functions.invoke('rr-notify',{body:{number:+I.n}}).catch(()=>{});
-  I.pub=now();I.mt=now();changed();busy();close();toast('Published! It’s in The Riley Rag now.',['Open',()=>location.href='../'])}
- catch(x){busy();toast('Couldn’t publish: '+(x.message||x))}}
-
-// ---------- cloud drafts (shared between editors) ----------
-let sb=null,ME=null;try{ME=JSON.parse(localStorage.getItem('rp_me')||'null')}catch(e){}
-try{if(window.supabase&&RAG)sb=supabase.createClient(RAG.url,RAG.key,{auth:{storageKey:'riley-rag-auth',persistSession:true,autoRefreshToken:true}})}catch(e){}
-const canSync=()=>sb&&ME&&ME.ed&&navigator.onLine;
-function dot(s){const d=$('#sdot');d.className='dot'+(s?' '+s:'');d.title={ok:'Shared',wait:'Saving…'}[s]||'On this device only'}
-async function who(){if(!sb)return;
- try{const{data:{session}}=await sb.auth.getSession();
-  if(!session)ME=null;
-  else{const u=session.user;let ed=null,name=u.email,err='';
-   const pr=await sb.from('profiles').select('name,is_editor').eq('id',u.id).maybeSingle();
-   if(pr.data){name=pr.data.name||name;ed=!!pr.data.is_editor}else err=pr.error?pr.error.message:'No Riley Rag member profile for this account.';
-   if(!ed){const rp=await sb.rpc('is_editor');if(!rp.error&&rp.data===true)ed=true;else if(rp.error&&!err)err=rp.error.message}
-   if(ed===null&&ME&&ME.id===u.id)ed=ME.ed;
-   ME={id:u.id,name,email:u.email,ed:!!ed,err:ed?'':err,known:!!pr.data||ed===true}}
-  localStorage.setItem('rp_me',JSON.stringify(ME))}catch(e){if(ME)ME.err=e.message||String(e)}
- dot(canSync()?'ok':'');
- if(!ME||(ME.known&&!ME.ed))purgeShared();else if(ME.ed)offerShare();if(I)render()}
-function merge(a,b){if(!a)return b;if(!b)return a;const m=(a.mt||0)>=(b.mt||0)?a:b,o={...m,b:{},del:{...a.del}};
- for(const k in b.del)o.del[k]=Math.max(o.del[k]||0,b.del[k]);
- for(const id of new Set([...Object.keys(a.b),...Object.keys(b.b)])){const x=a.b[id],y=b.b[id],w=!x?y:!y?x:(y.t>x.t?y:x);if(o.del[id]&&o.del[id]>=w.t)continue;o.b[id]=w}
- o.t=Math.max(a.t||0,b.t||0);o.gone=Math.max(a.gone||0,b.gone||0);o.pub=Math.max(a.pub||0,b.pub||0)||undefined;o._sync=a._sync||b._sync;return o}
-const strip=d=>{const o={...d};delete o._sync;return o};
-const dirty=new Set();let syncT=null,syncing=false;
-function syncSoon(id){id=id||(I&&I.id);if(DOCS[id]&&DOCS[id].play)return;dirty.add(id);if(!canSync())return;dot('wait');clearTimeout(syncT);syncT=setTimeout(sync,1800)}
-function adopt(d){const isCur=I&&I.id===d.id;if(isCur&&ED)edited(ED);const m=isCur?merge(I,d):merge(DOCS[d.id],d);m._sync=d._sync;DOCS[d.id]=m;dbPut('docs',JSON.parse(JSON.stringify(m)));if(isCur){I=m;render()}}
-async function sync(){if(!canSync()||syncing)return;syncing=true;dot('wait');
- try{const{data:list,error}=await sb.from('rag_drafts').select('id,updated_at');if(error)throw error;const srv={};for(const r of list)srv[r.id]=r.updated_at;
-  for(const r of list){const loc=DOCS[r.id];if(loc&&loc._sync===r.updated_at)continue;const{data}=await sb.from('rag_drafts').select('doc,updated_at').eq('id',r.id).single();if(!data)continue;const d={...data.doc,_sync:data.updated_at};
-   const before=loc?JSON.stringify(strip(loc)):'';adopt(d);if(loc&&JSON.stringify(strip(DOCS[r.id]))!==JSON.stringify(strip(d)))dirty.add(r.id)}
-  for(const id in DOCS)if(!srv[id]&&!DOCS[id].play)dirty.add(id);
-  for(const id of [...dirty]){const d=DOCS[id];dirty.delete(id);if(!d||d.play)continue;const{data,error}=await sb.from('rag_drafts').upsert({id,doc:strip(d),updated_at:new Date().toISOString(),updated_by:ME.id}).select('updated_at').single();if(error){dirty.add(id);throw error}
-   const cur=DOCS[id];cur._sync=data.updated_at;dbPut('docs',JSON.parse(JSON.stringify(cur)))}
-  await upImgs();dot(dirty.size?'wait':'ok');
-  if(!I||I.gone){const n=live()[0];if(n)openDoc(n.id)}}
- catch(e){dot('');console.warn('sync',e)}finally{syncing=false}}
-let upT=null;function upSoon(){clearTimeout(upT);upT=setTimeout(upImgs,1500)}
-async function upImgs(){if(!canSync())return;const all=await dbAll('imgs');const used=new Set();for(const d of Object.values(DOCS)){if(d.pdf){used.add(d.pdf.id);used.add(d.pdf.pv)}for(const b of Object.values(d.b))if(b.im)used.add(b.im.id)}
- for(const r of all){if(r.up||!used.has(r.id))continue;const{error}=await sb.storage.from('issues').upload(`drafts/${r.id}.${r.blob.type=='application/pdf'?'pdf':'jpg'}`,r.blob,{contentType:r.blob.type||'image/jpeg',upsert:false});if(!error||/exists|duplicate/i.test(error.message)){r.up=1;await dbPut('imgs',r)}}}
-function acct(){const el=$('#acct');if(!el)return;
- if(!sb){el.innerHTML='<p class="note">Sharing isn’t available right now. Your work is saved on this device.</p>';return}
- if(!ME){el.innerHTML=`<p class="note">Sign in with your Riley Rag account to share drafts with each other and publish straight to the Rag.</p><form id="lg"><input id="lg-e" type="email" autocomplete="username" placeholder="Email" required><input id="lg-p" type="password" autocomplete="current-password" placeholder="Password" required style="margin-top:8px"><p class="err" id="lg-x"></p><button class="btn pri big">Sign in</button></form>`;
-  el.querySelector('#lg').onsubmit=async e=>{e.preventDefault();const x=el.querySelector('#lg-x');x.textContent='Signing in…';const{error}=await sb.auth.signInWithPassword({email:el.querySelector('#lg-e').value.trim(),password:el.querySelector('#lg-p').value});if(error){x.textContent=error.message;return}await who();acct();sync()};return}
- el.innerHTML=`<p class="note">Signed in as <b>${esc(ME.name)}</b>. ${ME.ed?'Drafts are shared with the other editors, and you can publish.':'Only Riley Rag editors can share drafts and publish.'}</p><button class="btn" id="lg-o">Sign out</button>`;
- el.querySelector('#lg-o').onclick=async()=>{await sb.auth.signOut();ME=null;localStorage.removeItem('rp_me');dot('');purgeShared();acct()}}
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState=='visible')sync();else saveNow()});
-addEventListener('online',()=>sync());setInterval(()=>{if(document.visibilityState=='visible')sync()},20000);
-addEventListener('pagehide',saveNow);
-
-// ---------- zoom: pinch on phones, ctrl/⌘ + scroll or the zoom buttons on desktop ----------
-function zoomUI(){const z=$('#zm');if(!z)return;$('#zv').textContent=Math.round(S/FIT*100)+'%';z.classList.toggle('on',UZ)}
-function zoomAt(s,cx,cy,px,py){s=clamp(s,Math.min(FIT,.25),4);const r=$('#pg').getBoundingClientRect();if(px==null){px=(cx-r.left)/S;py=(cy-r.top)/S}
- setScale(s);const r2=$('#pg').getBoundingClientRect();VIEW.scrollLeft+=r2.left+px*s-cx;VIEW.scrollTop+=r2.top+py*s-cy;UZ=Math.abs(s-FIT)>.005;zoomUI()}
-function zoomBy(f){const r=VIEW.getBoundingClientRect();zoomAt(S*f,r.left+r.width/2,r.top+r.height/2)}
-$('#zm').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const z=b.dataset.z;if(z=='fit'){fit();return}zoomBy(z=='in'?1.2:1/1.2)});
-VIEW.addEventListener('wheel',e=>{if(!e.ctrlKey&&!e.metaKey)return;e.preventDefault();zoomAt(S*Math.exp(-clamp(e.deltaY,-60,60)*.006),e.clientX,e.clientY)},{passive:false});
-let PIN=null;
-function cancelDrag(){if(!DRAG)return;const d=DRAG;DRAG=null;SH&&SH.querySelector('.ghost')?.remove();if(d.el){d.el.classList.remove('mv');d.el.style.transform=''}render()}
-VIEW.addEventListener('touchstart',e=>{if(e.touches.length!==2)return;if(MODE=='w'&&e.target.closest&&e.target.closest('.blk.p.sel'))return;
- const[a,b]=e.touches,mx=(a.clientX+b.clientX)/2,my=(a.clientY+b.clientY)/2,r=$('#pg').getBoundingClientRect();
- PIN={d:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),s:S,px:(mx-r.left)/S,py:(my-r.top)/S};cancelDrag();e.preventDefault()},{passive:false});
-VIEW.addEventListener('touchmove',e=>{if(!PIN||e.touches.length!==2)return;e.preventDefault();const[a,b]=e.touches;
- zoomAt(PIN.s*Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)/PIN.d,(a.clientX+b.clientX)/2,(a.clientY+b.clientY)/2,PIN.px,PIN.py)},{passive:false});
-VIEW.addEventListener('touchend',e=>{if(e.touches.length<2)PIN=null});
-document.addEventListener('gesturestart',e=>e.preventDefault());
-// arrange drags ignore a second finger (that's a pinch)
-$('#pg').addEventListener('pointerdown',e=>{if(PIN)cancelDrag()},true);
-
-// ---------- desktop: issues rail on the left, tools on the right ----------
-function deskMode(){const was=isDesk(),on=innerWidth>=1024&&matchMedia('(pointer:fine)').matches||innerWidth>=1180;document.body.classList.toggle('desk',on);
- if(was!==on){renderRail(true);const fp=$('#fpan');fp.dataset.k='';if(ED){if(on)deskPan();else{fp.hidden=true;fp.innerHTML=''}}if(I)bar()}}
-document.addEventListener('keydown',e=>{const t=e.target,typing=t&&t.closest&&(t.closest('.tx')||/INPUT|TEXTAREA|SELECT/.test(t.tagName)),mod=e.metaKey||e.ctrlKey,k=e.key;
- if($('.scrim')||$('#crop')){if(k=='Escape'){close();$('#crop')&&$('#crop').remove()}return}
- if(mod&&(k=='='||k=='+')){e.preventDefault();zoomBy(1.2);return}
- if(mod&&k=='-'){e.preventDefault();zoomBy(1/1.2);return}
- if(mod&&k=='0'){e.preventDefault();fit();return}
- if(mod&&!typing&&k.toLowerCase()=='z'){e.preventDefault();e.shiftKey?redo():undo();return}
- if(k=='Escape'){if(ED){ED.blur();return}if(SEL){SEL=null;render()}return}
- if(typing||MODE!='a'||!SEL||!I.b[SEL])return;const b=I.b[SEL];
- if(k=='Backspace'||k=='Delete'){e.preventDefault();delBlock(SEL);return}
- const dir={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[k];if(!dir)return;e.preventDefault();
- const st=b.fl?.25:1,r={x:b.x+dir[0]*st,y:b.y+dir[1]*st,w:b.w,h:b.h};
- if(e.shiftKey){r.x=b.x;r.y=b.y;r.w=Math.max(st,b.w+dir[0]*st);r.h=Math.max(st,b.h+dir[1]*st)}
- if(!free(r,b.id,b.fl))return toast('That would overlap another box.');snap();Object.assign(b,r,{t:now()});changed();render()});
-
-// ---------- start ----------
-(async()=>{deskMode();try{for(const d of await dbAll('docs'))DOCS[d.id]=d}catch(e){toast('This browser won’t let the app save. Export copies as you go.')}
- let cid=null;try{cid=localStorage.getItem('rp_cur')}catch(e){}
- if(!cid||!live().includes(DOCS[cid]))cid=(live()[0]||{}).id;
- if(!cid)cid=makeDoc('classic').id;
- openDoc(cid);dot(canSync()?'ok':'');
- await who();sync();
- if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})})();
-</script>
-</body>
-</html>
+function memberLabel(n){ const b = $('#mb'); if(b) b.textContent = `Members (${n})`; }
+async function memberCount(){ const {data} = await sb.rpc('member_list'); if(data) memberLabel(data.length); }
+function closeMembers(){ $('#tools').innerHTML = ''; }
+async function members(){
+ const {data, error} = await sb.rpc('member_list');
+ if(error) return $('#tools').innerHTML = `<p class="err">${esc(error.message)}</p>`;
+ memberLabel(data.length);
+ const {data:ls} = await sb.from('profiles').select('id,last_seen'), LS = {}; (ls||[]).forEach(x => LS[x.id] = x.last_seen);
+ data.sort((a,b) => new Date(LS[b.id]||0) - new Date(LS[a.id]||0));
+ $('#tools').innerHTML = `<div class="panel" id="mp"><h2 class="gilt">Members (${data.length})</h2>${data.map(m => `<div class="cm"><b>${esc(m.name)}</b>${m.is_editor?' (editor)':''}<br><small style="margin:0">${esc(m.email)} · ${LS[m.id]?'last read '+ago(LS[m.id]):'hasn’t visited yet'}</small>${m.is_editor?'':`<button class="del" data-id="${m.id}">Remove</button>`}</div>`).join('')}<button class="btn ghost" id="mc">Close</button></div>`;
+ $('#mc').onclick = closeMembers;
+ document.querySelectorAll('#tools .del').forEach(b => b.onclick = async () => {
+  const nm = b.closest('.cm').querySelector('b').textContent;
+  if(!confirm(`Remove ${nm}? This also deletes their comments, reactions, game scores and Ask Peter letters. If they come back with the same email, they’ll start fresh.`)) return;
+  const {error} = await sb.rpc('delete_member',{uid:b.dataset.id}); error ? alert(error.message) : members();
+ });
+}
+function route(){
+ const h = location.hash || '#highlights';
+ document.querySelectorAll('#nav a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href')===h ? 'page' : 'false'));
+ ({'#games':gamesView,'#peter':peterView,'#recipes':recipesView,'#charter':charterView}[h] || feedView)(); scrollTo(0,0);
+}
+async function emailDraft(is){
+ if(!is){ const {data} = await sb.from('issues').select('number,tagline').order('issue_date',{ascending:false}).order('number',{ascending:false}).limit(1); is = data?.[0]; if(!is) return; }
+ const {data:em, error} = await sb.rpc('member_emails');
+ if(error) return $('#tools').innerHTML = `<p class="err">${esc(error.message)}</p>`;
+ const subj = `The Riley Rag № ${is.number} is out!`, tg = (is.tagline||'').replace(/[.\s]+$/,'');
+ const body = `Hello family and friends,\n\nA new edition of The Riley Rag just hit the presses: Issue № ${is.number}${tg?`, ${tg}`:''}.\n\nRead it here: https://joshp523.github.io/RileyRag/\n\nWhile you’re there, tap a reaction or leave a comment. We love hearing from you!\n\nWith love from Brussels,\nThe Rileys`;
+ const bcc = em.join(','), U = 'https://joshp523.github.io/RileyRag/';
+ const html = `<p>Hello family and friends,</p><p>A new edition of The Riley Rag just hit the presses: Issue № ${is.number}${tg?`, ${esc(tg)}`:''}.</p><p>Read it here: <a href="${U}">The Riley Rag</a></p><p>While you’re there, tap a reaction or leave a comment. We love hearing from you!</p><p>With love from Brussels,<br>The Rileys</p>`;
+ const crlf = t => encodeURIComponent(t.replace(/\n/g,'\r\n'));
+ $('#tools').innerHTML = `<div class="panel"><h2 class="gilt">Email the family</h2><p>${em.length} recipients, all in Bcc.</p><b>${esc(subj)}</b><div class="pv">${html}</div>
+ <p style="font-size:15px;opacity:.8">Best results: tap <b>Open in my email app</b>, then <b>Copy formatted message</b> and paste it into the body. The link will show up blue.</p>
+ <a class="btn" href="mailto:?bcc=${encodeURIComponent(bcc).replace(/%2C/g,',')}&subject=${encodeURIComponent(subj)}&body=${crlf(body)}">Open in my email app</a>
+ <button class="btn" id="c2">Copy formatted message</button><button class="btn ghost" id="c1">Copy recipients</button><button class="btn ghost" id="c3">Close</button></div>`;
+ $('#c1').onclick = async () => { try{ await navigator.clipboard.writeText(bcc); $('#c1').textContent = 'Copied'; }catch(e){ prompt('Copy this:', bcc); } };
+ $('#c2').onclick = async () => {
+  try{ await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}), 'text/plain':new Blob([body],{type:'text/plain'})})]); $('#c2').textContent = 'Copied! Now paste it into your email'; }
+  catch(e){ try{ await navigator.clipboard.writeText(body); $('#c2').textContent = 'Copied as plain text'; }catch(x){ prompt('Copy this:', body); } }
+ };
+ $('#c3').onclick = () => $('#tools').innerHTML = '';
+}
+async function wordForm(){
+ const {data} = await sb.from('wordlers').select('word').order('id',{ascending:false}).limit(1);
+ $('#tools').innerHTML = `<form class="panel" id="wf"><label for="nw">Set a new word (4 to 8 letters)${data?.[0]?`. Current word: <b>${esc(data[0].word)}</b>`:''}</label><input id="nw" pattern="[A-Za-z]{4,8}" maxlength="8" required autocomplete="off"><p class="err" id="we"></p><button class="btn">Set the word</button></form>`;
+ $('#wf').onsubmit = async e => { e.preventDefault(); const {error} = await sb.from('wordlers').insert({word:$('#nw').value.toLowerCase()}); error ? $('#we').textContent = error.message : gamesView(); };
+}
+async function board(){
+ const {data, error} = await sb.rpc('riled_leaderboard'), box = $('#lbd'); if(!box) return;
+ if(error) return box.innerHTML = '';
+ box.innerHTML = `<h2 class="gilt" style="margin:34px 0 6px">Leaderboard</h2><p style="font-size:15px;opacity:.75;margin:0 0 8px">Average tries across every game played. A missed word counts as 7.</p>`
+  + (data.length ? `<table class="lbt">${data.map((r,i) => `<tr><td class="r">${i+1}.</td><td>${esc(r.name)}</td><td class="n">${Number(r.avg_tries).toFixed(2)}</td><td class="n" style="color:var(--g3)">${r.games} ${r.games===1?'game':'games'}</td></tr>`).join('')}</table>` : '<p>No finished games yet. Be the first on the board!</p>');
+}
+async function gamesView(){
+ app.innerHTML = `<div class="apps"><a class="app" href="https://joshp523.github.io/Quip-game-app/"><img src="app-quiprash.png" alt="">QuipRash</a><a class="app" href="https://joshp523.github.io/Word-Games/"><img src="app-wordgames.png" alt="">Word Games</a></div><h2 class="hd gilt ph">Riled Up</h2><div id="tools"></div><div id="gm">Loading…</div><div id="lbd"></div>`;
+ if(me.is_editor) wordForm();
+ board();
+ const {data:cur} = await sb.rpc('wordler_current'), pz = cur?.[0], gm = $('#gm');
+ if(!pz) return gm.innerHTML = '<p style="text-align:center">No word has been set yet. Check back soon!</p>';
+ const {data:gs} = await sb.from('wordler_guesses').select('guess,pattern').eq('puzzle_id',pz.id).order('id');
+ let guesses = gs || [], typed = '';
+ const solved = () => guesses.some(g => /^g+$/.test(g.pattern)), over = () => solved() || guesses.length >= 6;
+ gm.innerHTML = `<p style="text-align:center">Guess the ${pz.len}-letter word in six tries.</p><div class="bd" id="bd" style="--n:${pz.len}"></div>
+ <form class="gf" id="gf"><input id="gi" maxlength="${pz.len}" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Your guess"><button class="btn">Guess</button></form><p class="err" id="ge"></p><div class="kb" id="kb"></div><p id="gend" style="text-align:center"></p>`;
+ async function draw(){
+  let h = '';
+  for(let i=0;i<6;i++){
+   const g = guesses[i], cur = i===guesses.length && !over();
+   h += '<div class="row">' + Array.from({length:pz.len},(_,j) => g ? `<div class="t ${g.pattern[j]}">${g.guess[j]}</div>` : `<div class="t">${cur?(typed[j]||''):''}</div>`).join('') + '</div>';
+  }
+  $('#bd').innerHTML = h;
+  const best = {}; guesses.forEach(g => [...g.guess].forEach((c,j) => { const p = g.pattern[j]; if(p==='g'||(p==='y'&&best[c]!=='g')||!best[c]) best[c] = p; }));
+  $('#kb').innerHTML = 'abcdefghijklmnopqrstuvwxyz'.split('').map(c => `<span class="k ${best[c]||''}">${c}</span>`).join('');
+  $('#gf').hidden = over();
+  if(solved()) $('#gend').textContent = `Solved in ${guesses.length}! Check back for the next word.`;
+  else if(over()){ const {data} = await sb.rpc('wordler_answer',{pid:pz.id}); $('#gend').textContent = `The word was “${data}”. Better luck next time!`; }
+ }
+ $('#gi').oninput = e => { typed = e.target.value.replace(/[^a-z]/gi,'').slice(0,pz.len); e.target.value = typed; draw(); };
+ $('#gf').onsubmit = async e => {
+  e.preventDefault(); $('#ge').textContent = '';
+  if(typed.length !== pz.len) return $('#ge').textContent = `Enter ${pz.len} letters.`;
+  const {data, error} = await sb.rpc('wordler_guess',{pid:pz.id, g:typed});
+  if(error) return $('#ge').textContent = error.message;
+  guesses.push({guess:typed.toLowerCase(), pattern:data}); typed = ''; $('#gi').value = ''; await draw();
+  if(over()){ board(); act('game', {text: solved() ? `solved Riled Up in ${guesses.length} ${guesses.length===1?'try':'tries'}` : 'played Riled Up and missed the word'}); }
+ };
+ draw();
+}
+async function peterView(){
+ app.innerHTML = `<h2 class="hd gilt ph">Ask Peter</h2><p style="text-align:center;font-style:italic">Write in to our advice columnist. Peter replies in his own time.</p>
+ <form class="panel" id="qf"><textarea id="qt" rows="3" maxlength="800" placeholder="Dear Peter…" aria-label="Your question for Peter" required></textarea><button class="btn">Send to Peter</button><p class="err" id="qe"></p></form><div id="ql">Loading…</div>`;
+ $('#qf').onsubmit = async e => { e.preventDefault(); const qt = $('#qt').value.trim(); const {error} = await sb.from('advice').insert({question:qt}); if(error) return $('#qe').textContent = error.message; act('peter', {text:qt}); peterView(); };
+ const {data, error} = await sb.from('advice').select('*,profiles(name)').order('created_at',{ascending:false});
+ if(error) return $('#ql').textContent = error.message;
+ $('#ql').innerHTML = data.length ? '' : '<p style="text-align:center">No letters yet. Be the first to write in!</p>';
+ data.forEach(q => {
+  const nm = q.profiles?.name || 'A reader', d = document.createElement('div'); d.className = 'cm';
+  d.innerHTML = `<div><i>Dear Peter,\n${esc(q.question)}\nSincerely, ${esc(nm)}</i></div>` + (q.answer ? `<p>Dear ${esc(nm)},\n${esc(q.answer)}</p>`
+   : me.is_editor ? `<textarea rows="3" placeholder="Peter’s reply" aria-label="Peter’s reply"></textarea><button class="btn pa">Publish reply</button><button class="btn ghost pd">Delete</button>`
+   : `<p><small>Waiting for Peter’s reply…</small></p>`);
+  if(me.is_editor && !q.answer){
+   d.querySelector('.pa').onclick = async () => { const a = d.querySelector('textarea').value.trim(); if(a){ const {error} = await sb.from('advice').update({answer:a, answered_at:new Date().toISOString()}).eq('id',q.id); if(error) return alert(error.message); if(TOKEN) send('rr-activity', {kind:'peter_answer', d:{id:q.id}}); peterView(); } };
+   d.querySelector('.pd').onclick = async () => { if(confirm('Delete this letter?')){ await sb.from('advice').delete().eq('id',q.id); peterView(); } };
+  }
+  $('#ql').append(d);
+ });
+}
+async function recipesView(){
+ app.innerHTML = `<h2 class="hd gilt ph">Riley Recipes</h2>${me.is_editor?'<div class="bar"><button class="btn" id="ra">Add a recipe card</button></div>':''}<div id="tools"></div><div id="rf">Loading…</div>`;
+ if(me.is_editor) $('#ra').onclick = () => {
+  $('#tools').innerHTML = `<form class="panel" id="rpf"><label for="rn">Recipe name (optional, used for screen readers)</label><input id="rn" maxlength="120"><label for="rp">Recipe card PDF</label><input id="rp" type="file" accept="application/pdf" required><p class="err" id="re" role="alert"></p><button class="btn">Upload</button> <button type="button" class="btn ghost" id="rc">Cancel</button></form>`;
+  $('#rc').onclick = () => $('#tools').innerHTML = '';
+  $('#rpf').onsubmit = async e => {
+   e.preventDefault(); $('#re').textContent = 'Uploading…';
+   try{
+    const file = $('#rp').files[0], pdf = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise;
+    const pg = await pdf.getPage(1), vp = pg.getViewport({scale: 1400/pg.getViewport({scale:1}).width});
+    const cv = document.createElement('canvas'); cv.width = vp.width; cv.height = vp.height;
+    await pg.render({canvasContext: cv.getContext('2d'), viewport: vp}).promise;
+    const img = await new Promise(r => cv.toBlob(r,'image/jpeg',.85)), id = crypto.randomUUID();
+    const pdfPath = `recipes/${id}.pdf`, imgPath = `recipes/${id}.jpg`;
+    let u = await sb.storage.from('issues').upload(pdfPath, file, {contentType:'application/pdf'}); if(u.error) throw u.error;
+    u = await sb.storage.from('issues').upload(imgPath, img, {contentType:'image/jpeg'}); if(u.error) throw u.error;
+    const {error} = await sb.from('recipes').insert({name:$('#rn').value.trim()||null, pdf_path:pdfPath, img_path:imgPath});
+    if(error) throw error; recipesView();
+   }catch(x){ $('#re').textContent = x.message || String(x); }
+  };
+ };
+ const {data, error} = await sb.from('recipes').select('*').order('created_at',{ascending:false});
+ if(error) return $('#rf').textContent = error.message;
+ $('#rf').innerHTML = data.length ? '' : '<p style="text-align:center">No recipe cards yet. Something delicious is coming!</p>';
+ data.forEach(r => {
+  const el = document.createElement('article'); el.className = 'issue';
+  el.innerHTML = `<button class="sheet" aria-label="Open recipe card full size"><img loading="lazy" src="${pub(r.img_path)}" alt="${esc(r.name||'Recipe card')}"></button>${me.is_editor?'<div class="bar" style="margin-top:10px"><button class="btn ghost rd">Delete this card</button></div>':''}`;
+  el.querySelector('.sheet').onclick = () => { $('#lbimg').src = pub(r.img_path); $('#lbpdf').href = pub(r.pdf_path); $('#lb').classList.add('on'); };
+  if(me.is_editor) el.querySelector('.rd').onclick = async () => { if(confirm('Delete this recipe card?')){ await sb.from('recipes').delete().eq('id',r.id); recipesView(); } };
+  $('#rf').append(el);
+ });
+}
+function forgotView(){
+ app.innerHTML = `<form class="panel" id="ff"><h2 class="gilt">Reset your password</h2><p>Enter your email and we’ll send you a link to choose a new one.</p><label for="fe">Email</label><input id="fe" type="email" required autocomplete="email"><p class="err" id="fr" role="alert"></p><button class="btn">Email me a reset link</button><button type="button" class="btn ghost" id="fb">Back to sign in</button></form>`;
+ $('#fb').onclick = authView;
+ $('#ff').onsubmit = async e => {
+  e.preventDefault(); const r = $('#fr'); r.style.color = 'var(--g1)'; r.textContent = 'Sending…';
+  const {error} = await sb.auth.resetPasswordForEmail($('#fe').value.trim(), {redirectTo: location.origin + location.pathname});
+  if(error){ r.style.color = ''; return r.textContent = error.message; }
+  r.textContent = 'If that email has an account, a reset link is on its way. Check your spam folder too.';
+ };
+}
+function recoveryView(){
+ $('#nav').hidden = true;
+ app.innerHTML = `<form class="panel" id="nf"><h2 class="gilt">Choose a new password</h2><label for="np">New password (6 or more characters)</label><input id="np" type="password" minlength="6" required autocomplete="new-password"><p class="err" id="nr" role="alert"></p><button class="btn">Save and continue</button></form>`;
+ $('#nf').onsubmit = async e => {
+  e.preventDefault(); const {error} = await sb.auth.updateUser({password:$('#np').value});
+  if(error) return $('#nr').textContent = error.message;
+  recovering = false; history.replaceState(null,'',location.pathname); boot();
+ };
+}
+const GALLERY = 'https://photos.app.goo.gl/6F13zuFyThHE7W2AA';   // shared Google Photos album; phones with the Google Photos app open it there
+const MORE_APPS = [
+ ['язык врагов','https://joshp523.github.io/russian/','app-russian.png'],['Idioma Celestial','https://joshp523.github.io/palabras/','app-palabras.png?v=3'],
+ ['Riley Rangers','https://joshp523.github.io/Rangers-app/','app-rangers.png'],
+ ['Mushroom classifier','https://joshp523.github.io/Mushroom-Classifier/','app-shroom.png'],
+ ['Writing','https://joshp523.github.io/writing-app/','app-writing.png'],['Rag Press','https://joshp523.github.io/RileyRag/press/','app-press.png'],
+  ['Habits: Josh','https://joshp523.github.io/daily-discipline/','app-habits-josh.png'],
+ ['Habits: Grandma','https://joshp523.github.io/wendys-app/','app-habits-grandma.png']];
+function aboutExtras(){
+ return `<div class="bar" style="margin-top:26px"><a class="btn" href="${GALLERY}" target="_blank" rel="noopener">Photo gallery</a></div>
+ <div class="ph-panel" id="phn"></div>
+ <h2 class="hd gilt ph" style="margin-top:34px">Other apps by Josh Riley</h2>
+ <div class="apps more">${MORE_APPS.map(([n,u,img]) => u
+  ? `<a class="app" href="${u}"><img src="${img}" alt="">${esc(n)}</a>`
+  : `<div class="app soon"><img src="${img}" alt="">${esc(n)}<small>coming soon!</small></div>`).join('')}</div>`;
+}
+function linkify(t){   // t is already HTML-escaped; turns http(s):// and www. addresses into tappable links
+ return t.replace(/(https?:\/\/|www\.)[^\s<>"']+/g, m => {
+  const tail = (m.match(/(&quot;|&#39;|&gt;|&lt;|[.,;:!?)\]])+$/) || [''])[0], url = m.slice(0, m.length - tail.length);
+  return `<a href="${url.startsWith('www.') ? 'https://' + url : url}" target="_blank" rel="noopener noreferrer">${url}</a>${tail}`;
+ });
+}
+async function charterView(){
+ app.innerHTML = `<h2 class="hd gilt ph">Charter</h2><div id="cb">Loading…</div><div id="ex"></div>`;
+ const {data, error} = await sb.from('site_pages').select('body').eq('key','charter').maybeSingle();
+ if(error) return $('#cb').textContent = error.message;
+ let body = data?.body || '';
+ const show = () => {
+  $('#cb').innerHTML = `<p class="charter">${body ? linkify(esc(body)) : '<i>Nothing here yet.</i>'}</p>${me.is_editor?'<div class="bar"><button class="btn" id="ce">Edit</button></div>':''}`;
+  if(me.is_editor) $('#ce').onclick = edit;
+ };
+ $('#ex').innerHTML = aboutExtras(); phonePanel();
+ const edit = () => {
+  $('#cb').innerHTML = `<form class="panel" id="cf"><label class="sr" for="ct">Charter text</label><textarea id="ct" rows="10" maxlength="5000"></textarea><p class="err" id="cr" role="alert"></p><button class="btn">Save</button> <button type="button" class="btn ghost" id="cc">Cancel</button></form>`;
+  $('#ct').value = body; $('#cc').onclick = show;
+  $('#cf').onsubmit = async e => {
+   e.preventDefault(); const t = $('#ct').value.trim();
+   const {error} = await sb.from('site_pages').upsert({key:'charter', body:t, updated_at:new Date().toISOString()});
+   if(error) return $('#cr').textContent = error.message;
+   body = t; show();
+  };
+ };
+ show();
+}
+$('#lbx').onclick = () => $('#lb').classList.remove('on');
+boot();
+</script></body></html>
