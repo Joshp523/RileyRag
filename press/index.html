@@ -898,9 +898,20 @@ function fmtAct(el){const f=el.dataset.f;
  f.addEventListener('pointerup',e=>{const b=e.target.closest('button');const held=!!rep;stop();if(b&&b===down&&!held)fmtAct(b);down=null});
  f.addEventListener('pointercancel',()=>{stop();down=null});
  f.addEventListener('pointerleave',stop)})();
-function placeBars(){const vv=window.visualViewport;if(!vv)return;const kb=innerHeight-vv.height-vv.offsetTop;document.body.classList.toggle('kb',kb>60);
- $('#fmt').style.transform=`translateY(${-Math.max(0,kb)}px)`;$('#hd').style.transform=vv.offsetTop>0?`translateY(${vv.offsetTop}px)`:''}
-if(window.visualViewport){visualViewport.addEventListener('resize',()=>{placeBars();keepCaret()});visualViewport.addEventListener('scroll',placeBars)}
+/* Keep the typing toolbar glued to the top of the iPhone keyboard (and its ^ v ✓ bar).
+   iOS animates the keyboard and scrolls the page on its own schedule and often skips the
+   events that report it, so after anything that can move the keyboard we re-measure every
+   frame for a moment, plus a slow check the whole time the keyboard is up. */
+let BARS='';
+function placeBars(){const vv=window.visualViewport;if(isDesk()||!vv){if(BARS){BARS='';$('#fmt').style.transform='';$('#hd').style.transform=''}return}
+ const top=Math.max(0,Math.round(vv.offsetTop)),kb=Math.max(0,Math.round(innerHeight-vv.height-vv.offsetTop)),k=top+'/'+kb;if(k===BARS)return;BARS=k;
+ document.body.classList.toggle('kb',kb>60);
+ $('#fmt').style.transform=kb?`translate3d(0,${-kb}px,0)`:'';$('#hd').style.transform=top?`translate3d(0,${top}px,0)`:''}
+let BARU=0;function chaseBars(ms=1200){const was=BARU;BARU=performance.now()+ms;if(was>performance.now())return;(function f(){placeBars();if(performance.now()<BARU)requestAnimationFrame(f)})()}
+if(window.visualViewport){visualViewport.addEventListener('resize',()=>{chaseBars();keepCaret()});visualViewport.addEventListener('scroll',()=>chaseBars(600))}
+addEventListener('scroll',()=>chaseBars(600),{passive:true});
+document.addEventListener('focusin',()=>chaseBars(1500));document.addEventListener('focusout',()=>chaseBars(1500));
+setInterval(()=>{if(document.body.classList.contains('kb')||document.activeElement?.isContentEditable)placeBars()},250);
 addEventListener('resize',()=>{deskMode();if(!ED&&!UZ)fit();else{FIT=fitScale();zoomUI()}});
 
 // ---------- sheets, toasts ----------
