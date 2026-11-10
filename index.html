@@ -335,6 +335,13 @@ body{font-family:var(--ui);color:var(--ink);background:var(--desk)}
 .selov b{background:var(--teal2)}
 body.arr .live .blk{outline-color:rgba(0,96,156,.6)}
 
+/* phones: typing toolbar docks under the header, clear of the keyboard */
+body:not(.desk) #fmt{top:calc(54px + var(--top));bottom:auto;padding-bottom:0;border-top:0;border-bottom:2px solid var(--ink);box-shadow:0 3px 0 var(--teal),0 6px 0 var(--green);display:flex;flex-direction:column}
+body:not(.desk) #fmt[hidden]{display:none}
+body:not(.desk) #fmt .frow{order:-1}
+body:not(.desk) #fmt .fpan{border-bottom:0;border-top:1px solid var(--rule)}
+body.typing:not(.desk) #view{padding-top:var(--fmh,0px)}
+
 /* zoom control */
 #zm{position:fixed;z-index:25;right:12px;bottom:calc(78px + var(--bot));display:none;align-items:center;gap:4px;background:var(--bone);border:1.5px solid var(--ink);border-radius:8px;padding:3px;box-shadow:0 3px 0 var(--ink)}
 #zm button{height:30px;min-width:30px;padding:0 8px;border-radius:5px;font:600 13px var(--mono);color:var(--ink)}
@@ -591,7 +598,7 @@ function zoomTo(id){const b=I.b[id];if(!b)return;const B=box(b);if(UZ){ZB=id;ret
  requestAnimationFrame(()=>{const w=$('#wrap');VIEW.scrollLeft=Math.max(0,w.offsetLeft+B.l*s-10);VIEW.scrollTop=Math.max(0,w.offsetTop+B.t*s-10);setTimeout(keepCaret,60)})}
 function keepCaret(){if(!ED)return;const r=rng();if(!r)return;let rc=r.getClientRects()[0]||r.getBoundingClientRect();
  if(!rc||(!rc.height&&!rc.top)){const n=r.startContainer.nodeType==1?r.startContainer:r.startContainer.parentElement;rc=n.getBoundingClientRect()}
- const vv=window.visualViewport,ot=vv&&!isDesk()?vv.offsetTop:0,vh=(vv?vv.height:innerHeight)+ot,top=$('#hd').offsetHeight+8+ot,bot=vh-(isDesk()?0:($('#fmt').offsetHeight||0))-12;
+ const vv=window.visualViewport,ot=vv&&!isDesk()?vv.offsetTop:0,vh=(vv?vv.height:innerHeight)+ot,top=$('#hd').offsetHeight+(isDesk()?0:($('#fmt').offsetHeight||0))+8+ot,bot=vh-(!isDesk()&&document.body.classList.contains('kb')?56:0)-12;
  if(rc.bottom>bot)VIEW.scrollTop+=rc.bottom-bot+40;else if(rc.top<top)VIEW.scrollTop+=rc.top-top-40}
 
 // ---------- modes ----------
@@ -839,7 +846,7 @@ document.addEventListener('selectionchange',()=>{if(ED&&rng())readState()});
 // format toolbar
 let PANEL=null;
 function showFmt(){$('#fmt').hidden=false;$('#bb').hidden=true;if(isDesk())deskPan();placeBars()}
-function hideFmt(){$('#fmt').hidden=true;$('#bb').hidden=false;PANEL=null;const fp=$('#fpan');fp.hidden=true;fp.innerHTML='';fp.dataset.k='';$$('.frow button').forEach(b=>b.classList.remove('act'))}
+function hideFmt(){$('#fmt').hidden=true;$('#bb').hidden=false;fmtSpace();PANEL=null;const fp=$('#fpan');fp.hidden=true;fp.innerHTML='';fp.dataset.k='';$$('.frow button').forEach(b=>b.classList.remove('act'))}
 function stepSize(d){let v=FS.pt;if(d>0)v=v<24?v+.5:v+2;else v=v<=24?v-.5:v-2;return clamp(v,5,120)}
 function deskPan(){const fp=$('#fpan');fp.hidden=false;
  if(fp.dataset.k==='desk'){updScrub();return}fp.dataset.k='desk';const ini=initials();
@@ -906,17 +913,19 @@ function fmtAct(el){const f=el.dataset.f;
    caret in view above the toolbar. */
 function pinPage(){if(isDesk())return;const vv=window.visualViewport;if(vv&&vv.scale>1.02)return;
  if(scrollY||document.documentElement.scrollTop||(vv&&vv.offsetTop>0.5))scrollTo(0,0)}
-function placeBars(){const vv=window.visualViewport;const f=$('#fmt'),h=$('#hd');
+function fmtSpace(){const b=document.body,f=$('#fmt'),on=!isDesk()&&!f.hidden,h=on?f.offsetHeight:0,old=parseFloat(b.style.getPropertyValue('--fmh'))||0;
+ if(h===old&&b.classList.contains('typing')===on)return;b.style.setProperty('--fmh',h+'px');b.classList.toggle('typing',on);if(h!==old){VIEW.scrollTop+=h-old;keepCaret()}}
+function placeBars(){const vv=window.visualViewport;const f=$('#fmt'),h=$('#hd');fmtSpace();
  if(isDesk()||!vv){f.style.transform='';h.style.transform='';return}
  const top=Math.max(0,Math.round(vv.offsetTop)),kb=Math.max(0,Math.round(innerHeight-vv.height-vv.offsetTop));
  document.body.classList.toggle('kb',kb>60);
- f.style.transform=kb?`translateY(${-kb}px)`:'';h.style.transform=top?`translateY(${top}px)`:''}
+ const t=top?`translateY(${top}px)`:'';f.style.transform=t;h.style.transform=t}
 function settleBars(){pinPage();placeBars();keepCaret()}
 if(window.visualViewport){visualViewport.addEventListener('resize',settleBars);visualViewport.addEventListener('scroll',()=>{pinPage();placeBars()})}
 addEventListener('scroll',()=>{pinPage();placeBars()},{passive:true});
 document.addEventListener('focusin',()=>{pinPage();[120,350,700].forEach(t=>setTimeout(settleBars,t))});
 document.addEventListener('focusout',()=>[120,400].forEach(t=>setTimeout(()=>{pinPage();placeBars()},t)));
-addEventListener('resize',()=>{deskMode();if(!ED&&!UZ)fit();else{FIT=fitScale();zoomUI()}});
+addEventListener('resize',()=>{deskMode();if(!isDesk()&&(document.body.classList.contains('kb')||document.activeElement?.isContentEditable))return;if(!ED&&!UZ)fit();else{FIT=fitScale();zoomUI()}});
 
 // ---------- sheets, toasts ----------
 function sheet(html){close();const s=document.createElement('div');s.className='scrim';s.innerHTML=`<div class="panel">${html}</div>`;s.onclick=e=>{if(e.target===s||e.target.closest('.x'))close()};document.body.appendChild(s);return s.firstChild}
