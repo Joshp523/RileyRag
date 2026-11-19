@@ -302,6 +302,7 @@ body{font-family:var(--ui);color:var(--ink);background:var(--desk)}
 .note{color:var(--mut)}.err{color:var(--red)!important}
 .pubx{background:var(--bone2);border:1.5px solid var(--rule)}
 .ilist li{background:var(--paper);border:1.5px solid var(--rule);border-radius:7px}
+.ilist.hist li{align-items:flex-start;cursor:default}.ilist.hist .m{flex:1;min-width:0}.ilist.hist small{display:block}.ilist.hist small.hd{margin-top:4px;color:var(--ink);opacity:.8;line-height:1.35;overflow-wrap:anywhere}.ilist.hist .btn{flex:0 0 auto}
 .ilist li.cur{border-color:var(--ink);box-shadow:inset 4px 0 0 var(--teal),inset 8px 0 0 var(--green)}
 .ilist .n{font:600 15px var(--mono)}
 .ilist .m small{color:var(--mut);font-family:var(--mono);font-size:11px}
@@ -434,6 +435,9 @@ const TIMES="'Times New Roman',Tinos,Times,serif",ANTON='Anton,Impact,sans-serif
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c=='x'?r:r&3|8).toString(16)});
+/* touch(b): a box changed here. bt = the version it was based on, so a merge can tell an edit made on
+   an out-of-date copy (another device hadn't caught up yet) from a real later edit. */
+const touch=b=>{b.bt=b.t||0;b.t=Date.now()};
 const now=()=>Date.now(),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const box=b=>({l:GX+b.x*CU+HG/2,t:GY+b.y*RH+VG/2,w:b.w*CU-HG,h:b.h*RH-VG});
 const MONTHS=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
@@ -465,20 +469,20 @@ const blocks=()=>Object.values(I.b);
 
 // ---------- local storage (IndexedDB) ----------
 let DBP=null;
-const idb=()=>DBP||(DBP=new Promise((res,rej)=>{const r=indexedDB.open('ragpress',1);r.onupgradeneeded=()=>{const d=r.result;d.createObjectStore('docs',{keyPath:'id'});d.createObjectStore('imgs',{keyPath:'id'})};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}));
+const idb=()=>DBP||(DBP=new Promise((res,rej)=>{const r=indexedDB.open('ragpress',2);r.onupgradeneeded=()=>{const d=r.result;for(const n of ['docs','imgs','vers'])if(!d.objectStoreNames.contains(n))d.createObjectStore(n,{keyPath:'id'})};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}));
 const ost=(st,mode,fn)=>idb().then(db=>new Promise((res,rej)=>{const t=db.transaction(st,mode),q=fn(t.objectStore(st));t.oncomplete=()=>res(q&&q.result);t.onerror=t.onabort=()=>rej(t.error)}));
 const dbGet=(st,k)=>ost(st,'readonly',s=>s.get(k)),dbPut=(st,v)=>ost(st,'readwrite',s=>s.put(v)),dbAll=st=>ost(st,'readonly',s=>s.getAll()),dbDel=(st,k)=>ost(st,'readwrite',s=>s.delete(k));
 let saveT=null,pushT=null;
 function saveSoon(){clearTimeout(saveT);saveT=setTimeout(saveNow,150)}
 function saveNow(){clearTimeout(saveT);if(!I)return;DOCS[I.id]=I;try{localStorage.setItem('rp_cur',I.id)}catch(e){}dbPut('docs',JSON.parse(JSON.stringify(I))).catch(()=>toast('Couldn’t save on this device. Export a copy to be safe.'))}
-function changed(){I.t=now();saveSoon();syncSoon();updUndo()}
+function changed(){I.t=now();saveSoon();syncSoon();updUndo();if(now()-(VLAST[I.id]||0)>5*60000){VLAST[I.id]=now();saveVer(I,'While editing')}}
 
 // ---------- undo ----------
 function snap(){U.push(JSON.stringify(I));if(U.length>80)U.shift();R=[];updUndo()}
 function updUndo(){$('#ub').disabled=!U.length&&!pendSnap;$('#rb').disabled=!R.length}
 const metaKey=d=>JSON.stringify([d.n,d.date,d.theme,d.addr,d.by]);
 function restore(js){const o=JSON.parse(js),t=now();
- for(const id in o.b){const a=o.b[id],c=I.b[id];if(!c||JSON.stringify({...a,t:0})!==JSON.stringify({...c,t:0})){a.t=t;delete o.del[id]}else a.t=c.t}
+ for(const id in o.b){const a=o.b[id],c=I.b[id];if(!c||JSON.stringify({...a,t:0,bt:0})!==JSON.stringify({...c,t:0,bt:0})){a.bt=c?c.t:(I.del[id]||0);a.t=t;delete o.del[id]}else{a.t=c.t;a.bt=c.bt}}
  for(const id in I.b)if(!o.b[id])o.del[id]=t;
  if(metaKey(o)!==metaKey(I))o.mt=t;
  o._sync=I._sync;I=o;DOCS[I.id]=I;SEL=null;changed();render()}
@@ -581,7 +585,7 @@ function overflow(){if(!SH||!I||I.pdf)return;let h='';
  SH.querySelector('.ovl').innerHTML=h}
 // tap the red tag to hide it for this story (it comes back if the story changes)
 document.addEventListener('pointerdown',e=>{const t=e.target.closest&&e.target.closest('.ovl b[data-ov]');if(!t||!I)return;e.preventDefault();e.stopPropagation();const b=I.b[t.dataset.ov];if(!b)return;
- if(ED&&ED.parentNode.dataset.id===b.id)edited(ED);b.dz=hashH(b.html);b.t=now();changed();overflow();toast('Warning hidden for this story',['Undo',()=>{delete b.dz;b.t=now();changed();overflow()}])},true);
+ if(ED&&ED.parentNode.dataset.id===b.id)edited(ED);b.dz=hashH(b.html);touch(b);changed();overflow();toast('Warning hidden for this story',['Undo',()=>{delete b.dz;touch(b);changed();overflow()}])},true);
 
 // ---------- scale and zoom ----------
 function heights(){return{top:$('#hd').offsetHeight,bot:($('#fmt').hidden?$('#bb').offsetHeight:0)}}
@@ -614,18 +618,19 @@ const ICON={
  crop:'<svg viewBox="0 0 24 24"><path d="M6 2v14a2 2 0 0 0 2 2h14M2 6h14a2 2 0 0 1 2 2v14"/></svg>',
  swap:'<svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg>',
  layer:'<svg viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg>',
+ clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
  info:'<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/></svg>'};
 function bar(){const bb=$('#bb');if(!I)return;
- if(I.pdf){bb.innerHTML=`<div class="hint">Finished PDF${I.pdf.pages>1?` (${I.pdf.pages} pages, first shown)`:''}. Set the number and date in Details, then Export to publish.</div><button class="btn sm" id="b-det">${ICON.info}Details</button>`;$('#b-det').onclick=details;return}
+ if(I.pdf){bb.innerHTML=`<div class="hint">Finished PDF${I.pdf.pages>1?` (${I.pdf.pages} pages, first shown)`:''}. Set the number and date in Details, then Export to publish.</div><button class="btn sm" id="b-hist">${ICON.clock}History</button><button class="btn sm" id="b-det">${ICON.info}Details</button>`;$('#b-det').onclick=details;$('#b-hist').onclick=showHistory;return}
  if(MODE=='w'){const b=SEL&&I.b[SEL];
   if(b&&b.k=='p'){bb.innerHTML=`<button class="btn" id="b-rep">${ICON.photo}${b.im?'Replace':'Add photo'}</button>${b.im?`<button class="btn" id="b-crop">${ICON.crop}Crop</button><button class="btn ${b.im.tint?'on':''}" id="b-tint">B&amp;W</button>`:''}<button class="btn pri sm" id="b-ok">Done</button>`;
-   $('#b-rep').onclick=()=>pick(b.id);if(b.im){$('#b-crop').onclick=()=>cropUI(b.id);$('#b-tint').onclick=()=>{snap();b.im.tint=b.im.tint?0:1;b.t=now();changed();render();toast(b.im.tint?'Black and white':'Colour')}}
+   $('#b-rep').onclick=()=>pick(b.id);if(b.im){$('#b-crop').onclick=()=>cropUI(b.id);$('#b-tint').onclick=()=>{snap();b.im.tint=b.im.tint?0:1;touch(b);changed();render();toast(b.im.tint?'Black and white':'Colour')}}
    $('#b-ok').onclick=()=>{SEL=null;render()};return}
-  bb.innerHTML=`<div class="hint">Tap a story to write. Tap a photo to change or crop it.</div><button class="btn sm" id="b-det">${ICON.info}Details</button>`;$('#b-det').onclick=details;return}
+  bb.innerHTML=`<div class="hint">Tap a story to write. Tap a photo to change or crop it.</div><button class="btn sm" id="b-hist">${ICON.clock}History</button><button class="btn sm" id="b-det">${ICON.info}Details</button>`;$('#b-det').onclick=details;$('#b-hist').onclick=showHistory;return}
  const b=SEL&&I.b[SEL];
  if(b){bb.innerHTML=`<button class="btn" id="b-ln">${ICON.lines}Lines</button><button class="btn ${b.fl?'on':''}" id="b-top">${ICON.layer}On top</button><button class="btn" id="b-kind">${ICON.swap}${b.k=='s'?'Photo':'Story'}</button><button class="btn dng sm" id="b-del">${ICON.trash}</button><button class="btn pri sm" id="b-ok">Done</button>`;
   $('#b-ln').onclick=()=>linesUI(b.id);$('#b-top').onclick=()=>toggleTop(b);$('#b-del').onclick=()=>delBlock(b.id);$('#b-ok').onclick=()=>{SEL=null;render()};
-  $('#b-kind').onclick=()=>{const has=b.k=='s'?hasTextHTML(b.html):!!b.im;const go=()=>{snap();if(b.k=='s'){b.k='p';b.html='';b.im=null}else{b.k='s';b.im=null;b.html=storyHTML()}b.t=now();changed();render()};if(has)ask(`This box has ${b.k=='s'?'writing':'a photo'} in it. Swap it for an empty ${b.k=='s'?'photo':'story'} box?`,'Swap',go);else go()};return}
+  $('#b-kind').onclick=()=>{const has=b.k=='s'?hasTextHTML(b.html):!!b.im;const go=()=>{snap();if(b.k=='s'){b.k='p';b.html='';b.im=null}else{b.k='s';b.im=null;b.html=storyHTML()}touch(b);changed();render()};if(has)ask(`This box has ${b.k=='s'?'writing':'a photo'} in it. Swap it for an empty ${b.k=='s'?'photo':'story'} box?`,'Swap',go);else go()};return}
  bb.innerHTML=`<button class="btn" id="b-as">${ICON.story}Story</button><button class="btn" id="b-ah">${ICON.story.replace('M4 5h16','M4 5h16" stroke-width="4')}Headline</button><button class="btn" id="b-ap">${ICON.photo}Photo</button>`;
  $('#b-as').onclick=()=>addBlock('s');$('#b-ah').onclick=()=>addBlock('h');$('#b-ap').onclick=()=>addBlock('p')}
 const hasTextHTML=h=>{const d=document.createElement('div');d.innerHTML=h||'';return/\S/.test(d.textContent)};
@@ -644,11 +649,11 @@ function addBlock(k,r){const given=!!r;r=r||biggestFree(2,k=='h'?2:3);let fl=0;
  snap();const id=uid();I.b[id]={id,k:k=='h'?'s':k,x:r.x,y:r.y,w:r.w,h:r.h,ln:'',html:k=='s'?storyHTML():k=='h'?headHTML():'',im:null,fl,t:now()};delete I.del[id];
  SEL=id;changed();render();toast(fl?'No empty space, so this box floats on top. Drag it where you want.':k=='p'?'Photo box added. Switch to Write to put a photo in it.':'Box added. Drag it or its handles to fit.')}
 function toggleTop(b){if(b.fl){const r={x:Math.round(b.x),y:Math.round(b.y),w:Math.max(1,Math.round(b.w)),h:Math.max(1,Math.round(b.h))};r.x=clamp(r.x,0,COLS-r.w);r.y=clamp(r.y,0,ROWS-r.h);
-  if(!free(r,b.id))return toast('It’s overlapping other boxes. Move it to an empty spot first.');snap();Object.assign(b,r,{fl:0,t:now()});changed();render();toast('Back in the grid')}
- else{snap();b.fl=1;b.t=now();changed();render();toast('This box now sits on top. Drag it over a photo or story.')}}
+  if(!free(r,b.id))return toast('It’s overlapping other boxes. Move it to an empty spot first.');snap();Object.assign(b,r,{fl:0});touch(b);changed();render();toast('Back in the grid')}
+ else{snap();b.fl=1;touch(b);changed();render();toast('This box now sits on top. Drag it over a photo or story.')}}
 function delBlock(id){snap();delete I.b[id];I.del[id]=now();SEL=null;changed();render();toast('Box deleted',['Undo',undo])}
 function linesUI(id){const b=I.b[id];const p=sheet(`<h3>Lines around this box<button class="x">✕</button></h3><p>Lines sit in the gap beside the box and move with it.</p><div class="lnsw">${[['l','Left'],['r','Right'],['t','Top'],['b','Bottom']].map(([k,n])=>`<button class="btn big ${b.ln.includes(k)?'on':''}" data-k="${k}">${n}</button>`).join('')}</div>`);
- p.querySelectorAll('[data-k]').forEach(x=>x.onclick=()=>{snap();const k=x.dataset.k;b.ln=b.ln.includes(k)?b.ln.replace(k,''):b.ln+k;b.t=now();x.classList.toggle('on');changed();render()})}
+ p.querySelectorAll('[data-k]').forEach(x=>x.onclick=()=>{snap();const k=x.dataset.k;b.ln=b.ln.includes(k)?b.ln.replace(k,''):b.ln+k;touch(b);x.classList.toggle('on');changed();render()})}
 
 // selection overlay and dragging
 function selOverlay(){if(!SH)return;SH.querySelectorAll('.selov').forEach(e=>e.remove());if(MODE!='a'||!SEL||!I.b[SEL])return;
@@ -689,7 +694,7 @@ function chooseKind(r){const p=sheet(`<h3>New box<button class="x">✕</button><
 let pickFor=null;
 function pick(id){pickFor=id;$('#fi').value='';$('#fi').click()}
 $('#fi').onchange=async()=>{const f=$('#fi').files[0],id=pickFor;if(!f||!I.b[id])return;busy('Developing photo…');
- try{const im=await ingest(f);snap();const b=I.b[id];b.im=im;b.t=now();SEL=id;changed();render()}catch(x){toast(x.message||'That photo couldn’t be used.')}finally{busy()}};
+ try{const im=await ingest(f);snap();const b=I.b[id];b.im=im;touch(b);SEL=id;changed();render()}catch(x){toast(x.message||'That photo couldn’t be used.')}finally{busy()}};
 $('#pg').addEventListener('click',e=>{if(MODE!='w'||noClick)return;
  const el=e.target.closest('.blk.p');if(el){const id=el.dataset.id;if(!I.b[id].im){SEL=id;render();pick(id);return}SEL=SEL==id?null:id;render();if(SEL)toast('Drag or pinch the photo to adjust it. Crop changes its shape.');return}
  if(e.target.closest('.meta')){details();return}
@@ -702,7 +707,7 @@ function pzApply(){const{img,c}=PZ;if(img)Object.assign(img.style,{left:c.l+'px'
 function pzMove(dx,dy,f,cx,cy){const{B,b}=PZ,im=b.im,D=dimsOf(im);let{l,t,dw,dh}=PZ.c;
  if(f&&f!==1){const mn=Math.max(B.w/D.w,B.h/D.h);let ndw=clamp(dw*f,D.w*mn,D.w*mn*10);const g=ndw/dw;l=cx-(cx-l)*g;t=cy-(cy-t)*g;dw=ndw;dh=dh*g}
  l=clamp(l+dx,B.w-dw,0);t=clamp(t+dy,B.h-dh,0);const n={l,t,dw,dh};if(!okRect(im,rectOf(n,B.w,B.h)))return;PZ.c=n;PZ.moved=1;pzApply()}
-function pzEnd(){if(!PZ)return;const{b,B,c,moved}=PZ;PZ=null;if(moved){noClick=1;setTimeout(()=>noClick=0,350);snap();b.im=withCrop(b.im,rectOf(c,B.w,B.h));b.t=now();changed();render()}}
+function pzEnd(){if(!PZ)return;const{b,B,c,moved}=PZ;PZ=null;if(moved){noClick=1;setTimeout(()=>noClick=0,350);snap();b.im=withCrop(b.im,rectOf(c,B.w,B.h));touch(b);changed();render()}}
 $('#pg').addEventListener('pointerdown',e=>{if(MODE!='w')return;const el=e.target.closest('.blk.p.sel');if(!el)return;const b=I.b[el.dataset.id];if(!b||!b.im)return;
  if(!PZ){const B=box(b);PZ={b,el,B,img:el.querySelector('img'),c:cropBox(b.im,B.w,B.h),P:new Map(),moved:0}}
  PZ.P.set(e.pointerId,{x:e.clientX,y:e.clientY});PZ.g=gst(PZ.P);try{el.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
@@ -748,7 +753,7 @@ function cropUI(id){const b=I.b[id];if(!b||!b.im)return;const B=box(b),im0=b.im,
  ov.querySelector('#c-r').onclick=()=>{r=biggest(A||(Math.abs(q)%2?ih/iw:iw/ih),D.w/2,D.h/2);draw()};
  ov.querySelector('#c-ok').onclick=()=>{snap();const n=norm(r);let im={...withCrop(im0,n),rot};if(!rot)delete im.rot;b.im=im;const ca=r.w/r.h;let msg='';
   if(Math.abs(ca/(B.w/B.h)-1)>.04)msg=reshape(b,ca)?'Box reshaped to fit your crop.':'There isn’t room to reshape the box, so the photo fills it. Make room in Arrange, then crop again.';
-  b.t=now();changed();render();done();if(msg)toast(msg)};
+  touch(b);changed();render();done();if(msg)toast(msg)};
  addEventListener('resize',lay);if(img.complete)lay();else img.onload=lay;requestAnimationFrame(lay)}
 function reshape(b,ca){const st=b.fl?.25:1,ok=r=>b.fl?inside(r):free(r,b.id);
  const hFor=w=>Math.max(st,Math.round(((w*CU-HG)/ca+VG)/RH/st)*st),wFor=h=>Math.max(st,Math.round(((h*RH-VG)*ca+HG)/CU/st)*st);
@@ -826,7 +831,7 @@ function clean(html){const t=document.createElement('template');t.innerHTML=html
 let edT=null;
 function markPh(t){const seen=new Set();for(const p of t.children){const ph=p.getAttribute('data-ph');if(ph){if(seen.has(ph))p.removeAttribute('data-ph');else seen.add(ph)}p.classList.toggle('e',!/\S/.test(p.textContent)&&!p.querySelector('img'))}}
 function edited(t){t=t||ED;if(!t)return;const e=t.parentNode,b=I.b[e.dataset.id];if(!b)return;markPh(t);const h=clean(t.innerHTML);
- e.classList.toggle('empty',!hasText(t));if(h!==b.html){b.html=h;b.t=now();e._j=JSON.stringify(b);changed()}overflow()}
+ e.classList.toggle('empty',!hasText(t));if(h!==b.html){b.html=h;touch(b);e._j=JSON.stringify(b);changed()}overflow()}
 function commitEdit(){clearTimeout(edT);if(ED)edited(ED)}
 document.addEventListener('input',e=>{const t=e.target.closest&&e.target.closest('.tx');if(!t)return;editSnap();markPh(t);t.parentNode.classList.toggle('empty',!hasText(t));clearTimeout(edT);edT=setTimeout(()=>edited(t),300);overflow();requestAnimationFrame(keepCaret)});
 document.addEventListener('paste',e=>{const t=e.target.closest&&e.target.closest('.tx');if(!t)return;e.preventDefault();const txt=(e.clipboardData||window.clipboardData).getData('text/plain').replace(/\r/g,'');const ls=txt.split('\n');
@@ -1077,14 +1082,47 @@ async function who(){if(!sb)return;
   localStorage.setItem('rp_me',JSON.stringify(ME))}catch(e){if(ME)ME.err=e.message||String(e)}
  dot(canSync()?'ok':'');
  if(!ME||(ME.known&&!ME.ed))purgeShared();else if(ME.ed)offerShare();if(I)render()}
+// Which copy of a box to keep when two devices disagree. Normally the later edit wins. But if the later
+// edit was made on a copy that hadn't caught up (its base is older than the other copy), and the other
+// copy was itself built on newer work, the other copy wins: the out-of-date device never saw that work.
+function pickBox(x,y){if(x.t===y.t)return x;const [n,o]=y.t>x.t?[y,x]:[x,y];
+ if((n.bt||0)<o.t&&(o.bt||0)>(n.bt||0))return o;return n}
 function merge(a,b){if(!a)return b;if(!b)return a;const m=(a.mt||0)>=(b.mt||0)?a:b,o={...m,b:{},del:{...a.del}};
  for(const k in b.del)o.del[k]=Math.max(o.del[k]||0,b.del[k]);
- for(const id of new Set([...Object.keys(a.b),...Object.keys(b.b)])){const x=a.b[id],y=b.b[id],w=!x?y:!y?x:(y.t>x.t?y:x);if(o.del[id]&&o.del[id]>=w.t)continue;o.b[id]=w}
+ for(const id of new Set([...Object.keys(a.b),...Object.keys(b.b)])){const x=a.b[id],y=b.b[id],w=!x?y:!y?x:pickBox(x,y);if(o.del[id]&&o.del[id]>=w.t)continue;o.b[id]=w}
  o.t=Math.max(a.t||0,b.t||0);o.gone=Math.max(a.gone||0,b.gone||0);o.pub=Math.max(a.pub||0,b.pub||0)||undefined;o._sync=a._sync||b._sync;return o}
 const strip=d=>{const o={...d};delete o._sync;return o};
+
+// ---------- history: earlier copies of each issue ----------
+// Copies are kept on this device (when the app opens, every 5 minutes of editing, before another device's
+// changes are merged in, and before a restore) and online in rag_draft_history (saved by the server
+// whenever a draft changes, at most every few minutes per editor). Restoring puts a copy back as the
+// newest version, so it syncs everywhere, and Undo takes it back.
+const VLAST={};
+const verKey=d=>hashH(JSON.stringify([d.b,d.n,d.date,d.theme,d.addr,d.by,d.pdf&&d.pdf.id]));
+async function saveVer(d,why){try{if(!d||!d.b)return;const snap=JSON.parse(JSON.stringify(strip(d)));if(!Object.keys(snap.b||{}).length&&!snap.pdf)return;
+ const h=verKey(snap),mine=(await dbAll('vers')).filter(v=>v.doc===d.id).sort((a,b)=>b.at-a.at);if(mine[0]&&mine[0].h===h)return;
+ await dbPut('vers',{id:d.id+':'+now(),doc:d.id,at:now(),why,h,snap});for(const v of mine.slice(59))await dbDel('vers',v.id)}catch(e){console.warn('saveVer',e)}}
+const boxText=b=>{const d=document.createElement('div');d.innerHTML=(b&&b.html)||'';return d.textContent.replace(/\s+/g,' ').trim()};
+function verDiff(v){const out=[];for(const id in v.b){const a=v.b[id],c=I.b[id];if(a.k!='s'&&a.k!='h'&&!a.html)continue;const t=boxText(a);if(!t)continue;
+  if(!c)out.push(['Missing now',t]);else if(boxText(c)!==t)out.push(['Different now',t])}return out}
+async function showHistory(){if(ED){ED.blur();commitEdit()}const doc=I,p=sheet(`<h3>History · № ${esc(doc.n)}<button class="x">✕</button></h3><p class="note">Earlier copies of this issue. Each one lists the writing that differs from the page now, so you can spot the one you want. Restoring makes it the current version on every device; Undo takes it back.</p><div id="hl"><p class="note">Looking…</p></div>`);
+ const L=[];try{for(const v of await dbAll('vers'))if(v.doc===doc.id)L.push({at:v.at,src:'On this device',why:v.why,snap:v.snap})}catch(e){}
+ if(canSync()){try{const{data}=await sb.from('rag_draft_history').select('saved_at,saved_by,doc').eq('draft_id',doc.id).order('saved_at',{ascending:false}).limit(80);
+  const ids=[...new Set((data||[]).map(r=>r.saved_by).filter(Boolean))];let nm={};if(ids.length){const{data:pr}=await sb.from('profiles').select('id,name').in('id',ids);(pr||[]).forEach(x=>nm[x.id]=x.name)}
+  for(const r of data||[])L.push({at:Date.parse(r.saved_at),src:'Saved online'+(nm[r.saved_by]?' · '+nm[r.saved_by]:''),why:'',snap:r.doc})}catch(e){}}
+ const seen=new Set(),V=L.sort((a,b)=>b.at-a.at).filter(v=>{const k=verKey(v.snap);if(seen.has(k)||k===verKey(strip(I)))return false;seen.add(k);return true});
+ const el=p.querySelector('#hl');if(!el)return;
+ if(!V.length){el.innerHTML='<p class="note">No earlier copies yet. From now on, copies are kept automatically.</p>';return}
+ const when=t=>new Date(t).toLocaleString(undefined,{weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit'});
+ el.innerHTML=`<ul class="ilist hist">${V.map((v,i)=>{const D=verDiff(v.snap);return `<li data-v="${i}"><span class="m"><b>${esc(when(v.at))}</b><small>${esc(v.src)}${v.why?' · '+esc(v.why):''}</small>${D.length?D.slice(0,4).map(([k,t])=>`<small class="hd"><i>${k}:</i> ${esc(t.slice(0,110))}${t.length>110?'…':''}</small>`).join('')+(D.length>4?`<small class="hd">and ${D.length-4} more</small>`:''):'<small class="hd">Same writing as now (layout or photos differ)</small>'}</span><button class="btn sm" data-r="${i}">Restore</button></li>`}).join('')}</ul>`;
+ el.querySelectorAll('[data-r]').forEach(b=>b.onclick=e=>{e.stopPropagation();const v=V[+b.dataset.r];ask(`Restore the copy from ${when(v.at)}? It becomes the current version on every device. You can Undo straight after.`,'Restore',async()=>{
+  await saveVer(I,'Before restoring an older copy');snap();const o=JSON.parse(JSON.stringify(v.snap));o.id=I.id;o.gone=0;restore(JSON.stringify(o));toast('Restored',['Undo',undo])})})}
 const dirty=new Set();let syncT=null,syncing=false;
 function syncSoon(id){id=id||(I&&I.id);if(DOCS[id]&&DOCS[id].play)return;dirty.add(id);if(!canSync())return;dot('wait');clearTimeout(syncT);syncT=setTimeout(sync,1800)}
-function adopt(d){const isCur=I&&I.id===d.id;if(isCur&&ED)edited(ED);const m=isCur?merge(I,d):merge(DOCS[d.id],d);m._sync=d._sync;DOCS[d.id]=m;dbPut('docs',JSON.parse(JSON.stringify(m)));if(isCur){I=m;render()}}
+function adopt(d){const isCur=I&&I.id===d.id;if(isCur&&ED)edited(ED);const L=isCur?I:DOCS[d.id],m=isCur?merge(I,d):merge(DOCS[d.id],d);m._sync=d._sync;
+ if(L&&L.b&&Object.keys(L.b).some(id=>!m.b[id]||JSON.stringify(m.b[id])!==JSON.stringify(L.b[id])))saveVer(L,'Before changes from another device');
+ DOCS[d.id]=m;dbPut('docs',JSON.parse(JSON.stringify(m)));if(isCur){if(JSON.stringify(strip(m))!==JSON.stringify(strip(I))){U=[];R=[];updUndo()}I=m;render()}}
 async function sync(){if(!canSync()||syncing)return;syncing=true;dot('wait');
  try{const{data:list,error}=await sb.from('rag_drafts').select('id,updated_at');if(error)throw error;const srv={};for(const r of list)srv[r.id]=r.updated_at;
   for(const r of list){const loc=DOCS[r.id];if(loc&&loc._sync===r.updated_at)continue;const{data}=await sb.from('rag_drafts').select('doc,updated_at').eq('id',r.id).single();if(!data)continue;const d={...data.doc,_sync:data.updated_at};
@@ -1145,7 +1183,7 @@ document.addEventListener('keydown',e=>{const t=e.target,typing=t&&t.closest&&(t
  if(!free(r,b.id,b.fl))return toast('That would overlap another box.');snap();Object.assign(b,r,{t:now()});changed();render()});
 
 // ---------- start ----------
-(async()=>{deskMode();try{for(const d of await dbAll('docs'))DOCS[d.id]=d}catch(e){toast('This browser won’t let the app save. Export copies as you go.')}
+(async()=>{deskMode();try{for(const d of await dbAll('docs'))DOCS[d.id]=d;for(const d of Object.values(DOCS))if(!d.gone)await saveVer(d,'When the app opened')}catch(e){toast('This browser won’t let the app save. Export copies as you go.')}
  let cid=null;try{cid=localStorage.getItem('rp_cur')}catch(e){}
  if(!cid||!live().includes(DOCS[cid]))cid=(live()[0]||{}).id;
  if(!cid)cid=makeDoc('classic').id;
