@@ -1,12 +1,15 @@
-const C='rus-v7',A=['./','index.html','data.js','asp.js','lex.js','concrete.jpg','manifest.webmanifest','icon-192.png','icon-512.png','icon-180.png'];
-// Books and their word list live in their own cache, so app updates don't download them again. Change BC only if a book file changes.
-const BC='rusbooks-2',BKS=['books/dict.json','books/bible-nt.json','books/bible-ot.json','books/uchenie.json','books/dama.json','books/karamazov.json'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(A))
- .then(()=>caches.open(BC)).then(c=>Promise.all(BKS.map(u=>c.match(u).then(m=>m||c.add(u).catch(()=>{})))))
- .then(()=>self.skipWaiting())));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>(x.startsWith('rus-')&&x!==C)||(x.startsWith('rusbooks-')&&x!==BC)).map(x=>caches.delete(x)))).then(()=>clients.claim())));
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).hostname.endsWith('supabase.co'))return;
- if(new URL(e.request.url).pathname.includes('/books/')){e.respondWith(caches.open(BC).then(c=>c.match(e.request,{ignoreSearch:true}).then(m=>m||fetch(e.request).then(r=>{if(r.ok)c.put(e.request,r.clone());return r}))));return}e.respondWith(caches.match(e.request).then(r=>{const f=fetch(e.request).then(res=>{const cp=res.clone();caches.open(C).then(c=>c.put(e.request,cp));return res}).catch(()=>r);return r||f}))});
-// Daily reminder
-self.addEventListener('push',e=>{const d=e.data?e.data.json():{};e.waitUntil(self.registration.showNotification(d.title||'Глаголы ★',{body:d.body||'Пора на смену.',icon:'icon-192.png',badge:'icon-192.png',data:d.url||'./'}))});
-self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(l=>{for(const c of l)if('focus' in c)return c.focus();return clients.openWindow(e.notification.data)}))});
+// The Riley Rag service worker: lets the home-screen app open quickly and receive new-issue alerts.
+// Pages always come fresh from the network when there is one, so new uploads show up without bumping anything.
+const V='rr-v11',ASSETS=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','apple-touch-icon.png','emblem.png','masthead.png','favicon.png'];
+self.addEventListener('install',e=>e.waitUntil(caches.open(V).then(c=>Promise.all(ASSETS.map(a=>c.add(a).catch(()=>{})))).then(()=>self.skipWaiting())));
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!=V).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+self.addEventListener('fetch',e=>{const r=e.request;
+ if(r.method!='GET'||new URL(r.url).origin!=location.origin)return;   // Supabase and other sites pass straight through
+ if(new URL(r.url).pathname.includes('/press/'))return;                 // Rag Press has its own service worker
+ e.respondWith(fetch(r).then(x=>{if(x.ok){const y=x.clone();caches.open(V).then(c=>c.put(r.mode=='navigate'?'./':r,y))}return x})
+  .catch(()=>caches.match(r.mode=='navigate'?'./':r).then(m=>m||caches.match('index.html'))))});
+// New-issue alerts
+self.addEventListener('push',e=>{const d=e.data?e.data.json():{};const o={body:d.body||'A new issue is out.',icon:'icon-192.png',badge:'icon-192.png',data:d.url||'./'};if(d.tag){o.tag=d.tag;o.renotify=true}
+ e.waitUntil(self.registration.showNotification(d.title||'The Riley Rag',o))});
+self.addEventListener('notificationclick',e=>{e.notification.close();const u=new URL(e.notification.data||'./',self.registration.scope).href;
+ e.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(l=>{for(const c of l)if('focus' in c){if(u.includes('#')&&'navigate' in c)c.navigate(u).catch(()=>{});return c.focus()}return clients.openWindow(u)}))});
