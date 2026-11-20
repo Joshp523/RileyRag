@@ -391,6 +391,9 @@ body.desk .chips button{flex:1 1 auto}
 body.desk #zm{display:flex;right:316px;bottom:18px}
 body.desk #zm.on>button:not(.zf),body.desk #zm.on>span{display:inline-flex;align-items:center;justify-content:center}
 body.desk #toast{bottom:28px;left:calc(280px + (100vw - 580px)/2)}
+.blk.locked::after{content:'Being edited in Writing';position:absolute;right:2px;top:-16px;font:600 10px 'IBM Plex Sans',sans-serif;color:var(--teal);background:var(--paper);padding:0 4px;border:1px solid var(--rule)}
+.ilist.cols li{align-items:flex-start}.ilist.cols .m{flex:1;min-width:0}.ilist.cols small{display:block}.ilist.cols small.hd{margin-top:3px;opacity:.75;overflow-wrap:anywhere}
+@media (max-width:640px){body:not(.desk) #bb{flex-wrap:wrap;row-gap:6px}body:not(.desk) #bb .hint{flex:1 1 100%}}
 </style>
 </head>
 <body class="write">
@@ -536,7 +539,7 @@ function photoInner(b,live){const B=box(b);
  if(b.im){const src=imgSrc(b.im);if(!src)return live?'<div class="ph" style="border-style:solid;opacity:.6">Loading photo…</div>':'';const c=cropBox(b.im,B.w,B.h);return`<img src="${src}" alt="" style="left:${c.l}px;top:${c.t}px;width:${c.dw}px;height:${c.dh}px">`}
  return live?`<div class="ph"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Tap to add a photo</div>`:''}
 function blockEl(b,live){const e=document.createElement('div');e.className='blk '+b.k+(b.fl?' fl':'');e.dataset.id=b.id;place(e,b);
- if(b.k=='s'){const t=document.createElement('div');t.className='tx';t.innerHTML=b.html||'';if(live){t.contentEditable=MODE=='w'?'true':'false';t.spellcheck=true;markPh(t);if(!hasText(t))e.classList.add('empty')}e.appendChild(t)}
+ if(b.k=='s'){const t=document.createElement('div');t.className='tx';t.innerHTML=b.html||'';if(live){const lk=b.col&&colLocked(colById(b.col));if(lk)e.classList.add('locked');t.contentEditable=MODE=='w'&&!lk?'true':'false';t.spellcheck=true;markPh(t);if(!hasText(t))e.classList.add('empty')}e.appendChild(t)}
  else e.innerHTML=photoInner(b,live);
  e._j=JSON.stringify(b)+(b.k=='p'&&b.im?imgSrc(b.im):'');return e}
 function linesHTML(d){let h='';const L=1.3;
@@ -621,15 +624,15 @@ const ICON={
  clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
  info:'<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 9v11"/></svg>'};
 function bar(){const bb=$('#bb');if(!I)return;
- if(I.pdf){bb.innerHTML=`<div class="hint">Finished PDF${I.pdf.pages>1?` (${I.pdf.pages} pages, first shown)`:''}. Set the number and date in Details, then Export to publish.</div><button class="btn sm" id="b-hist">${ICON.clock}History</button><button class="btn sm" id="b-det">${ICON.info}Details</button>`;$('#b-det').onclick=details;$('#b-hist').onclick=showHistory;return}
+ if(I.pdf){bb.innerHTML=`<div class="hint">Finished PDF${I.pdf.pages>1?` (${I.pdf.pages} pages, first shown)`:''}. Set the number and date in Details, then Export to publish.</div><button class="btn sm" id="b-cols">${ICON.story}Columns</button><button class="btn sm" id="b-hist">${ICON.clock}History</button><button class="btn sm" id="b-det">${ICON.info}Details</button>`;$('#b-det').onclick=details;$('#b-hist').onclick=showHistory;$('#b-cols').onclick=()=>colPicker(null);return}
  if(MODE=='w'){const b=SEL&&I.b[SEL];
   if(b&&b.k=='p'){bb.innerHTML=`<button class="btn" id="b-rep">${ICON.photo}${b.im?'Replace':'Add photo'}</button>${b.im?`<button class="btn" id="b-crop">${ICON.crop}Crop</button><button class="btn ${b.im.tint?'on':''}" id="b-tint">B&amp;W</button>`:''}<button class="btn pri sm" id="b-ok">Done</button>`;
    $('#b-rep').onclick=()=>pick(b.id);if(b.im){$('#b-crop').onclick=()=>cropUI(b.id);$('#b-tint').onclick=()=>{snap();b.im.tint=b.im.tint?0:1;touch(b);changed();render();toast(b.im.tint?'Black and white':'Colour')}}
    $('#b-ok').onclick=()=>{SEL=null;render()};return}
-  bb.innerHTML=`<div class="hint">Tap a story to write. Tap a photo to change or crop it.</div><button class="btn sm" id="b-hist">${ICON.clock}History</button><button class="btn sm" id="b-det">${ICON.info}Details</button>`;$('#b-det').onclick=details;$('#b-hist').onclick=showHistory;return}
+  bb.innerHTML=`<div class="hint">Tap a story to write. Tap a photo to change or crop it.</div><button class="btn sm" id="b-cols">${ICON.story}Columns</button><button class="btn sm" id="b-hist">${ICON.clock}History</button><button class="btn sm" id="b-det">${ICON.info}Details</button>`;$('#b-det').onclick=details;$('#b-hist').onclick=showHistory;$('#b-cols').onclick=()=>colPicker(null);return}
  const b=SEL&&I.b[SEL];
- if(b){bb.innerHTML=`<button class="btn" id="b-ln">${ICON.lines}Lines</button><button class="btn ${b.fl?'on':''}" id="b-top">${ICON.layer}On top</button><button class="btn" id="b-kind">${ICON.swap}${b.k=='s'?'Photo':'Story'}</button><button class="btn dng sm" id="b-del">${ICON.trash}</button><button class="btn pri sm" id="b-ok">Done</button>`;
-  $('#b-ln').onclick=()=>linesUI(b.id);$('#b-top').onclick=()=>toggleTop(b);$('#b-del').onclick=()=>delBlock(b.id);$('#b-ok').onclick=()=>{SEL=null;render()};
+ if(b){const cc=b.col&&colById(b.col);bb.innerHTML=`${b.k=='s'?(b.col?`<button class="btn on" id="b-col" title="Linked to Writing">${ICON.story}${esc((cc&&cc.t)||'Linked').slice(0,14)} ✕</button>`:`<button class="btn" id="b-col">${ICON.story}Column</button>`):''}<button class="btn" id="b-ln">${ICON.lines}Lines</button><button class="btn ${b.fl?'on':''}" id="b-top">${ICON.layer}On top</button><button class="btn" id="b-kind">${ICON.swap}${b.k=='s'?'Photo':'Story'}</button><button class="btn dng sm" id="b-del">${ICON.trash}</button><button class="btn pri sm" id="b-ok">Done</button>`;
+  $('#b-ln').onclick=()=>linesUI(b.id);if($('#b-col'))$('#b-col').onclick=()=>b.col?ask('Unlink this box from its Writing column?','Unlink',()=>unlinkCol(b)):colPicker(b.id);$('#b-top').onclick=()=>toggleTop(b);$('#b-del').onclick=()=>delBlock(b.id);$('#b-ok').onclick=()=>{SEL=null;render()};
   $('#b-kind').onclick=()=>{const has=b.k=='s'?hasTextHTML(b.html):!!b.im;const go=()=>{snap();if(b.k=='s'){b.k='p';b.html='';b.im=null}else{b.k='s';b.im=null;b.html=storyHTML()}touch(b);changed();render()};if(has)ask(`This box has ${b.k=='s'?'writing':'a photo'} in it. Swap it for an empty ${b.k=='s'?'photo':'story'} box?`,'Swap',go);else go()};return}
  bb.innerHTML=`<button class="btn" id="b-as">${ICON.story}Story</button><button class="btn" id="b-ah">${ICON.story.replace('M4 5h16','M4 5h16" stroke-width="4')}Headline</button><button class="btn" id="b-ap">${ICON.photo}Photo</button>`;
  $('#b-as').onclick=()=>addBlock('s');$('#b-ah').onclick=()=>addBlock('h');$('#b-ap').onclick=()=>addBlock('p')}
@@ -831,7 +834,7 @@ function clean(html){const t=document.createElement('template');t.innerHTML=html
 let edT=null;
 function markPh(t){const seen=new Set();for(const p of t.children){const ph=p.getAttribute('data-ph');if(ph){if(seen.has(ph))p.removeAttribute('data-ph');else seen.add(ph)}p.classList.toggle('e',!/\S/.test(p.textContent)&&!p.querySelector('img'))}}
 function edited(t){t=t||ED;if(!t)return;const e=t.parentNode,b=I.b[e.dataset.id];if(!b)return;markPh(t);const h=clean(t.innerHTML);
- e.classList.toggle('empty',!hasText(t));if(h!==b.html){b.html=h;touch(b);e._j=JSON.stringify(b);changed()}overflow()}
+ e.classList.toggle('empty',!hasText(t));if(h!==b.html){b.html=h;touch(b);if(b.col){b.cx=1;jwSoon()}e._j=JSON.stringify(b);changed()}overflow()}
 function commitEdit(){clearTimeout(edT);if(ED)edited(ED)}
 document.addEventListener('input',e=>{const t=e.target.closest&&e.target.closest('.tx');if(!t)return;editSnap();markPh(t);t.parentNode.classList.toggle('empty',!hasText(t));clearTimeout(edT);edT=setTimeout(()=>edited(t),300);overflow();requestAnimationFrame(keepCaret)});
 document.addEventListener('paste',e=>{const t=e.target.closest&&e.target.closest('.tx');if(!t)return;e.preventDefault();const txt=(e.clipboardData||window.clipboardData).getData('text/plain').replace(/\r/g,'');const ls=txt.split('\n');
@@ -1060,7 +1063,11 @@ async function publish(){busy('Printing Issue № '+I.n+'…');
  try{const f=await makeFile('pdf');let img;if(I.pdf)img=await pdfPage(1600,'image/jpeg');else{await need('lib/html2canvas.min.js',()=>window.html2canvas);const cv=await canvasOf(1600/PW);img=await new Promise(r=>cv.toBlob(r,'image/jpeg',.85))}
   const id=uid(),pp=`${id}.pdf`,ip=`${id}.jpg`;let u=await sb.storage.from('issues').upload(pp,f,{contentType:'application/pdf'});if(u.error)throw u.error;
   u=await sb.storage.from('issues').upload(ip,img,{contentType:'image/jpeg'});if(u.error)throw u.error;
-  const{error}=await sb.from('issues').insert({number:+I.n,issue_date:I.date,tagline:I.theme.trim()||null,pdf_path:pp,img_path:ip});if(error)throw error;
+  // put the issue on the Rag's map, using the address in the top-left corner
+  const place=(I.addr||'').split(/\n+/).map(x=>x.trim().replace(/,$/,'')).filter(Boolean),spot=await findPlace(place),row={number:+I.n,issue_date:I.date,tagline:I.theme.trim()||null,pdf_path:pp,img_path:ip};
+  let{error}=await sb.from('issues').insert(spot?{...row,place:place.join(', '),lat:spot.lat,lng:spot.lng}:{...row,place:place.join(', ')||null});
+  if(error&&/place|lat|lng|column/i.test(error.message))({error}=await sb.from('issues').insert(row));   // map not switched on yet
+  if(error)throw error;
   sb.functions.invoke('rr-notify',{body:{number:+I.n}}).catch(()=>{});
   I.pub=now();I.mt=now();changed();busy();close();toast('Published! It’s in The Riley Rag now.',['Open',()=>location.href='../'])}
  catch(x){busy();toast('Couldn’t publish: '+(x.message||x))}}
@@ -1093,6 +1100,82 @@ function merge(a,b){if(!a)return b;if(!b)return a;const m=(a.mt||0)>=(b.mt||0)?a
  o.t=Math.max(a.t||0,b.t||0);o.gone=Math.max(a.gone||0,b.gone||0);o.pub=Math.max(a.pub||0,b.pub||0)||undefined;o._sync=a._sync||b._sync;return o}
 const strip=d=>{const o={...d};delete o._sync;return o};
 
+
+// ---------- linked columns: stories drafted in the Writing app ----------
+// A story box can be linked to a column from the Writing app (its "Rags" desk). The column's title becomes
+// the headline, its author the byline, its text the body, and the two stay in step: edits in either app
+// show up in both. The Writing app keeps its own sign-in (same login as Writing), stored on this device.
+// While someone is suggesting edits to a column in Writing, the box here is read-only until they finish.
+const JW={url:'https://hrhlgscfgqjqslejlpqa.supabase.co',key:'sb_publishable_GeOYErBznt6Y60TeU9oJcA_hK_Ugwyy'};
+let JA=null;try{JA=JSON.parse(localStorage.getItem('rp_jw'))}catch(e){}
+let JC=[],JPL={},JRow=null,jwAt=0,jwBusy=false;const jwSave=()=>{try{JA?localStorage.setItem('rp_jw',JSON.stringify(JA)):localStorage.removeItem('rp_jw')}catch(e){}};
+async function jwAuth(body,grant){const r=await fetch(JW.url+'/auth/v1/token?grant_type='+grant,{method:'POST',headers:{apikey:JW.key,'Content-Type':'application/json'},body:JSON.stringify(body)}),j=await r.json();
+ if(!r.ok){if(grant==='refresh_token'){JA=null;jwSave()}throw new Error(j.error_description||j.msg||'Sign-in failed')}JA={at:j.access_token,rt:j.refresh_token,exp:Date.now()+j.expires_in*1000,uid:j.user.id,em:j.user.email};jwSave()}
+async function jwReq(p,o={}){if(!JA)throw new Error('off');if(JA.exp-30000<Date.now())await jwAuth({refresh_token:JA.rt},'refresh_token');
+ const r=await fetch(JW.url+'/rest/v1/'+p,{...o,headers:{apikey:JW.key,Authorization:'Bearer '+JA.at,'Content-Type':'application/json',...(o.headers||{})}});if(!r.ok)throw new Error('HTTP '+r.status);const t=await r.text();return t?JSON.parse(t):null}
+const liveCols=()=>JC.filter(c=>!c.del);
+const colById=id=>JC.find(c=>c.id===id&&!c.del);
+const colLocked=c=>!!(c&&c.sg&&c.sg.s&&c.sg.s.some(x=>x[0]!==0));
+async function jwPull(){const row=(await jwReq('jw_snapshots?select=data,updated_at'))[0];JRow=row||null;JC=((row&&row.data&&row.data.rag&&row.data.rag.cols)||[]).slice();JPL=(row&&row.data&&row.data.press&&row.data.press.pl)||{};jwAt=Date.now();return JC}
+// write changed columns back, merging with whatever is there now (newest edit of each column wins)
+async function jwPush(changed,pl){const row=(await jwReq('jw_snapshots?select=data,updated_at'))[0],d=(row&&row.data)||{},rg=d.rag||{},m={};
+ for(const c of [...(rg.cols||[]),...changed])if(!m[c.id]||(c.u||0)>(m[c.id].u||0))m[c.id]=c;
+ const cols=Object.values(m),press={...(d.press||{}),pl:{...((d.press||{}).pl||{}),...(pl||{})}};
+ await jwReq('jw_snapshots?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates'},body:JSON.stringify({user_id:JA.uid,data:{...d,rag:{...rg,cols},press},updated_at:new Date().toISOString()})});JC=cols;JPL=press.pl}
+const jparas=t=>(t||'').split(/\n+/).map(x=>x.trim()).filter(Boolean);
+const isHead=el=>/anton/i.test(el.style.fontFamily||'');
+function storyParts(html){const t=document.createElement('div');t.innerHTML=html||'';const kids=[...t.children];let hi=kids.findIndex(isHead);
+ const head=hi>=0?kids[hi]:null,by=head&&kids[hi+1]&&/italic/.test(kids[hi+1].style.fontStyle||'')&&kids[hi+1].textContent.length<120?kids[hi+1]:null;
+ return{t,head,by,body:kids.filter(k=>k!==head&&k!==by)}}
+const textOf=el=>(el.innerText!=null&&el.isConnected?el.innerText:el.textContent).replace(/\s+/g,' ').trim();
+// the column's words, laid into the box; unchanged paragraphs keep any styling done in the Press
+function colIntoHTML(c,html){const P=storyParts(html||storyHTML()),t=P.t,body=P.body,want=jparas(c.x);
+ if(P.head){P.head.textContent=c.t||'';if(!c.t)P.head.innerHTML='<br>'}
+ if(P.by&&c.a&&(!textOf(P.by)||P.by.hasAttribute('data-ph')))P.by.textContent='By '+c.a;
+ const style=(body[0]&&body[0].getAttribute('style'))||ST.body,keep=body.slice();
+ body.forEach(b=>b.remove());
+ want.forEach((p,i)=>{const old=keep[i];if(old&&textOf(old)===p){t.appendChild(old);return}const n=document.createElement('div');n.setAttribute('style',(old&&old.getAttribute('style'))||style);n.textContent=p;t.appendChild(n)});
+ if(!want.length){const n=document.createElement('div');n.setAttribute('style',style);n.setAttribute('data-ph','Tap here and start writing.');n.innerHTML='<br>';t.appendChild(n)}
+ return t.innerHTML}
+function boxWords(html,c){const P=storyParts(html),sep=/\n\s*\n/.test((c&&c.x)||'')||!(c&&c.x)?'\n\n':'\n';return{t:P.head?textOf(P.head):'',x:P.body.map(textOf).filter(Boolean).join(sep)}}
+// roughly how many characters fit the box at its current size and type, for the Writing app's length bar
+function boxFit(b){const e=$(`#pg .blk[data-id="${b.id}"] .tx`);if(!e)return null;const P=storyParts(b.html),L=P.body.map(textOf).join(' ').length;
+ const bodyEls=[...e.children].filter(k=>!isHead(k)&&!(k.previousElementSibling&&isHead(k.previousElementSibling)&&/italic/.test(k.style.fontStyle||'')));
+ const top=bodyEls[0]?bodyEls[0].offsetTop:0,avail=e.clientHeight-top,used=bodyEls.length?bodyEls[bodyEls.length-1].offsetTop+bodyEls[bodyEls.length-1].offsetHeight-top:0;
+ if(L>250&&used>20)return Math.round(L*avail/used/50)*50;
+ const fs=parseFloat((P.body[0]&&P.body[0].style.fontSize)||16),lh=parseFloat((P.body[0]&&P.body[0].style.lineHeight)||1.15)*fs;
+ return Math.round(e.clientWidth/(fs*.47)*Math.max(0,avail)/lh/50)*50}
+const linked=()=>Object.values(DOCS).flatMap(d=>d.gone?[]:Object.values(d.b).filter(b=>b.col).map(b=>[d,b]));
+// bring Writing's changes in, and send the Press's changes out
+async function jwSync(force){if(!JA||jwBusy||!navigator.onLine)return;if(!force&&!linked().length)return;jwBusy=true;
+ try{await jwPull();const out=[],pl={};let here=false;
+  for(const [d,b] of linked()){const c=colById(b.col);if(!c)continue;
+   if((c.u||0)>(b.cu||0)){if(b.cx)saveVer(d,'Before changes from Writing');delete b.cx;const h=colIntoHTML(c,b.html);if(h!==b.html){b.html=h;touch(b);d.t=now();if(d===I)here=true;dbPut('docs',JSON.parse(JSON.stringify(d)));dirty.add(d.id)}b.cu=c.u||0}
+   else if(b.cx&&!colLocked(c)){const bt=boxWords(b.html,c);if(bt.x!==c.x||(bt.t&&bt.t!==c.t)){const n={...c,x:bt.x,t:bt.t||c.t,u:Date.now()};out.push(n);b.cu=n.u}delete b.cx}
+   const f=d===I?boxFit(b):null,o=JPL[c.id];if(f&&(!o||Math.abs((o.fit||0)-f)>Math.max(50,f*.05)||o.is!==String(d.n)))pl[c.id]={is:String(d.n),fit:f,at:Date.now()}}
+  if(out.length||Object.keys(pl).length)await jwPush(out,pl);if(here){render();syncSoon()}}
+ catch(e){console.warn('writing link',e)}finally{jwBusy=false}}
+let jwT=null;const jwSoon=()=>{clearTimeout(jwT);jwT=setTimeout(()=>jwSync(),2500)};
+// the picker: link a column to a box, or drop it in as a new box
+async function colPicker(boxId){if(ED){ED.blur();commitEdit()}
+ if(!JA)return jwSignIn(()=>colPicker(boxId));
+ const p=sheet(`<h3>Columns from Writing<button class="x">✕</button></h3><p class="note">${boxId?'Pick a column for this box.':'Pick a column and it drops onto the page as a new story.'} Edits in either app show up in both.</p><div id="cpl"><p class="note">Loading…</p></div><p class="note" style="margin-top:10px">Linked to Writing as ${esc(JA.em)}. <a href="#" id="cp-o">Unlink this device</a></p>`);
+ p.querySelector('#cp-o').onclick=e=>{e.preventDefault();JA=null;jwSave();close();toast('Writing unlinked on this device')};
+ try{await jwPull()}catch(e){p.querySelector('#cpl').innerHTML=`<p class="err">Couldn’t reach Writing (${esc(e.message)}).</p>`;return}
+ const used=new Map(linked().map(([d,b])=>[b.col,d.n])),S2=['Idea','Draft','Ready','Published'];
+ const L=liveCols().filter(c=>c.s!==3).sort((a,b)=>((a.is==I.n)?0:1)-((b.is==I.n)?0:1)||(b.u||0)-(a.u||0));
+ const el=p.querySelector('#cpl');if(!L.length){el.innerHTML='<p class="note">No columns yet. Start one in Writing → Rags.</p>';return}
+ el.innerHTML=`<ul class="ilist cols">${L.map(c=>`<li data-c="${c.id}"><span class="m"><b>${esc(c.t||'Untitled column')}</b><small>${esc(c.a||'')}${c.a?' · ':''}${S2[c.s||0]}${c.is?' · for № '+esc(c.is):''} · ${(c.x||'').length.toLocaleString()} characters${used.has(c.id)?' · on the page in № '+used.get(c.id):''}</small><small class="hd">${esc(jparas(c.x)[0]||'Nothing written yet').slice(0,120)}</small></span></li>`).join('')}</ul>`;
+ el.querySelectorAll('li').forEach(li=>li.onclick=()=>{const c=colById(li.dataset.c);close();placeCol(c,boxId)})}
+function placeCol(c,boxId){let b=boxId&&I.b[boxId];
+ if(b&&b.k=='s'&&hasTextHTML(b.html)&&!b.col){return ask(`This box already has writing in it. Replace it with “${c.t||'the column'}”?`,'Replace',()=>{b.html=storyHTML();placeCol(c,boxId)})}
+ if(!b){addBlock('s');b=I.b[SEL]}
+ snap();b.k='s';b.col=c.id;b.html=colIntoHTML(c,b.html&&b.col?b.html:storyHTML());b.cu=c.u||0;touch(b);changed();render();
+ toast(`“${c.t||'Column'}” is on the page`);setTimeout(()=>jwSync(true),400)}
+function unlinkCol(b){snap();delete b.col;delete b.cu;delete b.cx;touch(b);changed();render();toast('Unlinked. The text stays here; Writing keeps its own copy.')}
+function jwSignIn(then){const p=sheet(`<h3>Link the Writing app<button class="x">✕</button></h3><p class="note">Sign in with the account you use in the Writing app. Its columns will appear here, and edits flow both ways.</p><form id="jw"><input id="jw-e" type="email" autocomplete="username" placeholder="Writing app email" required><input id="jw-p" type="password" autocomplete="current-password" placeholder="Password" required style="margin-top:8px"><p class="err" id="jw-x"></p><button class="btn pri big">Link</button></form>`);
+ p.querySelector('#jw').onsubmit=async e=>{e.preventDefault();const x=p.querySelector('#jw-x');x.textContent='Linking…';try{await jwAuth({email:p.querySelector('#jw-e').value.trim(),password:p.querySelector('#jw-p').value},'password');close();then&&then()}catch(er){x.textContent=er.message}}}
+
 // ---------- history: earlier copies of each issue ----------
 // Copies are kept on this device (when the app opens, every 5 minutes of editing, before another device's
 // changes are merged in, and before a restore) and online in rag_draft_history (saved by the server
@@ -1123,6 +1206,9 @@ function syncSoon(id){id=id||(I&&I.id);if(DOCS[id]&&DOCS[id].play)return;dirty.a
 function adopt(d){const isCur=I&&I.id===d.id;if(isCur&&ED)edited(ED);const L=isCur?I:DOCS[d.id],m=isCur?merge(I,d):merge(DOCS[d.id],d);m._sync=d._sync;
  if(L&&L.b&&Object.keys(L.b).some(id=>!m.b[id]||JSON.stringify(m.b[id])!==JSON.stringify(L.b[id])))saveVer(L,'Before changes from another device');
  DOCS[d.id]=m;dbPut('docs',JSON.parse(JSON.stringify(m)));if(isCur){if(JSON.stringify(strip(m))!==JSON.stringify(strip(I))){U=[];R=[];updUndo()}I=m;render()}}
+// Where an address is on the map: try the whole address, then just the last lines (the city), via OpenStreetMap.
+async function findPlace(lines){for(let k=lines.length;k>=1;k--){const q=lines.slice(-k).join(', ');if(!q)continue;
+ try{const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q),{headers:{'Accept-Language':'en'}});const j=await r.json();if(j[0])return{lat:+(+j[0].lat).toFixed(4),lng:+(+j[0].lon).toFixed(4)}}catch(e){return null}}return null}
 async function sync(){if(!canSync()||syncing)return;syncing=true;dot('wait');
  try{const{data:list,error}=await sb.from('rag_drafts').select('id,updated_at');if(error)throw error;const srv={};for(const r of list)srv[r.id]=r.updated_at;
   for(const r of list){const loc=DOCS[r.id];if(loc&&loc._sync===r.updated_at)continue;const{data}=await sb.from('rag_drafts').select('doc,updated_at').eq('id',r.id).single();if(!data)continue;const d={...data.doc,_sync:data.updated_at};
@@ -1143,7 +1229,7 @@ function acct(){const el=$('#acct');if(!el)return;
  el.innerHTML=`<p class="note">Signed in as <b>${esc(ME.name)}</b>. ${ME.ed?'Drafts are shared with the other editors, and you can publish.':'Only Riley Rag editors can share drafts and publish.'}</p><button class="btn" id="lg-o">Sign out</button>`;
  el.querySelector('#lg-o').onclick=async()=>{await sb.auth.signOut();ME=null;localStorage.removeItem('rp_me');dot('');purgeShared();acct()}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState=='visible')sync();else saveNow()});
-addEventListener('online',()=>sync());setInterval(()=>{if(document.visibilityState=='visible')sync()},20000);
+addEventListener('online',()=>sync());setInterval(()=>{if(document.visibilityState=='visible'){sync();jwSync()}},20000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState=='visible')jwSync()});setTimeout(()=>jwSync(),1500);
 addEventListener('pagehide',saveNow);
 
 // ---------- zoom: pinch on phones, ctrl/⌘ + scroll or the zoom buttons on desktop ----------
