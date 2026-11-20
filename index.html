@@ -1,608 +1,316 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#120a06">
-<meta name="color-scheme" content="dark">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>The Riley Rag</title>
-<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png"><link rel="icon" href="favicon.png" sizes="256x256" type="image/png"><link rel="apple-touch-icon" href="favicon.png"><link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-title" content="Riley Rag">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@400;700&family=Anton&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Глаголы</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Roboto+Condensed:wght@400;700&display=swap">
+<meta name="theme-color" content="#b30f27"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Глаголы">
 <style>
-:root{--g1:#f1d88a;--g2:#c9a24a;--g3:#8f6c24;--gold:#d9bd73;--bg:#120a06}
-*{box-sizing:border-box}
-html{background:#120a06;color-scheme:dark;min-height:100%}
-body{margin:0;min-height:100vh;font:19px/1.55 'Tinos','Times New Roman',serif;color:var(--gold);padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
-body::before{content:'';position:fixed;inset:0;z-index:-1;background:
-  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)'/%3E%3C/svg%3E"),
-  radial-gradient(ellipse at 50% -10%,#3a2314,#1a0f08 55%,#0c0603)}
-.gilt{background:linear-gradient(120deg,var(--g1),var(--g2) 50%,var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent}
-h1,h2{margin:0}
-h1{font:400 clamp(48px,13vw,92px)/1 'UnifrakturCook',serif}
-h2,.hd{font:400 29px/1.1 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.08em}
-header{text-align:center;padding:14px 12px 2px}
-header .emb{width:50px;height:50px;opacity:.95}
-h1 img{width:min(94%,620px);height:auto}
-.sub{letter-spacing:.09em;font-size:clamp(8px,2.5vw,13px);white-space:nowrap;margin:2px 0 8px;color:var(--g2)}
-.hi{text-align:center;margin:0 0 14px;color:var(--g1);font-style:italic;max-height:40px;overflow:hidden;transition:opacity 1s,max-height 1s}.hi.off{opacity:0;max-height:0;margin:0}
-.foot{text-align:center;margin-top:30px;padding-top:16px;border-top:1px solid #3a2a16}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-textarea{display:block;margin-bottom:8px}
-#hint{max-width:700px;margin:8px auto 0;padding:0 14px}#hint .panel{margin:0 0 10px}#hint ol{margin:8px 0 14px;padding-left:22px}#hint li{margin:4px 0}#hint h2{font-size:22px}
-.stitch{border:0;border-top:1px solid var(--g3);opacity:.5;max-width:640px;margin:10px auto}
-main{max-width:700px;margin:0 auto;padding:10px 14px 70px}
-button,input,textarea{font:inherit}
-.btn{cursor:pointer;color:var(--g1);background:transparent;border:1px solid var(--g3);border-radius:2px;padding:8px 18px;transition:background .15s,color .15s}
-.btn:hover{background:var(--g2);color:#1a0f08}
-.btn.ghost{border-color:transparent;color:var(--g2)}.btn.ghost:hover{background:#ffffff0d;color:var(--g1)}
-.btn:focus-visible,input:focus-visible,textarea:focus-visible,.rx:focus-visible{outline:2px solid var(--g1);outline-offset:2px}
-.bar{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:6px 0 22px}
-.panel{background:#0b0603cc;border:1px solid var(--g3);padding:18px;margin:0 auto 26px}
-.panel label{display:block;margin:12px 0 4px;color:var(--g2)}
-input,textarea{width:100%;padding:10px;border-radius:2px;border:1px solid #5a4020;background:#0b0603;color:var(--g1)}
-.issue{margin:0 0 56px}
-.meta{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0 2px 8px}
-.meta .hd{font-size:30px}
-.sheet{display:block;width:100%;border:0;padding:0;cursor:zoom-in;background:#f4ecd8;box-shadow:0 18px 40px #000c,0 0 0 1px #000}
-.sheet img{display:block;width:100%;height:auto;min-height:200px}
-.rxs{display:flex;gap:6px clamp(4px,2.4vw,18px);flex-wrap:wrap;margin:14px 2px 6px}
-.rx{display:flex;align-items:center;gap:4px;cursor:pointer;color:var(--g3);background:none;border:0;padding:2px;font-size:17px}
-.rx img{width:clamp(38px,11.5vw,50px);height:auto;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 2px 3px #000b) saturate(.7);opacity:.6;transition:transform .15s,opacity .15s}
-.rx:hover img{opacity:.9;transform:scale(1.08)}
-.rx[aria-pressed=true]{color:var(--g1)}.rx[aria-pressed=true] img{opacity:1;filter:drop-shadow(0 2px 4px #000b);transform:scale(1.12)}
-.cm{border-left:1px solid var(--g3);padding:2px 14px;margin:10px 0}
-.cm b{color:var(--g1);font-weight:700}.cm small{opacity:.55;margin-left:8px}
-.cm .del{float:right;background:none;border:0;color:#c88;cursor:pointer}
-.err{color:#e99;margin:6px 0 0}
-.who{margin:0 2px 10px;padding:8px 12px;border:1px solid var(--g3);background:#0b0603;font-size:17px;max-width:420px}
-.who>div{padding:4px 0;border-top:1px solid #2a1c10}.who>div:first-child{border-top:0}.who small{opacity:.6;margin-left:8px}
-.who .whoh{display:flex;align-items:center;gap:8px;color:var(--g1);font-variant:all-small-caps;letter-spacing:.05em}.who .whoh img{width:26px;height:26px}
-.btn.seen{padding:4px 2px;font-size:16px;margin:0 0 6px}
-#lb{padding-top:env(safe-area-inset-top);position:fixed;inset:0;background:#000f;z-index:9;display:none;flex-direction:column}
-#lb.on{display:flex}#lb .top{display:flex;justify-content:space-between;padding:10px 14px}
-#lb .scroll{flex:1;overflow:auto;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch}
-#lb img{width:100%;max-width:900px;display:block;margin:0 auto;background:#f4ecd8}
-[hidden]{display:none!important}
-nav{display:flex;flex-wrap:nowrap;white-space:nowrap;justify-content:center;gap:clamp(6px,2.6vw,28px);margin:4px 0 10px}
-nav a{font:400 clamp(12px,4.1vw,22px) 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.05em;color:var(--g3);text-decoration:none;padding:6px 2px;border-bottom:2px solid transparent}
-nav a:hover{color:var(--g2)}nav a[aria-current=page]{color:var(--g1);border-color:var(--g2)}
-.ph{font-size:44px;text-align:center;margin:4px 0 14px}
-.pre{white-space:pre-wrap;background:#0b0603;border:1px solid #3a2a16;padding:12px;margin:8px 0 14px;font:inherit;font-size:16px}
-.cm div,.cm p{white-space:pre-wrap;margin:6px 0}.cm textarea{margin-top:8px}
-.bd{display:grid;gap:6px;margin:16px 0}.row{display:flex;gap:6px;justify-content:center}
-.t{width:min(50px,calc((100vw - 64px)/var(--n)));aspect-ratio:1;display:grid;place-items:center;font:400 clamp(16px,5vw,26px) 'Anton',sans-serif;text-transform:uppercase;border:1px solid #5a4020;color:var(--g1)}
-.t.g{background:#5f7f4d;color:#f4efd8;border-color:#7a9a64}.t.y{background:var(--g2);color:#1a0f08;border-color:var(--g1)}.t.b{background:#1c120b;color:#7a6840;border-color:#2a1c10}
-.gf{display:flex;gap:8px}.kb{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:14px 0}
-.k{min-width:26px;text-align:center;font:400 15px 'Anton',sans-serif;text-transform:uppercase;padding:4px 2px;border:1px solid #3a2a16;color:var(--g2)}
-.k.g{background:#5f7f4d;color:#f4efd8}.k.y{background:var(--g2);color:#1a0f08}.k.b{opacity:.3}
-.lbt{width:100%;border-collapse:collapse}.lbt td{padding:7px 4px;border-bottom:1px solid #3a2a16}.lbt .r{width:2em;color:var(--g3)}.lbt .n{text-align:right;color:var(--g1)}
-.pv{background:#0b0603;border:1px solid #3a2a16;padding:12px 14px;margin:8px 0 14px;font-size:16px}.pv p{margin:0 0 10px}.pv p:last-child{margin:0}.pv a{color:#8fb4ff}
-.bar.ed{flex-wrap:nowrap;gap:4px}.bar.ed .btn{white-space:nowrap;padding:8px clamp(6px,2.2vw,16px);font-size:clamp(12px,3.8vw,18px)}
-a.btn{display:inline-block;text-decoration:none}.charter{white-space:pre-wrap;font-size:19px;line-height:1.7;margin:0 0 18px}
-.apps{display:flex;justify-content:center;gap:clamp(28px,10vw,64px);margin:6px 0 30px}
-.app{display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;color:var(--g1);font:400 21px 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.06em;transition:transform .15s}
-.app img{width:clamp(84px,26vw,112px);height:auto;aspect-ratio:1;filter:drop-shadow(0 8px 14px #000c)}
-.apps.more{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 12px;max-width:420px;margin:14px auto 30px}.apps.more .app{text-align:center;line-height:1.15}.app.soon{opacity:.75}.app.soon small{display:block;font:italic 15px 'Tinos',serif;font-variant:normal;letter-spacing:0;color:var(--g2);margin-top:-4px}
-.app:hover,.app:focus-visible{transform:translateY(-3px)}.app:focus-visible{outline:2px solid var(--g1);outline-offset:6px;border-radius:12px}
-.charter a{color:var(--g1);text-decoration:underline;text-underline-offset:3px;word-break:break-all}
-
-/* phone prompts: add to home screen, new-issue alerts */
-#sheet{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center}
-#sheet .bk{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;transition:opacity .3s}
-#sheet .sh{position:relative;width:min(100% - 20px,460px);margin:0 0 max(10px,env(safe-area-inset-bottom));padding:22px 20px 16px;background:#1c110a;border:1px solid var(--g3);box-shadow:0 -10px 40px rgba(0,0,0,.6);transform:translateY(30px);opacity:0;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .3s;max-height:90vh;overflow:auto}
-#sheet.on .bk{opacity:1}#sheet.on .sh{transform:none;opacity:1}
-#sheet h2{margin:0 0 6px;font:400 26px/1.15 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.06em}
-#sheet p{margin:6px 0 12px;font-size:18px;line-height:1.45}
-.steps{list-style:none;margin:12px 0 16px;padding:0;counter-reset:s}
-.steps li{counter-increment:s;display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid #3a2a16;font-size:18px;line-height:1.35}
-.steps li:first-child{border-top:0}
-.steps li::before{content:counter(s);flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--g2);color:var(--g1);display:grid;place-items:center;font-size:16px}
-.steps svg{flex:none;width:30px;height:30px;color:var(--g1);margin-left:auto}
-.sh .btns{display:flex;flex-direction:column;gap:8px}.sh .btns .btn{width:100%;padding:12px;font-size:18px;text-align:center}
-.sh .btn.solid,.btn.solid{background:linear-gradient(120deg,var(--g1),var(--g2));color:#1c110a;border-color:transparent;font-weight:700}
-.ph-panel{text-align:center;margin-top:30px}.ph-panel p{margin:4px 0 12px}
-.getapp{display:block;margin:18px auto 0;font-size:17px}
-@media (prefers-reduced-motion:reduce){#sheet .sh,#sheet .bk{transition:none}}
-</style></head>
-<body>
-<header><img class="emb" src="emblem.png" alt=""><h1><img src="masthead.png" alt="The Riley Rag"></h1><nav id="nav" hidden><a href="#highlights">Highlights</a><a href="#games">Games</a><a href="#peter">Ask Peter</a><a href="#recipes">Recipes</a><a href="#charter">Us</a></nav><hr class="stitch"></header>
-<aside id="hint" hidden></aside>
-<main id="app"><p style="text-align:center">Opening the desk…</p></main>
-<div id="lb"><div class="top"><a id="lbpdf" class="btn ghost" target="_blank" rel="noopener">Download PDF</a><button class="btn" id="lbx">Close</button></div><div class="scroll"><img id="lbimg" alt="Full page of the newspaper"></div></div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+*{box-sizing:border-box}html,body{margin:0}html{background:#b1aeaa}
+body{font:17px/1.4 "Roboto Condensed",sans-serif;color:#1b1c1d;background:transparent;min-height:100vh}
+/* concrete photo pinned behind the page; the html colour matches it so iPhone's bottom strip blends in */
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:url(concrete.jpg) center/cover no-repeat #b1aeaa;pointer-events:none}
+@media (display-mode: standalone){html{min-height:calc(100% + env(safe-area-inset-top,0px))}}
+main{max-width:520px;margin:0 auto;padding:0 0 110px}.o,h1,h3,.btn,nav button,.chip{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.12em}
+.b{background:#b30f27;color:#f3efe6;padding:calc(12px + env(safe-area-inset-top,0px)) 16px 12px;display:flex;justify-content:space-between;font-size:14px;border-bottom:4px solid #1b1c1d}
+.k{background:#2b2c2e;color:#eeebe3;border:3px solid #1b1c1d;box-shadow:6px 6px 0 #1b1c1d;padding:14px;margin:16px}.k h3{margin:0 0 8px;font-size:15px;color:#e6b94f;font-weight:500}.m{color:#c4c3bc;font-size:14px}
+.btn{display:block;width:100%;min-height:48px;border:3px solid #1b1c1d;background:#b30f27;color:#fff;font-size:16px;margin-top:12px;box-shadow:4px 4px 0 #1b1c1d}.btn.g{background:#3a4a3f}
+.lnk{background:none;border:0;color:#c4c3bc;text-decoration:underline;font:14px "Roboto Condensed",sans-serif;margin-top:10px;padding:6px 0}
+.big{font:600 44px Oswald,sans-serif;color:#fff}.t{height:12px;background:#4a4b4d;margin:4px 0 12px}.t i{display:block;height:100%;background:#d8213a}
+.ru{font-size:22px;line-height:1.35}input{display:block;width:100%;min-height:54px;margin-top:10px;border:3px solid #1b1c1d;background:#e8e4da;font:24px "Roboto Condensed",sans-serif;padding:8px 12px;color:#1b1c1d}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:#1b1c1d;border-top:4px solid #b30f27}nav button{flex:1;background:none;border:0;color:#c4c3bc;font-size:11px;letter-spacing:.06em;padding:14px 0 calc(22px + env(safe-area-inset-bottom,0px))}nav .on{background:#b30f27;color:#fff}
+.ok{color:#6fd68c}.bad{color:#e6b94f}table{width:100%;border-collapse:collapse;font-size:16px}td{padding:5px 4px;border-top:1px solid #4a4b4d;vertical-align:top}
+.src{color:#c4c3bc;font-size:14px;margin-top:4px}.q{border-left:4px solid #b30f27;padding:2px 0 2px 10px;margin:10px 0}.q .ru{font-size:18px}
+u{text-decoration:none;border-bottom:2px solid #e6b94f}.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.chip{border:2px solid #1b1c1d;background:#4a4b4d;color:#eeebe3;padding:8px 10px;font-size:12px}.chip.on{background:#b30f27;color:#fff}
+details{border-top:1px solid #4a4b4d;padding:6px 0}summary{cursor:pointer;font-size:18px;list-style:none}summary::-webkit-details-marker{display:none}.gl{color:#c4c3bc;font-size:14px}
+span.w{cursor:pointer;border-radius:2px}span.w:active,span.w.sel{background:#b30f27;color:#fff}
+#sheet{position:fixed;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:5;display:none}#sheet .k{max-width:488px;margin:0 auto 8px;border-color:#b30f27;max-height:50vh;overflow:auto}
+.x{float:right;background:none;border:0;color:#c4c3bc;font-size:22px;line-height:1;padding:0 4px}
+/* audio */
+.spk{display:inline-grid;place-items:center;width:34px;height:34px;vertical-align:middle;margin-left:6px;border:2px solid #1b1c1d;background:#4a4b4d;color:#e6b94f;padding:0;cursor:pointer;box-shadow:2px 2px 0 #1b1c1d}.spk:active{transform:translate(2px,2px);box-shadow:none}.spk svg{width:18px;height:18px}
+.spk.on{background:#b30f27;color:#fff}.say{cursor:pointer;border-bottom:1px dotted #8a8981}.say:active{color:#e6b94f}
+.rem .chip{min-width:64px}
+/* exercise progress */
+.pg{height:6px;background:#1b1c1d;margin:0}.pg i{display:block;height:100%;background:#e6b94f;transition:width .35s}
+.en{color:#c4c3bc;font-size:14px;font-style:italic;margin-top:6px}
+nav{z-index:6;transition:transform .25s}nav button{font-size:min(10.5px,2.8vw);letter-spacing:.03em;padding-left:1px;padding-right:1px}
+/* BOOKS */
+.bkc{cursor:pointer}.bkc .bt{font:400 24px/1.2 "PT Serif",Georgia,serif;color:#fff;margin:2px 0 10px}
+#rd{position:fixed;inset:0;z-index:4;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;visibility:hidden;pointer-events:none;
+ --pa:#f4efe4;--ink:#22201c;--mu:#8a7f6c;--acc:#b30f27;background:var(--pa);color:var(--ink);font:400 20px/1.62 "PT Serif",Georgia,serif;
+ padding:calc(env(safe-area-inset-top,0px) + 30px) 22px calc(env(safe-area-inset-bottom,0px) + 90px);-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+#rd>*{max-width:34em;margin-left:auto;margin-right:auto}
+body.reading #rd{visibility:visible;pointer-events:auto}body.reading main{display:none}
+body.reading::after{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:#1b1c1d;z-index:7}
+body.reading.navh nav{transform:translateY(105%)}
+#rd p{margin:0;text-indent:1.4em;hyphens:auto;-webkit-hyphens:auto;text-align:justify}
+#rd.vns p{text-indent:0;margin:0 0 .35em}#rd .vn{font:600 .62em/1 Oswald,sans-serif;color:var(--acc);vertical-align:.45em;margin-right:.3em;user-select:none}
+a.toc{color:#e6b94f;text-decoration:underline;cursor:pointer}
+#btoc{position:fixed;inset:0;z-index:30;display:none;background:rgba(0,0,0,.55);overflow:auto;-webkit-overflow-scrolling:touch}
+#btoc .tw{max-width:520px;margin:max(14px,env(safe-area-inset-top)) auto 90px;background:#2b2c2e;color:#eeebe3;border:3px solid #1b1c1d;box-shadow:6px 6px 0 #1b1c1d;padding:6px 14px 14px;font-family:Oswald,sans-serif}
+#btoc .th{display:flex;align-items:center;justify-content:space-between;padding:10px 0;position:sticky;top:0;background:inherit}
+#btoc .tx{background:none;border:1px solid currentColor;color:inherit;font:inherit;padding:4px 10px;cursor:pointer}
+#btoc details{border-top:1px solid rgba(255,255,255,.12)}#btoc summary{padding:12px 2px;cursor:pointer;display:flex;gap:8px;align-items:baseline}
+#btoc summary small{margin-left:auto;opacity:.55}#btoc .here{color:#e6b94f;font-size:.85em}
+#btoc .cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;padding:4px 0 14px}
+#btoc .cg button{font:500 15px Oswald,sans-serif;padding:9px 0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:inherit;cursor:pointer}
+#btoc .cg button.on{background:#b30f27;border-color:#b30f27;color:#fff}#rd p+p{margin-top:.35em}
+#rd p.v{text-indent:0;font-style:italic;text-align:left;padding-left:1.4em}
+#rd section{content-visibility:auto;contain-intrinsic-size:auto 2400px;padding-bottom:1.6em}
+#rd .kk{font:500 12px/1.4 Oswald,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);text-align:center;margin:2.2em 0 .4em}
+#rd h2{font:700 1em/1.35 "PT Serif",Georgia,serif;text-align:center;margin:1.4em 0 1em}
+#rd .rdh{text-align:center;margin:1em auto 2em}#rd .rdh div{font:500 13px Oswald,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}#rd .rdh h1{text-transform:none;letter-spacing:0;font:400 32px/1.15 "PT Serif",Georgia,serif;margin:.3em 0 0}
+#rd .fin{text-align:center;color:var(--mu);font-size:28px;margin:1em auto 3em}#rd .rdl{text-align:center;color:var(--mu);margin-top:40vh;font-size:16px}
+#rd sup.fn{font:600 .55em Oswald,sans-serif;color:var(--acc);padding:0 .15em;cursor:pointer;line-height:0}
+#hl{position:fixed;z-index:5;pointer-events:none;background:rgba(179,15,39,.18);border-radius:3px;display:none;box-shadow:0 2px 0 #b30f27}
+#rpop{position:fixed;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);z-index:8;display:none;max-width:30em;margin:0 auto;background:#1b1c1d;color:#eeebe3;
+ border-top:4px solid #b30f27;box-shadow:0 10px 30px rgba(0,0,0,.35);padding:14px 16px 12px;font:16px/1.35 "Roboto Condensed",sans-serif;max-height:45vh;overflow:auto}
+#rpop .rw{font:400 26px/1.15 "PT Serif",Georgia,serif;color:#fff}#rpop .re{margin-top:8px}#rpop .re b{font:400 19px "PT Serif",Georgia,serif;color:#e6b94f}#rpop .gr{color:#9d9c95;font-size:13px}#rpop .tr{font-size:17px}
+body.navh #rpop,body:not(.reading) #rpop{bottom:calc(env(safe-area-inset-bottom,0px) + 18px)}body.reading:not(.navh) #rpop{bottom:calc(env(safe-area-inset-bottom,0px) + 74px)}
+#rbar{position:fixed;left:0;right:0;bottom:0;height:3px;background:rgba(0,0,0,.08);z-index:5;display:none}#rbar i{display:block;height:100%;width:0;background:#b30f27}
+body.reading #rbar{display:block}
+@media (prefers-color-scheme:dark){#rd{--pa:#151514;--ink:#d8d2c4;--mu:#8b857a;--acc:#e0566a}#rbar{background:rgba(255,255,255,.08)}}
+@media (min-width:700px){#rd{font-size:22px;padding-top:calc(env(safe-area-inset-top,0px) + 60px)}}
+h4{font:500 13px Oswald,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#e6b94f;margin:14px 0 4px}
+</style></head><body><main id="app"></main><div id="rd" lang="ru"></div><div id="hl"></div><div id="rpop"></div><div id="rbar"><i></i></div><div id="sheet"></div><div id="btoc"></div><nav id="nav"></nav>
+<script src="data.js"></script><script src="asp.js"></script>
 <script>
-// ====== 1. PASTE YOUR SUPABASE VALUES (Project Settings > API) ======
-const SUPABASE_URL = 'https://vikxpnxnbmhmawhnwxzl.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_0WwmJLwgxP4uSQF8TDdaOw_vrL-XU6x';
-// ====================================================================
-const recoveryAtLoad = /type=recovery/.test(location.hash);
-// Own sign-in slot: other apps on joshp523.github.io use this Supabase project too, and must not overwrite the Rag's login.
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { storageKey: 'riley-rag-auth' } });
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-const $ = s => document.querySelector(s), app = $('#app');
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const pub = p => sb.storage.from('issues').getPublicUrl(p).data.publicUrl;
-let me = null, signup = false, greeted = false, recovering = recoveryAtLoad;
-
-// ====== Phones: add to home screen + new-issue alerts ======
-const VAPID_PUBLIC_KEY = 'BNRong9iomykb8ezl4BbbuNyNzjkCB5Rhm8wJXmezro4y1-ni-9B7Ro0QqLZGmh8YVh_ed8wRwgyyKCMFgVYDjg'; // same key as Word Games
-const UA = navigator.userAgent, IOS = /iPhone|iPad|iPod/.test(UA) || (/Macintosh/.test(UA) && navigator.maxTouchPoints > 1), PHONE = IOS || /Android/i.test(UA);
-const IN_APP = /FBAN|FBAV|Instagram|Line\/|GSA\/|Snapchat|LinkedInApp|Twitter/i.test(UA);   // Facebook, Instagram, Google app, etc.
-const IOS_OK = IOS && !IN_APP && (/Safari\//.test(UA) || /CriOS|EdgiOS|FxiOS/.test(UA));   // browsers that can add to the iPhone home screen
-const STANDALONE = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-const CAN_PUSH = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
-let BIP = null; addEventListener('beforeinstallprompt', e => { e.preventDefault(); BIP = e; });
-const snoozed = k => +(localStorage.getItem('rr_snooze_'+k) || 0) > Date.now(), snooze = (k, d) => localStorage.setItem('rr_snooze_'+k, Date.now() + d*864e5);
-const ICO = {
- share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M7 10H5v11h14V10h-2"/></svg>',
- plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>',
- dots:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>',
- home:'<img src="icon-192.png" alt="" style="width:30px;height:30px;border-radius:7px;margin-left:auto">',
- compass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>'};
-function sheet(h){ closeSheet(); const d = document.createElement('div'); d.id = 'sheet';
- d.innerHTML = `<div class="bk" data-x></div><div class="sh" role="dialog" aria-modal="true">${h}</div>`; document.body.append(d);
- d.addEventListener('click', e => { if(e.target.closest('[data-x]')) closeSheet(); }); requestAnimationFrame(() => d.classList.add('on')); return d; }
-const closeSheet = () => $('#sheet')?.remove();
-
-function installSheet(){
- let how;
- if(IOS && !IOS_OK) how = `<p>This page is open inside another app, which can’t save it. Open it in Safari first:</p>
-  <ol class="steps"><li><span>Tap <b>Copy link</b> below.</span></li><li><span>Open <b>Safari</b> and paste it in the address bar.</span></li><li><span>Then come back to these steps.</span></li></ol>
-  <div class="btns"><button class="btn solid" id="cpl">Copy link</button><button class="btn ghost" data-x>Not now</button></div>`;
- else if(IOS) how = `<ol class="steps"><li><span>Tap the <b>Share</b> button${/CriOS|EdgiOS|FxiOS/.test(UA)?' at the top, next to the address':' at the bottom of the screen'}.</span>${ICO.share}</li>
-  <li><span>Scroll down and tap <b>Add to Home Screen</b>.</span>${ICO.plus}</li><li><span>Tap <b>Add</b>. The Rag appears on your home screen.</span>${ICO.home}</li></ol>
-  <div class="btns"><button class="btn ghost" data-x>Got it</button></div>`;
- else if(BIP) how = `<p>One tap and it sits on your home screen, next to your other apps.</p><div class="btns"><button class="btn solid" id="ins">Add to home screen</button><button class="btn ghost" data-x>Not now</button></div>`;
- else how = `<ol class="steps"><li><span>Tap the <b>menu</b> button at the top right.</span>${ICO.dots}</li><li><span>Tap <b>Add to Home screen</b> or <b>Install app</b>.</span>${ICO.plus}</li><li><span>Tap <b>Add</b>.</span>${ICO.home}</li></ol><div class="btns"><button class="btn ghost" data-x>Got it</button></div>`;
- const d = sheet(`<h2 class="gilt">Keep the Rag on your phone</h2><p>Save it to your home screen and it opens like an app, full screen, with one tap.${me?' You can also get a note when a new issue comes out.':''}</p>${how}`);
- d.querySelector('#ins')?.addEventListener('click', async () => { BIP.prompt(); await BIP.userChoice; BIP = null; closeSheet(); });
- d.querySelector('#cpl')?.addEventListener('click', async e => { try{ await navigator.clipboard.writeText(location.href.split('#')[0]); e.target.textContent = 'Copied!'; }catch(x){ prompt('Copy this link:', location.href.split('#')[0]); } });
-}
-async function pushSub(){ if(!CAN_PUSH()) return null; const r = await navigator.serviceWorker.getRegistration(); return r && r.pushManager.getSubscription(); }
-async function alertsOn(){
- try{
-  const reg = await navigator.serviceWorker.register('sw.js'); await navigator.serviceWorker.ready;
-  if(await Notification.requestPermission() !== 'granted') return 'Your phone said no to alerts. You can allow them later in Settings → Notifications → Riley Rag.';
-  const u = VAPID_PUBLIC_KEY.replace(/-/g,'+').replace(/_/g,'/'), raw = atob(u + '='.repeat((4 - u.length % 4) % 4));
-  const sub = await reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:Uint8Array.from(raw, c => c.charCodeAt(0))}), j = sub.toJSON();
-  const { error } = await sb.from('rr_push_subs').upsert({endpoint:j.endpoint, user_id:me.id, sub:j}, {onConflict:'endpoint'});
-  return error ? error.message : null;
- }catch(x){ return x.message || 'Could not turn on alerts.'; }
-}
-async function alertsOff(){ const s = await pushSub(); if(s){ await sb.from('rr_push_subs').delete().eq('endpoint', s.endpoint); await s.unsubscribe(); } }
-function alertsSheet(){
- const d = sheet(`<h2 class="gilt">Hear about new issues</h2><p>We’ll send one short note to this phone whenever a new Riley Rag comes out. Nothing else, ever.</p><p class="err" id="ae" role="alert"></p><div class="btns"><button class="btn solid" id="aon">Yes, tell me</button><button class="btn ghost" id="anot">Not now</button></div>`);
- d.querySelector('#anot').onclick = () => { snooze('alerts', 14); closeSheet(); };
- d.querySelector('#aon').onclick = async e => { e.target.disabled = true; e.target.textContent = 'One moment…'; const er = await alertsOn();
-  if(er){ $('#ae').textContent = er; e.target.hidden = true; snooze('alerts', 30); }
-  else { d.querySelector('.sh').innerHTML = '<h2 class="gilt">You’re on the list</h2><p>The next issue will tap you on the shoulder.</p><div class="btns"><button class="btn ghost" data-x>Lovely</button></div>'; if(location.hash==='#charter') charterView(); } };
-}
-async function nudge(){   // gentle, once in a while, phones only
- if(!PHONE || $('#sheet')) return;
- if(!STANDALONE()){ if(!snoozed('install')){ snooze('install', 7); installSheet(); } return; }
- if(!me || !CAN_PUSH() || Notification.permission === 'denied' || await pushSub()) return;
- if(Notification.permission === 'granted'){ await alertsOn(); return; }   // allowed before: switch on quietly
- if(!snoozed('alerts')) alertsSheet();
-}
-async function phonePanel(){   // "On your phone" section on the Us page
- const el = $('#phn'); if(!el) return;
- const sub = await pushSub(), parts = [];
- if(!STANDALONE()) parts.push(`<p>${PHONE?'Save the Rag to your home screen and it opens like an app.':'On your phone, you can save the Rag to your home screen so it opens like an app.'}</p>${PHONE?'<button class="btn solid" id="gap">Add to home screen</button>':''}`);
- if(CAN_PUSH() && (STANDALONE() || !IOS)) parts.push(sub ? `<p>New-issue alerts are <b>on</b> for this ${PHONE?'phone':'device'}.</p><button class="btn ghost" id="aof">Turn alerts off</button>`
-  : Notification.permission === 'denied' ? '<p>Alerts are blocked. To allow them: Settings → Notifications → Riley Rag.</p>'
-  : '<p>Get a short note whenever a new issue comes out.</p><button class="btn solid" id="aop">Turn on new-issue alerts</button>');
- else if(IOS) parts.push('<p>Once the Rag is on your home screen, open it from there to turn on new-issue alerts.</p>');
- el.innerHTML = parts.length ? `<h2 class="hd gilt ph">On your phone</h2>${parts.join('')}` : '';
- $('#gap') && ($('#gap').onclick = installSheet);
- $('#aop') && ($('#aop').onclick = alertsSheet);
- $('#aof') && ($('#aof').onclick = async () => { await alertsOff(); phonePanel(); });
-}
-if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
-
-// Custom reaction icons (stroke = currentColor)
-const S = 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
-const stk = k => `<img src="stickers/${k}.png" alt="" width="46" height="46">`;
-const RX = {
- love:['Love it',stk('love')], silly:['Silly!',stk('silly')], more:['Tell me more',stk('more')],
- sleepy:['So sleepy',stk('sleepy')], object:['I object',stk('object')]
-};
-
-// ---- Remembering readers: name + email are kept on this device (and in a cookie as a backup),
-// so if the browser ever forgets the session we sign them straight back in without asking.
-const WHO_K = 'rr_who';
-function who(){ try{ const v = localStorage.getItem(WHO_K); if(v) return JSON.parse(v); }catch(e){}
- const m = document.cookie.match(/(?:^|; )rr_who=([^;]*)/); try{ return m ? JSON.parse(decodeURIComponent(m[1])) : null; }catch(e){ return null; } }
-function saveWho(name, email){ const v = JSON.stringify({name, email}); try{ localStorage.setItem(WHO_K, v); }catch(e){}
- document.cookie = `rr_who=${encodeURIComponent(v)}; max-age=${400*864e2}; path=/RileyRag/; SameSite=Lax; Secure`;
- try{ navigator.storage && navigator.storage.persist && navigator.storage.persist(); }catch(e){} }
-function forgetWho(){ try{ localStorage.removeItem(WHO_K); }catch(e){} document.cookie = 'rr_who=; max-age=0; path=/RileyRag/'; }
-async function quickLogin(name, email){   // true, 'editor', or an error message
- try{
-  const { data, error } = await sb.functions.invoke('rr-login', { body:{ name, email } });
-  if(error){ let m = error.message; try{ const j = await error.context.json(); if(j.editor) return 'editor'; m = j.error || m; }catch(x){} return m; }
-  if(data.editor) return 'editor';
-  let v = await sb.auth.verifyOtp({ token_hash:data.token_hash, type:'magiclink' });
-  if(v.error) v = await sb.auth.verifyOtp({ token_hash:data.token_hash, type:'email' });
-  if(v.error) return v.error.message;
-  saveWho(name, email); return true;
- }catch(x){ return navigator.onLine === false ? 'You’re offline. Connect to the internet and try again.' : (x.message || 'Couldn’t sign in. Please try again.'); }
-}
-let switching = false;
-// ---- Tell the editors what readers are doing (the server function sends the alerts; readers are never pinged for this) ----
-let TOKEN = null;
-sb.auth.onAuthStateChange((ev, ses) => { TOKEN = ses ? ses.access_token : null; });
-function act(kind, d){ if(!me || me.is_editor || !TOKEN) return; send('rr-activity', {kind, d}); }
-function send(fn, body){ try{ fetch(`${SUPABASE_URL}/functions/v1/${fn}`, {method:'POST', keepalive:true, headers:{'Content-Type':'application/json', Authorization:'Bearer '+TOKEN, apikey:SUPABASE_ANON_KEY}, body:JSON.stringify(body)}).catch(() => {}); }catch(e){} }
-// any link a reader taps (other apps, Word Games, QuipRash, the photo gallery, PDF downloads, links in the charter)
-document.addEventListener('click', e => { const a = e.target.closest && e.target.closest('a[href]'); if(!a) return; const h = a.getAttribute('href') || '';
- if(!h || h.startsWith('#') || h.startsWith('mailto:') || h.startsWith('javascript:')) return;
- const label = (a.id === 'lbpdf' ? 'the PDF of an issue' : (a.textContent || '').replace(/\s+/g,' ').trim()) || h;
- act('link', {key:a.href, label}); }, true);
-async function boot(){
- let { data:{ session } } = await sb.auth.getSession();
- if(!session && !switching){ const w = who(); if(w && w.email && await quickLogin(w.name, w.email) === true) session = (await sb.auth.getSession()).data.session; }
- if(!session){ $('#nav').hidden = true; setTimeout(nudge, 2500); return authView(); }
- if(recovering) return recoveryView();
- const { data } = await sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
- if(!data){ await sb.auth.signOut({ scope:'local' }); $('#nav').hidden = true; return authView(); } // signed in, but not as a Rag member
- me = data; TOKEN = session.access_token; if(session.user.email && !who()) saveWho(me.name, session.user.email);
- sb.rpc('touch_me').then(() => {}, () => {});
- $('#nav').hidden = false; route(); setTimeout(nudge, 2500);
-}
-sb.auth.onAuthStateChange(ev => { if(ev==='PASSWORD_RECOVERY'){ recovering = true; recoveryView(); } if(ev==='SIGNED_OUT'){ me = null; boot(); } });
-addEventListener('hashchange', () => { if(me) route(); });
-
-function authView(msg){
- const w = who() || {};
- app.innerHTML = `<form class="panel" id="af"><h2 class="gilt">Welcome to the Rag</h2><p style="margin:6px 0 4px">Just tell us who you are. No password needed, and this phone will remember you.</p>
- <label for="n">Your name (as the family knows you)</label><input id="n" required maxlength="60" autocomplete="name" value="${esc(w.name||'')}">
- <label for="e">Your email</label><input id="e" type="email" required autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" value="${esc(w.email||'')}">
- <div id="pw" hidden><label for="p">Editor password</label><input id="p" type="password" autocomplete="current-password"></div>
- <p class="err" id="er" role="alert">${esc(msg||'')}</p>
- <button class="btn solid" id="go" style="width:100%;padding:12px">Open the paper</button>
- <button type="button" class="btn ghost" id="fg" hidden>Forgot your editor password?</button></form>${PHONE&&!STANDALONE()?'<button class="btn ghost getapp" id="ga">📲 Put the Rag on your phone</button>':''}`;
- $('#ga') && ($('#ga').onclick = installSheet);
- $('#fg').onclick = forgotView;
- $('#af').onsubmit = async e => {
-  e.preventDefault(); const name = $('#n').value.trim(), email = $('#e').value.trim().toLowerCase(), er = $('#er'), go = $('#go');
-  er.textContent = ''; go.disabled = true; go.textContent = 'Opening…';
-  try{
-   if(!$('#pw').hidden){
-    const r = await sb.auth.signInWithPassword({ email, password:$('#p').value });
-    if(r.error){ er.textContent = r.error.message; return; }
-    saveWho(name, email); switching = false; return boot();
-   }
-   const r = await quickLogin(name, email);
-   if(r === 'editor'){ $('#pw').hidden = false; $('#fg').hidden = false; er.textContent = 'You’re an editor, so please add your password too.'; $('#p').focus(); return; }
-   if(r !== true){ er.textContent = r; return; }
-   switching = false; boot();
-  }finally{ go.disabled = false; go.textContent = 'Open the paper'; }
- };
-}
-
-async function feedView(){
- const hello = !greeted; greeted = true;
- app.innerHTML = `${hello?`<p class="hi" id="hi">Welcome, ${esc(me.name)}</p>`:''}${me.is_editor?'<div class="bar ed"><button class="btn ghost" id="eb">Email draft</button><button class="btn ghost" id="mb">Members</button></div>':''}<div id="tools"></div><div id="feed">Loading issues…</div><div class="foot"><button class="btn ghost" id="so">Not ${esc(me.name)}? Switch reader</button></div>`;
- if(hello) setTimeout(() => $('#hi')?.classList.add('off'), 3500);
- $('#so').onclick = () => { if(!confirm('Sign out so someone else can read here?')) return; switching = true; forgetWho(); sb.auth.signOut(); };
- if(me.is_editor){ $('#mb').onclick = () => $('#mp') ? closeMembers() : members(); $('#eb').onclick = () => emailDraft(); memberCount(); }
- const [i,c,r] = await Promise.all([
-  sb.from('issues').select('*').order('issue_date',{ascending:false}).order('number',{ascending:false}),
-  sb.from('comments').select('*,profiles(name)').order('created_at'),
-  me.is_editor ? sb.from('reactions').select('issue_id,kind,user_id,profiles(name)') : sb.from('reactions').select('issue_id,kind,user_id').eq('user_id', me.id)]);
- const [cn, vw] = await Promise.all([sb.rpc('reaction_counts'), me.is_editor ? sb.from('issue_views').select('issue_id,last_at,n,profiles(name)') : Promise.resolve({data:null})]);
- RXC = {}; (cn.data||[]).forEach(x => RXC[x.issue_id+'|'+x.kind] = x.n);
- VIEWS = vw.data || [];
- if(i.error) return $('#feed').textContent = i.error.message;
- $('#feed').innerHTML = i.data.length ? '' : '<p style="text-align:center">No issues yet. The press is warming up.</p>';
- i.data.forEach(is => $('#feed').append(issueEl(is, c.data||[], r.data||[])));
-}
-
-let RXC = {}, VIEWS = [];
-const seen = new Set(), viewObs = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(en => { const id = +en.target.dataset.iss;
- if(en.isIntersecting && !seen.has(id)){ seen.add(id); viewObs.unobserve(en.target); sb.rpc('saw_issue', {iid:id}).then(() => {}, () => {}); act('read', {key:id, n:en.target.dataset.n}); } }), {threshold:.5}) : null;
-const ago = t => { const d = (Date.now() - new Date(t)) / 864e5; return d < 1 ? 'today' : d < 2 ? 'yesterday' : d < 30 ? Math.floor(d)+' days ago' : new Date(t).toLocaleDateString(); };
-function issueEl(is, cs, rs){
- const el = document.createElement('article'); el.className='issue';
- const d = new Date(is.issue_date+'T00:00').toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
- el.innerHTML = `<button class="sheet" aria-label="Open issue ${is.number} full size"><img loading="lazy" src="${pub(is.img_path)}" alt="The Riley Rag, Issue ${is.number}, ${d}"></button>
- <div class="rxs"></div><div class="who" hidden></div>${me.is_editor?'<button class="btn ghost seen"></button><div class="who seenl" hidden></div>':''}<div class="cms"></div>
- <form><label class="sr" for="c${is.id}">Leave a comment</label><textarea id="c${is.id}" rows="2" maxlength="1000" placeholder="Leave a comment…" required></textarea><button class="btn">Post comment</button><p class="err"></p></form>`;
- el.querySelector('.sheet').onclick = () => { $('#lbimg').src = pub(is.img_path); $('#lbpdf').href = pub(is.pdf_path); $('#lb').classList.add('on'); if(!me.is_editor){ sb.rpc('saw_issue', {iid:is.id}).then(() => {}, () => {}); act('read', {key:is.id, n:is.number}); } };
- if(!me.is_editor && viewObs){ el.querySelector('.sheet').dataset.iss = is.id; el.querySelector('.sheet').dataset.n = is.number; viewObs.observe(el.querySelector('.sheet')); }
- if(me.is_editor){   // who has read this issue
-  const v = VIEWS.filter(x => x.issue_id === is.id).sort((a,b) => new Date(b.last_at) - new Date(a.last_at)), sb2 = el.querySelector('.seen'), sl = el.querySelector('.seenl');
-  sb2.textContent = v.length ? `👁 Read by ${v.length} ${v.length===1?'person':'people'} ▾` : '👁 Nobody has opened this one yet';
-  sl.innerHTML = v.map(x => `<div><b>${esc(x.profiles?.name||'Someone')}</b><small>${ago(x.last_at)}${x.n>1?` · ${x.n} times`:''}</small></div>`).join('');
-  sb2.onclick = () => { if(v.length){ sl.hidden = !sl.hidden; sb2.textContent = sb2.textContent.replace(/[▾▴]$/, sl.hidden?'▾':'▴'); } };
- }
- const rx = el.querySelector('.rxs'), whoBox = el.querySelector('.who');
- let openKind = null;
- const drawRx = () => {
-  rx.innerHTML = '';
-  Object.entries(RX).forEach(([k,[label,svg]]) => {
-   const mine = rs.some(x => x.issue_id===is.id && x.kind===k && x.user_id===me.id);
-   const n = RXC[is.id+'|'+k] || 0;
-   const b = document.createElement('button'); b.className='rx'; b.setAttribute('aria-pressed',mine);
-   b.setAttribute('aria-label',label+(n?`, ${n}`:'')); b.title = label;
-   b.innerHTML = `${svg}${n?`<span>${n}</span>`:''}`;
-   if(me.is_editor){   // editors don't react; they see who did
-    b.setAttribute('aria-pressed', openKind===k); b.setAttribute('aria-expanded', openKind===k);
-    b.onclick = () => { openKind = openKind===k ? null : k; drawRx(); };
-    rx.append(b); return;
-   }
-   b.onclick = async () => {
-    b.disabled = true;
-    const {error} = mine ? await sb.from('reactions').delete().match({issue_id:is.id,user_id:me.id,kind:k}) : await sb.from('reactions').insert({issue_id:is.id,kind:k});
-    if(error){ b.disabled = false; return alert(error.message); }
-    if(mine){ const i = rs.findIndex(x => x.issue_id===is.id && x.kind===k && x.user_id===me.id); if(i>-1) rs.splice(i,1); RXC[is.id+'|'+k] = Math.max(0, n-1); }
-    else { rs.push({issue_id:is.id, user_id:me.id, kind:k}); RXC[is.id+'|'+k] = n+1; act('react', {n:is.number, label}); }
-    drawRx(); [...rx.children].find(c => c.title===label)?.focus({preventScroll:true});
-   };
-   rx.append(b);
-  });
-  if(me.is_editor){
-   const names = openKind ? rs.filter(x => x.issue_id===is.id && x.kind===openKind).map(x => x.profiles?.name || 'Someone').sort((a,b) => a.localeCompare(b)) : [];
-   whoBox.hidden = !openKind;
-   if(openKind) whoBox.innerHTML = `<div class="whoh">${RX[openKind][1]}<span>${esc(RX[openKind][0])}</span></div>` + (names.length ? names.map(n => `<div>${esc(n)}</div>`).join('') : '<div><i>Nobody yet</i></div>');
-  }
- };
- drawRx();
- const box = el.querySelector('.cms');
- const addComment = x => {
-  const c = document.createElement('div'); c.className='cm';
-  c.innerHTML = `${me.is_editor?'<button class="del" aria-label="Delete comment">Delete</button>':''}<b>${esc(x.profiles?.name||'Someone')}</b><small>${new Date(x.created_at).toLocaleDateString()}</small><div>${esc(x.body)}</div>`;
-  if(me.is_editor) c.querySelector('.del').onclick = async () => { if(confirm('Delete this comment?')){ const {error} = await sb.from('comments').delete().eq('id',x.id); if(error) alert(error.message); else c.remove(); } };
-  box.append(c);
- };
- cs.filter(x => x.issue_id===is.id).forEach(addComment);
- el.querySelector('form').onsubmit = async e => {
-  e.preventDefault(); const ta = el.querySelector('textarea'), er = el.querySelector('.err'); er.textContent = '';
-  const {data, error} = await sb.from('comments').insert({issue_id:is.id, body:ta.value.trim()}).select('*,profiles(name)').single();
-  if(error) return er.textContent = error.message;
-  act('comment', {n:is.number, text:ta.value.trim()}); ta.value = ''; addComment(data);
- };
- return el;
-}
-
-function publishForm(){
- $('#tools').innerHTML = `<form class="panel" id="pf"><h2 class="gilt">Publish a new issue</h2>
- <label for="pn">Issue number</label><input id="pn" type="number" min="1" required>
- <label for="pd">Date</label><input id="pd" type="date" required>
- <label for="pt">Tagline</label><input id="pt" maxlength="120">
- <label for="pp">Newspaper PDF (one page)</label><input id="pp" type="file" accept="application/pdf" required>
- <p class="err" id="pe" role="alert"></p><button class="btn">Publish</button> <button type="button" class="btn ghost" id="pc">Cancel</button></form>`;
- $('#pd').valueAsDate = new Date(); $('#pc').onclick = () => $('#tools').innerHTML = '';
- $('#pf').onsubmit = async e => {
-  e.preventDefault(); const err = $('#pe'); err.textContent = 'Publishing…';
-  try{
-   const file = $('#pp').files[0];
-   const pdf = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise;
-   const pg = await pdf.getPage(1), vp = pg.getViewport({scale: 1600/pg.getViewport({scale:1}).width});
-   const cv = document.createElement('canvas'); cv.width = vp.width; cv.height = vp.height;
-   await pg.render({canvasContext: cv.getContext('2d'), viewport: vp}).promise;
-   const img = await new Promise(r => cv.toBlob(r,'image/jpeg',.85));
-   const id = crypto.randomUUID(), pdfPath = `${id}.pdf`, imgPath = `${id}.jpg`;
-   let u = await sb.storage.from('issues').upload(pdfPath, file, {contentType:'application/pdf'}); if(u.error) throw u.error;
-   u = await sb.storage.from('issues').upload(imgPath, img, {contentType:'image/jpeg'}); if(u.error) throw u.error;
-   const {error} = await sb.from('issues').insert({number:+$('#pn').value, issue_date:$('#pd').value, tagline:$('#pt').value.trim()||null, pdf_path:pdfPath, img_path:imgPath});
-   if(error) throw error; const nn = +$('#pn').value, tt = $('#pt').value.trim();
-   sb.functions.invoke('rr-notify', {body:{number:nn}}).catch(() => {});   // new-issue alerts to everyone else
-   await feedView(); emailDraft({number:nn, tagline:tt});
-  }catch(x){ err.textContent = x.message || String(x); }
- };
-}
-
-function memberLabel(n){ const b = $('#mb'); if(b) b.textContent = `Members (${n})`; }
-async function memberCount(){ const {data} = await sb.rpc('member_list'); if(data) memberLabel(data.length); }
-function closeMembers(){ $('#tools').innerHTML = ''; }
-async function members(){
- const {data, error} = await sb.rpc('member_list');
- if(error) return $('#tools').innerHTML = `<p class="err">${esc(error.message)}</p>`;
- memberLabel(data.length);
- const {data:ls} = await sb.from('profiles').select('id,last_seen'), LS = {}; (ls||[]).forEach(x => LS[x.id] = x.last_seen);
- data.sort((a,b) => new Date(LS[b.id]||0) - new Date(LS[a.id]||0));
- $('#tools').innerHTML = `<div class="panel" id="mp"><h2 class="gilt">Members (${data.length})</h2>${data.map(m => `<div class="cm"><b>${esc(m.name)}</b>${m.is_editor?' (editor)':''}<br><small style="margin:0">${esc(m.email)} · ${LS[m.id]?'last read '+ago(LS[m.id]):'hasn’t visited yet'}</small>${m.is_editor?'':`<button class="del" data-id="${m.id}">Remove</button>`}</div>`).join('')}<button class="btn ghost" id="mc">Close</button></div>`;
- $('#mc').onclick = closeMembers;
- document.querySelectorAll('#tools .del').forEach(b => b.onclick = async () => {
-  const nm = b.closest('.cm').querySelector('b').textContent;
-  if(!confirm(`Remove ${nm}? This also deletes their comments, reactions, game scores and Ask Peter letters. If they come back with the same email, they’ll start fresh.`)) return;
-  const {error} = await sb.rpc('delete_member',{uid:b.dataset.id}); error ? alert(error.message) : members();
- });
-}
-function route(){
- const h = location.hash || '#highlights';
- document.querySelectorAll('#nav a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href')===h ? 'page' : 'false'));
- ({'#games':gamesView,'#peter':peterView,'#recipes':recipesView,'#charter':charterView}[h] || feedView)(); scrollTo(0,0);
-}
-async function emailDraft(is){
- if(!is){ const {data} = await sb.from('issues').select('number,tagline').order('issue_date',{ascending:false}).order('number',{ascending:false}).limit(1); is = data?.[0]; if(!is) return; }
- const {data:em, error} = await sb.rpc('member_emails');
- if(error) return $('#tools').innerHTML = `<p class="err">${esc(error.message)}</p>`;
- const subj = `The Riley Rag № ${is.number} is out!`, tg = (is.tagline||'').replace(/[.\s]+$/,'');
- const body = `Hello family and friends,\n\nA new edition of The Riley Rag just hit the presses: Issue № ${is.number}${tg?`, ${tg}`:''}.\n\nRead it here: https://joshp523.github.io/RileyRag/\n\nWhile you’re there, tap a reaction or leave a comment. We love hearing from you!\n\nWith love from Brussels,\nThe Rileys`;
- const bcc = em.join(','), U = 'https://joshp523.github.io/RileyRag/';
- const html = `<p>Hello family and friends,</p><p>A new edition of The Riley Rag just hit the presses: Issue № ${is.number}${tg?`, ${esc(tg)}`:''}.</p><p>Read it here: <a href="${U}">The Riley Rag</a></p><p>While you’re there, tap a reaction or leave a comment. We love hearing from you!</p><p>With love from Brussels,<br>The Rileys</p>`;
- const crlf = t => encodeURIComponent(t.replace(/\n/g,'\r\n'));
- $('#tools').innerHTML = `<div class="panel"><h2 class="gilt">Email the family</h2><p>${em.length} recipients, all in Bcc.</p><b>${esc(subj)}</b><div class="pv">${html}</div>
- <p style="font-size:15px;opacity:.8">Best results: tap <b>Open in my email app</b>, then <b>Copy formatted message</b> and paste it into the body. The link will show up blue.</p>
- <a class="btn" href="mailto:?bcc=${encodeURIComponent(bcc).replace(/%2C/g,',')}&subject=${encodeURIComponent(subj)}&body=${crlf(body)}">Open in my email app</a>
- <button class="btn" id="c2">Copy formatted message</button><button class="btn ghost" id="c1">Copy recipients</button><button class="btn ghost" id="c3">Close</button></div>`;
- $('#c1').onclick = async () => { try{ await navigator.clipboard.writeText(bcc); $('#c1').textContent = 'Copied'; }catch(e){ prompt('Copy this:', bcc); } };
- $('#c2').onclick = async () => {
-  try{ await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}), 'text/plain':new Blob([body],{type:'text/plain'})})]); $('#c2').textContent = 'Copied! Now paste it into your email'; }
-  catch(e){ try{ await navigator.clipboard.writeText(body); $('#c2').textContent = 'Copied as plain text'; }catch(x){ prompt('Copy this:', body); } }
- };
- $('#c3').onclick = () => $('#tools').innerHTML = '';
-}
-async function wordForm(){
- // The word is never shown, not even to editors, so another editor can still play. Whoever sets it sits that round out.
- $('#tools').innerHTML = `<form class="panel" id="wf"><label for="nw">Set a new word (4 to 8 letters). Nobody will see it, and you’ll sit that round out.</label><input id="nw" pattern="[A-Za-z]{4,8}" maxlength="8" required autocomplete="off" autocapitalize="none" spellcheck="false"><p class="err" id="we"></p><button class="btn">Set the word</button></form>`;
- $('#wf').onsubmit = async e => { e.preventDefault(); const {error} = await sb.from('wordlers').insert({word:$('#nw').value.toLowerCase()}); error ? $('#we').textContent = error.message : gamesView(); };
-}
-async function board(){
- const {data, error} = await sb.rpc('riled_leaderboard'), box = $('#lbd'); if(!box) return;
- if(error) return box.innerHTML = '';
- box.innerHTML = `<h2 class="gilt" style="margin:34px 0 6px">Leaderboard</h2><p style="font-size:15px;opacity:.75;margin:0 0 8px">Average tries across every game played. A missed word counts as 7.</p>`
-  + (data.length ? `<table class="lbt">${data.map((r,i) => `<tr><td class="r">${i+1}.</td><td>${esc(r.name)}</td><td class="n">${Number(r.avg_tries).toFixed(2)}</td><td class="n" style="color:var(--g3)">${r.games} ${r.games===1?'game':'games'}</td></tr>`).join('')}</table>` : '<p>No finished games yet. Be the first on the board!</p>');
-}
-async function gamesView(){
- app.innerHTML = `<div class="apps"><a class="app" href="https://joshp523.github.io/Quip-game-app/"><img src="app-quiprash.png" alt="">QuipRash</a><a class="app" href="https://joshp523.github.io/Word-Games/"><img src="app-wordgames.png" alt="">Word Games</a></div><h2 class="hd gilt ph">Riled Up</h2><div id="tools"></div><div id="gm">Loading…</div><div id="lbd"></div>`;
- if(me.is_editor) wordForm();
- board();
- const {data:cur} = await sb.rpc('wordler_current'), pz = cur?.[0], gm = $('#gm');
- if(!pz) return gm.innerHTML = '<p style="text-align:center">No word has been set yet. Check back soon!</p>';
- const {data:si} = await sb.rpc('riled_setter'), st = si?.[0];
- const when = st?.set_at ? new Date(st.set_at).toLocaleString(undefined,{weekday:'long',day:'numeric',month:'long',hour:'numeric',minute:'2-digit'}) : '';
- const setLine = st ? `<p style="text-align:center;font-style:italic;opacity:.8">Word set by ${st.mine?'you':esc(st.name||'an editor')}${when?' on '+esc(when):''}.</p>` : '';
- if(st?.mine) return gm.innerHTML = setLine + '<p style="text-align:center">You set this word, so you sit this round out. You can play again once someone else sets the next one.</p>';
- const {data:gs} = await sb.from('wordler_guesses').select('guess,pattern').eq('puzzle_id',pz.id).order('id');
- let guesses = gs || [], typed = '';
- const solved = () => guesses.some(g => /^g+$/.test(g.pattern)), over = () => solved() || guesses.length >= 6;
- gm.innerHTML = setLine + `<p style="text-align:center">Guess the ${pz.len}-letter word in six tries.</p><div class="bd" id="bd" style="--n:${pz.len}"></div>
- <form class="gf" id="gf"><input id="gi" maxlength="${pz.len}" autocomplete="off" autocapitalize="none" spellcheck="false" aria-label="Your guess"><button class="btn">Guess</button></form><p class="err" id="ge"></p><div class="kb" id="kb"></div><p id="gend" style="text-align:center"></p>`;
- async function draw(){
-  let h = '';
-  for(let i=0;i<6;i++){
-   const g = guesses[i], cur = i===guesses.length && !over();
-   h += '<div class="row">' + Array.from({length:pz.len},(_,j) => g ? `<div class="t ${g.pattern[j]}">${g.guess[j]}</div>` : `<div class="t">${cur?(typed[j]||''):''}</div>`).join('') + '</div>';
-  }
-  $('#bd').innerHTML = h;
-  const best = {}; guesses.forEach(g => [...g.guess].forEach((c,j) => { const p = g.pattern[j]; if(p==='g'||(p==='y'&&best[c]!=='g')||!best[c]) best[c] = p; }));
-  $('#kb').innerHTML = 'abcdefghijklmnopqrstuvwxyz'.split('').map(c => `<span class="k ${best[c]||''}">${c}</span>`).join('');
-  $('#gf').hidden = over();
-  if(solved()) $('#gend').textContent = `Solved in ${guesses.length}! Check back for the next word.`;
-  else if(over()){ const {data} = await sb.rpc('wordler_answer',{pid:pz.id}); $('#gend').textContent = `The word was “${data}”. Better luck next time!`; }
- }
- $('#gi').oninput = e => { typed = e.target.value.replace(/[^a-z]/gi,'').slice(0,pz.len); e.target.value = typed; draw(); };
- $('#gf').onsubmit = async e => {
-  e.preventDefault(); $('#ge').textContent = '';
-  if(typed.length !== pz.len) return $('#ge').textContent = `Enter ${pz.len} letters.`;
-  const {data, error} = await sb.rpc('wordler_guess',{pid:pz.id, g:typed});
-  if(error) return $('#ge').textContent = error.message;
-  guesses.push({guess:typed.toLowerCase(), pattern:data}); typed = ''; $('#gi').value = ''; await draw();
-  if(over()){ board(); act('game', {text: solved() ? `solved Riled Up in ${guesses.length} ${guesses.length===1?'try':'tries'}` : 'played Riled Up and missed the word'}); }
- };
- draw();
-}
-async function peterView(){
- app.innerHTML = `<h2 class="hd gilt ph">Ask Peter</h2><p style="text-align:center;font-style:italic">Write in to our advice columnist. Peter replies in his own time.</p>
- <form class="panel" id="qf"><textarea id="qt" rows="3" maxlength="800" placeholder="Dear Peter…" aria-label="Your question for Peter" required></textarea><button class="btn">Send to Peter</button><p class="err" id="qe"></p></form><div id="ql">Loading…</div>`;
- $('#qf').onsubmit = async e => { e.preventDefault(); const qt = $('#qt').value.trim(); const {error} = await sb.from('advice').insert({question:qt}); if(error) return $('#qe').textContent = error.message; act('peter', {text:qt}); peterView(); };
- const {data, error} = await sb.from('advice').select('*,profiles(name)').order('created_at',{ascending:false});
- if(error) return $('#ql').textContent = error.message;
- $('#ql').innerHTML = data.length ? '' : '<p style="text-align:center">No letters yet. Be the first to write in!</p>';
- data.forEach(q => {
-  const nm = q.profiles?.name || 'A reader', d = document.createElement('div'); d.className = 'cm';
-  d.innerHTML = `<div><i>Dear Peter,\n${esc(q.question)}\nSincerely, ${esc(nm)}</i></div>` + (q.answer ? `<p>Dear ${esc(nm)},\n${esc(q.answer)}</p>`
-   : me.is_editor ? `<textarea rows="3" placeholder="Peter’s reply" aria-label="Peter’s reply"></textarea><button class="btn pa">Publish reply</button><button class="btn ghost pd">Delete</button>`
-   : `<p><small>Waiting for Peter’s reply…</small></p>`);
-  if(me.is_editor && !q.answer){
-   d.querySelector('.pa').onclick = async () => { const a = d.querySelector('textarea').value.trim(); if(a){ const {error} = await sb.from('advice').update({answer:a, answered_at:new Date().toISOString()}).eq('id',q.id); if(error) return alert(error.message); if(TOKEN) send('rr-activity', {kind:'peter_answer', d:{id:q.id}}); peterView(); } };
-   d.querySelector('.pd').onclick = async () => { if(confirm('Delete this letter?')){ await sb.from('advice').delete().eq('id',q.id); peterView(); } };
-  }
-  $('#ql').append(d);
- });
-}
-async function recipesView(){
- app.innerHTML = `<h2 class="hd gilt ph">Riley Recipes</h2>${me.is_editor?'<div class="bar"><button class="btn" id="ra">Add a recipe card</button></div>':''}<div id="tools"></div><div id="rf">Loading…</div>`;
- if(me.is_editor) $('#ra').onclick = () => {
-  $('#tools').innerHTML = `<form class="panel" id="rpf"><label for="rn">Recipe name (optional, used for screen readers)</label><input id="rn" maxlength="120"><label for="rp">Recipe card PDF</label><input id="rp" type="file" accept="application/pdf" required><p class="err" id="re" role="alert"></p><button class="btn">Upload</button> <button type="button" class="btn ghost" id="rc">Cancel</button></form>`;
-  $('#rc').onclick = () => $('#tools').innerHTML = '';
-  $('#rpf').onsubmit = async e => {
-   e.preventDefault(); $('#re').textContent = 'Uploading…';
-   try{
-    const file = $('#rp').files[0], pdf = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise;
-    const pg = await pdf.getPage(1), vp = pg.getViewport({scale: 1400/pg.getViewport({scale:1}).width});
-    const cv = document.createElement('canvas'); cv.width = vp.width; cv.height = vp.height;
-    await pg.render({canvasContext: cv.getContext('2d'), viewport: vp}).promise;
-    const img = await new Promise(r => cv.toBlob(r,'image/jpeg',.85)), id = crypto.randomUUID();
-    const pdfPath = `recipes/${id}.pdf`, imgPath = `recipes/${id}.jpg`;
-    let u = await sb.storage.from('issues').upload(pdfPath, file, {contentType:'application/pdf'}); if(u.error) throw u.error;
-    u = await sb.storage.from('issues').upload(imgPath, img, {contentType:'image/jpeg'}); if(u.error) throw u.error;
-    const {error} = await sb.from('recipes').insert({name:$('#rn').value.trim()||null, pdf_path:pdfPath, img_path:imgPath});
-    if(error) throw error; recipesView();
-   }catch(x){ $('#re').textContent = x.message || String(x); }
-  };
- };
- const {data, error} = await sb.from('recipes').select('*').order('created_at',{ascending:false});
- if(error) return $('#rf').textContent = error.message;
- $('#rf').innerHTML = data.length ? '' : '<p style="text-align:center">No recipe cards yet. Something delicious is coming!</p>';
- data.forEach(r => {
-  const el = document.createElement('article'); el.className = 'issue';
-  el.innerHTML = `<button class="sheet" aria-label="Open recipe card full size"><img loading="lazy" src="${pub(r.img_path)}" alt="${esc(r.name||'Recipe card')}"></button>${me.is_editor?'<div class="bar" style="margin-top:10px"><button class="btn ghost rd">Delete this card</button></div>':''}`;
-  el.querySelector('.sheet').onclick = () => { $('#lbimg').src = pub(r.img_path); $('#lbpdf').href = pub(r.pdf_path); $('#lb').classList.add('on'); };
-  if(me.is_editor) el.querySelector('.rd').onclick = async () => { if(confirm('Delete this recipe card?')){ await sb.from('recipes').delete().eq('id',r.id); recipesView(); } };
-  $('#rf').append(el);
- });
-}
-function forgotView(){
- app.innerHTML = `<form class="panel" id="ff"><h2 class="gilt">Reset your password</h2><p>Enter your email and we’ll send you a link to choose a new one.</p><label for="fe">Email</label><input id="fe" type="email" required autocomplete="email"><p class="err" id="fr" role="alert"></p><button class="btn">Email me a reset link</button><button type="button" class="btn ghost" id="fb">Back to sign in</button></form>`;
- $('#fb').onclick = authView;
- $('#ff').onsubmit = async e => {
-  e.preventDefault(); const r = $('#fr'); r.style.color = 'var(--g1)'; r.textContent = 'Sending…';
-  const {error} = await sb.auth.resetPasswordForEmail($('#fe').value.trim(), {redirectTo: location.origin + location.pathname});
-  if(error){ r.style.color = ''; return r.textContent = error.message; }
-  r.textContent = 'If that email has an account, a reset link is on its way. Check your spam folder too.';
- };
-}
-function recoveryView(){
- $('#nav').hidden = true;
- app.innerHTML = `<form class="panel" id="nf"><h2 class="gilt">Choose a new password</h2><label for="np">New password (6 or more characters)</label><input id="np" type="password" minlength="6" required autocomplete="new-password"><p class="err" id="nr" role="alert"></p><button class="btn">Save and continue</button></form>`;
- $('#nf').onsubmit = async e => {
-  e.preventDefault(); const {error} = await sb.auth.updateUser({password:$('#np').value});
-  if(error) return $('#nr').textContent = error.message;
-  recovering = false; history.replaceState(null,'',location.pathname); boot();
- };
-}
-const GALLERY = 'https://photos.app.goo.gl/6F13zuFyThHE7W2AA';   // shared Google Photos album; phones with the Google Photos app open it there
-const MORE_APPS = [
- ['язык врагов','https://joshp523.github.io/russian/','app-russian.png'],['Idioma Celestial','https://joshp523.github.io/palabras/','app-palabras.png?v=3'],
- ['Riley Rangers','https://joshp523.github.io/Rangers-app/','app-rangers.png'],
- ['Mushroom classifier','https://joshp523.github.io/Mushroom-Classifier/','app-shroom.png'],
- ['Writing','https://joshp523.github.io/writing-app/','app-writing.png'],['Rag Press','https://joshp523.github.io/RileyRag/press/','app-press.png'],
-  ['Habits: Josh','https://joshp523.github.io/daily-discipline/','app-habits-josh.png'],
- ['Habits: Grandma','https://joshp523.github.io/wendys-app/','app-habits-grandma.png']];
-function aboutExtras(){
- return `<div class="bar" style="margin-top:26px"><a class="btn" href="${GALLERY}" target="_blank" rel="noopener">Photo gallery</a></div>
- <div class="ph-panel" id="phn"></div>
- <h2 class="hd gilt ph" style="margin-top:34px">Other apps by Josh Riley</h2>
- <div class="apps more">${MORE_APPS.map(([n,u,img]) => u
-  ? `<a class="app" href="${u}"><img src="${img}" alt="">${esc(n)}</a>`
-  : `<div class="app soon"><img src="${img}" alt="">${esc(n)}<small>coming soon!</small></div>`).join('')}</div>`;
-}
-function linkify(t){   // t is already HTML-escaped; turns http(s):// and www. addresses into tappable links
- return t.replace(/(https?:\/\/|www\.)[^\s<>"']+/g, m => {
-  const tail = (m.match(/(&quot;|&#39;|&gt;|&lt;|[.,;:!?)\]])+$/) || [''])[0], url = m.slice(0, m.length - tail.length);
-  return `<a href="${url.startsWith('www.') ? 'https://' + url : url}" target="_blank" rel="noopener noreferrer">${url}</a>${tail}`;
- });
-}
-async function charterView(){
- app.innerHTML = `<h2 class="hd gilt ph">Charter</h2><div id="cb">Loading…</div><div id="ex"></div>`;
- const {data, error} = await sb.from('site_pages').select('body').eq('key','charter').maybeSingle();
- if(error) return $('#cb').textContent = error.message;
- let body = data?.body || '';
- const show = () => {
-  $('#cb').innerHTML = `<p class="charter">${body ? linkify(esc(body)) : '<i>Nothing here yet.</i>'}</p>${me.is_editor?'<div class="bar"><button class="btn" id="ce">Edit</button></div>':''}`;
-  if(me.is_editor) $('#ce').onclick = edit;
- };
- $('#ex').innerHTML = aboutExtras(); phonePanel();
- const edit = () => {
-  $('#cb').innerHTML = `<form class="panel" id="cf"><label class="sr" for="ct">Charter text</label><textarea id="ct" rows="10" maxlength="5000"></textarea><p class="err" id="cr" role="alert"></p><button class="btn">Save</button> <button type="button" class="btn ghost" id="cc">Cancel</button></form>`;
-  $('#ct').value = body; $('#cc').onclick = show;
-  $('#cf').onsubmit = async e => {
-   e.preventDefault(); const t = $('#ct').value.trim();
-   const {error} = await sb.from('site_pages').upsert({key:'charter', body:t, updated_at:new Date().toISOString()});
-   if(error) return $('#cr').textContent = error.message;
-   body = t; show();
-  };
- };
- show();
-}
-$('#lbx').onclick = () => $('#lb').classList.remove('on');
-boot();
+const IV=[0,1,3,7,16,35],K='rus1';
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const today=iso(new Date()),addD=n=>{const d=new Date();d.setDate(d.getDate()+n);return iso(d)};
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=s=>s.replace(/́/g,'').toLowerCase().replace(/ё/g,'е').trim();
+const ac=s=>String(s||'').replace(/'/g,'́');
+/* Урок 1 (original hand-written deck): id, tag, sentence, hint, answer (stressed), rule */
+const L=[
+['m1','идти','Сейчас я ___ в магазин.','идти / ходить','иду́','Один конкретный путь, прямо сейчас → идти́: я иду́, ты идёшь, они иду́т.'],
+['m2','идти','Я каждый день ___ в университет пешком.','идти / ходить','хожу́','Привычка, повторение → ходи́ть: я хожу́, ты хо́дишь.'],
+['m3','идти','Вчера мы ___ в кино. (пошли и вернулись)','идти / ходить','хо́дили','Туда и обратно в прошлом → ходи́ть (хо́дили).'],
+['m4','идти','Куда ты ___?','идти / ходить','идёшь','Вопрос «куда?» прямо сейчас → идти́: идёшь.'],
+['m5','идти','Когда я ___ домой, я встретил друга. (я = он)','идти / ходить','шёл','Прошедшее от идти́ нерегулярное: шёл, шла, шло, шли.'],
+['m6','идти','Когда она ___ домой, пошёл дождь.','идти / ходить','шла','Прошедшее от идти́: шёл, шла, шло, шли.'],
+['m7','ехать','Мы сейчас ___ на поезде в Брюгге.','ехать / ездить','е́дем','Один путь, сейчас → е́хать: е́ду, е́дешь, е́дем.'],
+['m8','ехать','Он часто ___ в Москву по делам.','ехать / ездить','е́здит','Регулярно → е́здить: е́зжу, е́здишь, е́здит.'],
+['m9','вести','Она каждое утро ___ ребёнка в школу.','вести / водить','во́дит','Регулярно → води́ть: вожу́, во́дишь. (Один путь: вести́ — веду́, ведёшь.)'],
+['m10','нести','Я сейчас ___ сумку домой.','нести / носить','несу́','Один путь, сейчас → нести́: несу́, несёшь.'],
+['m11','нести','Он всегда ___ с собой словарь.','нести / носить','но́сит','Всегда, обычно → носи́ть: ношу́, но́сишь.'],
+['m12','лететь','Смотри, самолёт ___ над городом!','лететь / летать','лети́т','Один полёт, сейчас → лете́ть: лечу́, лети́шь, лети́т.'],
+['m13','лететь','Я боюсь ___ на самолёте.','лететь / летать','лета́ть','Общий факт, без одного маршрута → лета́ть.'],
+['m14','бежать','Смотри, мальчик ___ по улице!','бежать / бегать','бежи́т','Один путь, сейчас → бежа́ть: бегу́, бежи́шь, бежи́т.'],
+['m15','бежать','Я люблю ___ утром в парке.','бежать / бегать','бе́гать','Любить + процесс вообще → бе́гать.'],
+['m16','плыть','Смотри, кто-то ___ по реке.','плыть / плавать','плывёт','Один путь, сейчас → плыть: плыву́, плывёшь, плывёт.'],
+['m17','плыть','Он хорошо ___.','плыть / плавать','пла́вает','Умение, способность → пла́вать.'],
+['p1','приставки','Вчера он ___ из дома в восемь утра.','выйти / выходить','вы́шел','Один раз, результат → совершенный вид: вы́йти (вы́йду, вы́шел) + из + род. п.'],
+['p2','приставки','Он обычно ___ из дома в восемь.','выйти / выходить','выхо́дит','Обычно → несовершенный вид: выходи́ть (выхожу́, выхо́дишь).'],
+['p3','приставки','Завтра я ___ к тебе в гости.','прийти / приходить','приду́','Один раз в будущем → прийти́: приду́, придёшь, придёт. к + дат. п.'],
+['p4','приставки','Каждый день она ___ домой в шесть.','прийти / приходить','прихо́дит','Каждый день → приходи́ть: прихожу́, прихо́дишь.']];
+/* V[verb] = [kind u|m|p, base group, aspect p|i, OpenRussian partner, OpenRussian English gloss, prefix, forms[13], pair label] */
+const TL=['инфинитив','повел., ты','повел., вы','прош., он','прош., она','прош., оно','прош., они','я','ты','он / она','мы','вы','они'];
+const PM={'в':'внутрь','вы':'наружу','при':'прибытие','у':'уход','под':'приближение','от':'удаление','пере':'через','про':'мимо, сквозь','до':'до цели','за':'по пути, за чем-то','об':'вокруг','с':'вниз, с','по':'начало движения','раз':'в разные стороны'};
+const LM=Object.fromEntries(L.map(c=>[c[0],c])),AM=Object.fromEntries(AS.map(c=>[c[0],c]));const CM=Object.fromEntries(C.map(c=>[c[0],c]));
+const src=i=>{const w=W[i];return`${w[0]}, «${w[1]}», ${w[2]}`};
+function card(id){const l=LM[id];if(l)return{id,deck:'l1',tag:l[1],sent:l[2],hint:l[3],ans:l[4],rule:l[5]};
+ const a=AM[id];if(a)return{id,deck:'asp',tag:'вид глагола',sent:a[1],hint:a[2],ans:ac(a[3]),alt:a[4],rule:a[5],en:a[6]};
+ const c=CM[id];if(!c)return null;const v=V[c[1]],k=v[0],tag=k==='p'?v[5]+'-':v[1],inf=ac(v[6][0]);
+ const rule=k==='u'?`${inf} — однонаправленный: одно движение в одну сторону (сейчас, конкретный путь, фон в прошлом).`
+  :k==='m'?`${inf} — разнонаправленный: повторение, привычка, туда и обратно, без направления, умение.`
+  :v[5]==='по'&&v[2]==='p'?`${inf}: по- + однонаправленный → совершенный вид, начало движения («отправиться»).`
+  :v[2]==='p'?`${inf}: ${v[5]}- (${PM[v[5]]||'приставка'}) + однонаправленный → совершенный вид: одно законченное действие, результат.`
+  :`${inf}: ${v[5]}- (${PM[v[5]]||'приставка'}) + разнонаправленный → несовершенный вид: процесс, повторение, привычка.`;
+ return{id,deck:k==='p'?'pref':'base',tag,verb:c[1],ti:c[2],sent:c[3],hint:v[7]+' · '+TL[c[2]],ans:c[4],rule,src:c[5],gloss:v[4]}}
+function alts(c){if(c.alt)return c.alt.map(norm);if(!c.verb)return[];const v=V[c.verb],o=[];v[7].split(' / ').forEach(x=>{x=x.trim();if(x!==c.verb&&V[x])o.push(V[x][6][c.ti])});
+ return o.flatMap(f=>String(f||'').split(/[,;]/)).map(f=>norm(f.replace(/'/g,''))).filter(Boolean)}
+let S={cards:{},tg:{},log:[],days:{},sus:{},set:{n:10,d:{l1:1,asp:1,base:1,pref:1}},rd:{}};
+try{const o=JSON.parse(localStorage.getItem(K));if(o)S={...S,...o,set:{...S.set,...(o.set||{}),d:{...S.set.d,...((o.set||{}).d||{})}}}}catch(e){}
+let tab='home',Q=[],TOT=0,DONE=0,tries=0,fb=null,msg='',dq='';
+const persist=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+let pt;const save=()=>{persist();if(AU){clearTimeout(pt);pt=setTimeout(sync,4000)}};
+const streak=()=>{let n=0,i=S.days[today]?0:1;while(S.days[addD(-i)]){n++;i++}return n};
+const ALLIDS=L.map(c=>c[0]).concat(AS.map(c=>c[0]),C.map(c=>c[0]));
+const live=id=>{const c=card(id);return c&&!S.sus[id]&&S.set.d[c.deck]!==0};
+function queue(){const ids=ALLIDS.filter(live),due=ids.filter(i=>S.cards[i]&&S.cards[i].due<=today),fresh=ids.filter(i=>!S.cards[i]),used=Object.values(S.cards).filter(c=>c.f===today).length;
+ return due.concat(fresh.slice(0,Math.max(0,S.set.n-used)))}
+function start(){Q=queue();TOT=Q.length;DONE=0;tries=0;fb=null;msg='';tab='drill';render()}
+function check(){const v=document.getElementById('a').value;if(!v.trim())return;const c=card(Q[0]);
+ if(norm(v)===norm(c.ans)){grade(c,tries?1:2,v)}
+ else if(alts(c).includes(norm(v))){msg=c.deck==='asp'?'Форма верная, но вид другой. Подумайте, почему.':'Форма верная, но у автора другой глагол пары. Подумайте, почему.';render()}
+ else if(!tries){tries=1;msg='Не совсем. Попробуйте ещё раз.';render()}
+ else{S.log.push({t:Date.now(),id:c.id,a:v});S.log=S.log.slice(-200);grade(c,0,v)}}
+function grade(c,g,v){const id=c.id,s=S.cards[id]||{b:0,f:today};
+ if(!tries){const t=S.tg[c.tag]||[0,0];t[1]++;if(g===2)t[0]++;S.tg[c.tag]=t}
+ s.b=g===2?Math.min(5,s.b+1):g===1?Math.max(1,s.b):0;s.due=addD(IV[s.b]);s.t=Date.now();S.cards[id]=s;S.days[today]=(S.days[today]||0)+1;
+ if(g===0)Q.push(id);fb={g};msg='';save();render();if(S.set.au!==0)say(c.sent.replace('___',c.ans))}
+function next(){Q.shift();DONE++;tries=0;fb=null;msg='';render()}
+function suspend(){S.sus[Q[0]]=Date.now();Q=Q.filter(i=>i!==Q[0]);tries=0;fb=null;msg='';save();render()}
+const st=a=>a.replace(/([аеёиоуыэюяАЕЁИОУЫЭЮЯ])́/g,'<b style="color:#e6b94f">$1́</b>');
+const hl=(s,w)=>{const e=esc(s),i=e.indexOf(w);return i<0?e:e.slice(0,i)+'<u>'+e.slice(i,i+w.length)+'</u>'+e.slice(i+w.length)};
+const tw=h=>h.replace(/[А-Яа-яЁё\u0301]+(?:-[А-Яа-яЁё\u0301]+)*/g,m=>`<span class="w">${m}</span>`);
+const quote=q=>`<div class="q"><div class="ru">«${tw(hl(q[0],q[2]))}» ${spk(q[0])}</div><div class="src">${esc(src(q[1]))}</div></div>`;
+const setN=n=>{S.set.n=n;save();render()};const tgl=d=>{S.set.d[d]=S.set.d[d]===0?1:0;save();render()};
+function home(){const q=queue(),due=q.filter(i=>S.cards[i]).length,tg=Object.entries(S.tg).filter(([k,v])=>v[1]>=3).map(([k,v])=>[k,v[0]/v[1]]).sort((a,b)=>a[1]-b[1]).slice(0,4);
+ const seen=Object.keys(S.cards).length,tot=ALLIDS.length;
+ return`<div class="b o"><span>★ Глаголы</span><span>Серия ${streak()}</span></div><div class="k"><h3>Норма сегодня</h3><div style="display:flex;gap:28px"><div><div class="big">${due}</div><div class="m">повторений</div></div><div><div class="big">${q.length-due}</div><div class="m">новых</div></div></div><button class="btn" onclick="start()">${q.length?'Начать смену ★':'Норма выполнена'}</button><div class="m" style="margin-top:10px">Изучено ${seen} из ${tot} карточек</div><div class="t"><i style="width:${seen/tot*100}%"></i></div></div>
+ ${remCard()}<div class="k"><h3>Слабые места</h3>${tg.length?tg.map(([k,v])=>`<div class="m">${esc(k)} ${Math.round(v*100)}%</div><div class="t"><i style="width:${v*100}%"></i></div>`).join(''):'<div class="m">Данные появятся после первых смен.</div>'}</div>
+ <div class="k"><h3>Настройки</h3><div class="m">Новых карточек в день</div><div class="chips">${[5,10,15,25].map(n=>`<button class="chip ${S.set.n===n?'on':''}" onclick="setN(${n})">${n}</button>`).join('')}</div>
+ <div class="m" style="margin-top:12px">Колоды</div><div class="chips">${[['l1','Урок 1'],['asp','Вид глагола'],['base','Без приставок'],['pref','С приставками']].map(([d,l])=>`<button class="chip ${S.set.d[d]!==0?'on':''}" onclick="tgl('${d}')">${l}</button>`).join('')}</div>
+ ${TTS?`<div class="m" style="margin-top:12px">Озвучка после ответа</div><div class="chips"><button class="chip ${S.set.au!==0?'on':''}" onclick="S.set.au=1;save();render()">Авто</button><button class="chip ${S.set.au===0?'on':''}" onclick="S.set.au=0;save();render()">Только по кнопке</button></div>
+ <div class="m" style="margin-top:12px">Скорость речи</div><div class="chips">${[[.7,'Медленно'],[.9,'Обычно'],[1.05,'Быстро']].map(([r,l])=>`<button class="chip ${(S.set.rate||.9)===r?'on':''}" onclick="S.set.rate=${r};save();render();say('Я иду домой.')">${l}</button>`).join('')}</div>`:''}
+ <div class="m" style="margin-top:10px">${C.length} карточек из русской классики · ${Object.keys(V).length} глаголов в словаре</div></div>`}
+function drill(){if(!Q.length)return`<div class="b o"><span>★ Смена окончена</span></div><div class="k"><h3>Готово</h3><div class="m">Сделано ${TOT} карточек. Возвращайтесь завтра.</div><button class="btn" onclick="tab='home';render()">На главную</button></div>`;
+ const c=card(Q[0]);
+ const full=tw(esc(c.sent)).replace('___','<u><span class="w">'+st(c.ans)+'</span></u>'),said=c.sent.replace('___',c.ans);
+ const body=fb?`<div class="k"><h3 class="${fb.g?'ok':'bad'}">${fb.g===2?'Верно':fb.g===1?'Верно со второго раза':'Неверно'}</h3><div class="ru">${full} ${spk(said)}</div>${c.src!=null?`<div class="src">— ${esc(src(c.src))}</div>`:''}<div style="margin-top:10px">${st(esc(c.rule))}</div>${c.en?`<div class="en">${esc(c.en)}</div>`:''}${c.gloss?`<div class="gl" style="margin-top:6px">OpenRussian: “${esc(c.gloss)}”</div>`:''}<button class="btn" onclick="next()">Дальше</button>${c.src!=null?'<button class="lnk" onclick="suspend()">Убрать эту карточку</button>':''}</div>`
+ :`<div class="k"><h3>${esc(c.hint)}</h3><div class="ru">${tw(esc(c.sent)).replace('___','<b style="color:#e6b94f">___</b>')}</div>${c.src!=null?`<div class="src">— ${esc(src(c.src))}</div>`:''}<input id="a" autocapitalize="off" autocorrect="off" spellcheck="false" lang="ru" autocomplete="off" aria-label="Ответ" onkeydown="if(event.key==='Enter')check()"><div class="bad" style="margin-top:6px">${esc(msg)}</div><div class="m">Ударение не нужно · е = ё · нажмите на слово — перевод</div><button class="btn" onclick="check()">Проверить</button></div>`;
+ const dn=DONE+(fb?1:0),all=DONE+Q.length;return`<div class="b o"><span>★ Упражнение</span><span>${dn} / ${all}</span></div><div class="pg" role="progressbar" aria-valuenow="${dn}" aria-valuemax="${all}"><i style="width:${all?dn/all*100:0}%"></i></div>${body}`}
+function rules(){return`<div class="b o"><span>★ Правила</span><span>${R.length} тем</span></div>`+R.map(r=>`<div class="k"><h3>${esc(r.h)}</h3>${(r.p||[]).map(p=>`<div style="margin-bottom:6px">${st(esc(p))}</div>`).join('')}
+ ${r.pairs?`<table>${B.map(b=>`<tr><td>${sayW(ac(V[b[0]][6][0]))} / ${sayW(ac(V[b[1]][6][0]))}</td><td class="m">${esc(b[2])}<br>“${esc(V[b[0]][4])}”</td></tr>`).join('')}</table>`:''}
+ ${r.pref?r.pref.map(p=>`<h4>${esc(p[0])} · ${esc(p[1])} · ${esc(p[2])}</h4>${quote(p[3])}`).join(''):''}
+ ${(r.ex||[]).map(quote).join('')}</div>`).join('')
+ +`<div class="k"><h3>Вид глагола: трудные случаи</h3>${ASR.map(r=>`<div style="margin-bottom:8px">${st(esc(r[0]))}<div class="en" style="margin-top:2px">${esc(r[1])}</div></div>`).join('')}<div class="m">Тренировка — колода «Вид глагола» (${AS.length} карточек) в обычной смене.</div></div>`+`<div class="k" style="border-color:#b30f27"><h3>Из книги</h3>${quote(FIRST)}</div>`
+ +`<div class="k"><h3>Источники и лицензии</h3><div class="m" style="margin-bottom:8px">Все примеры — дословные цитаты (изменены только тире). Ударения и английские значения — из словаря OpenRussian. Объяснения правил — краткие, от составителя.</div>
+ <div class="m">• Формы глаголов, ударения, видовые пары, переводы: <a style="color:#e6b94f" href="https://github.com/Badestrand/russian-dictionary">OpenRussian dictionary data</a> (openrussian.org), CC BY-SA 4.0.</div>
+ <div class="m">• Тексты: <a style="color:#e6b94f" href="https://github.com/nevmenandr/word2vec-russian-novels">nevmenandr/word2vec-russian-novels</a> (Б. Орехов); произведения в общественном достоянии:</div>
+ <div class="m" style="margin-top:6px">${W.map(w=>`${esc(w[0])}, «${esc(w[1])}» (${w[2]}) — ${C.filter(c=>W[c[5]]===w).length} карт.`).join('<br>')}</div></div>`}
+function vtable(v){const m=V[v],f=m[6].map(ac),c=C.filter(x=>x[1]===v).length,st=x=>sayW(x||'');
+ return`<div style="margin:6px 0">${spk(f[0])} <span class="gl">нажмите на форму, чтобы услышать</span></div><div class="gl">${m[2]==='p'?'сов.':'несов.'}${m[3]&&m[3]!=='-'?' · пара: '+esc(m[3].replace(/[,;]/g,', ')):''} · ${c} карт.</div><div class="gl">OpenRussian: “${esc(m[4])}”</div>
+ <table><tr><td class="m">я</td><td>${st(f[7])}</td><td class="m">мы</td><td>${st(f[10])}</td></tr><tr><td class="m">ты</td><td>${st(f[8])}</td><td class="m">вы</td><td>${st(f[11])}</td></tr><tr><td class="m">он</td><td>${st(f[9])}</td><td class="m">они</td><td>${st(f[12])}</td></tr>
+ <tr><td class="m">прош.</td><td colspan="3">${[3,4,5,6].map(i=>st(f[i])).join(', ')}</td></tr><tr><td class="m">повел.</td><td colspan="3">${st(f[1])}, ${st(f[2])}</td></tr></table>`}
+function dict(){
+ return`<div class="b o"><span>★ Словарь</span><span>${Object.keys(V).length} глаголов</span></div><div class="k"><h3>Поиск</h3><input id="dq" value="${esc(dq)}" placeholder="прийти, carry…" autocapitalize="off" autocomplete="off" oninput="dq=this.value;document.getElementById('dl').innerHTML=dlist()"><div class="m" style="margin-top:6px">Данные: OpenRussian, CC BY-SA 4.0</div></div><div id="dl">${dlist()}</div>`}
+function dlist(){const q=norm(dq);return B.map(b=>{const vs=Object.keys(V).filter(v=>V[v][1]===b[0]&&(!q||norm(v).includes(q)||V[v][4].toLowerCase().includes(q))).sort((a,c)=>(V[a][0]>V[c][0])-(V[a][0]<V[c][0])||(V[a][7]>V[c][7])-(V[a][7]<V[c][7])||(V[a][2]>V[c][2])-(V[a][2]<V[c][2]));
+ return vs.length?`<div class="k"><h3>${esc(b[0])} / ${esc(b[1])}</h3>${vs.map(v=>`<details ontoggle="if(this.open&&!this.dataset.f){this.insertAdjacentHTML('beforeend',vtable('${v}'));this.dataset.f=1}"><summary>${st(ac(V[v][6][0]))} <span class="gl">${V[v][2]==='p'?'сов.':'несов.'} · ${esc(V[v][4].split(',').slice(0,3).join(','))}</span></summary></details>`).join('')}</div>`:''}).join('')||'<div class="k"><div class="m">Ничего не найдено.</div></div>'}
+function stats(){const bx=[0,1,2,3,4,5].map(i=>Object.values(S.cards).filter(c=>c.b===i).length),mx=Math.max(1,...bx),ns=Object.keys(S.sus).length;
+ return`<div class="b o"><span>★ Итоги</span><span>Серия ${streak()}</span></div><div class="k"><h3>Коробки (0 · 1д · 3д · 7д · 16д · 35д)</h3><div style="display:flex;gap:6px;align-items:flex-end;height:90px">${bx.map(v=>`<div style="flex:1;background:#b30f27;height:${v/mx*90+3}px" title="${v}"></div>`).join('')}</div><div class="m" style="display:flex;justify-content:space-around;margin-top:4px">${bx.map(v=>`<span>${v}</span>`).join('')}</div></div>
+ <div class="k"><h3>Ошибки (последние)</h3>${S.log.slice(-8).reverse().map(x=>{const c=card(x.id);return c?`<div class="m">${esc(x.a)} → <span class="ok">${st(c.ans)}</span> · ${esc(c.hint)}</div>`:''}).join('')||'<div class="m">Пока пусто.</div>'}</div>
+ ${ns?`<div class="k"><h3>Убранные карточки</h3><div class="m">${ns} шт.</div><button class="btn g" onclick="S.sus={};save();render()">Вернуть все</button></div>`:''}${cloud()}`}
+/* AUDIO: the phone's own Russian voice reads sentences and words aloud */
+const TTS='speechSynthesis' in window;let VO=null;
+const pickV=()=>{const vs=speechSynthesis.getVoices().filter(v=>/^ru/i.test(v.lang));VO=vs.find(v=>/premium|enhanced|улучш/i.test(v.name))||vs.find(v=>/Milena|Google|Yuri|Katya/i.test(v.name))||vs[0]||null};
+if(TTS){pickV();speechSynthesis.addEventListener&&speechSynthesis.addEventListener('voiceschanged',pickV)}
+let spOn=null;function say(t,btn){if(!TTS)return;speechSynthesis.cancel();if(spOn)spOn.classList.remove('on');
+ const u=new SpeechSynthesisUtterance(String(t).replace(/\u0301/g,'').replace(/_{2,}/g,'…'));u.lang='ru-RU';try{if(VO)u.voice=VO}catch(e){}u.rate=S.set.rate||.9;
+ if(btn){spOn=btn;btn.classList.add('on');u.onend=u.onerror=()=>btn.classList.remove('on')}speechSynthesis.speak(u)}
+const SPK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+const spk=t=>TTS?`<button class="spk" data-t="${esc(t)}" aria-label="Слушать">${SPK}</button>`:'';
+const sayW=t=>TTS?`<span class="say" data-t="${esc(t)}">${st(esc(t))}</span>`:st(esc(t));
+document.addEventListener('click',e=>{const b=e.target.closest('.spk,.say');if(b){e.stopPropagation();say(b.dataset.t,b.classList.contains('spk')?b:null)}},true);
+/* Tap-to-translate: lex.js (OpenRussian glosses) loads on first tap */
+let lexP=null;const lex=()=>lexP||(lexP=new Promise((ok,no)=>{const sc=document.createElement('script');sc.src='lex.js';sc.onload=ok;sc.onerror=()=>{lexP=null;no()};document.head.appendChild(sc)}));
+let selW=null;const closeW=()=>{document.getElementById('sheet').style.display='none';if(selW)selW.classList.remove('sel');selW=null};
+async function showW(el){if(selW)selW.classList.remove('sel');selW=el;el.classList.add('sel');const raw=el.textContent.replace(/\u0301/g,''),k=norm(raw),sh=document.getElementById('sheet');
+ sh.innerHTML='<div class="k"><div class="m">…</div></div>';sh.style.display='block';
+ let E=[];try{await lex();E=LEX[k]||[]}catch(e){}
+ const wl=w=>'https://en.wiktionary.org/wiki/'+encodeURIComponent(w.replace(/\u0301/g,'').toLowerCase());
+ sh.innerHTML=`<div class="k"><button class="x" onclick="closeW()" aria-label="Закрыть">×</button><h3>${esc(raw)} ${spk(raw)}</h3>${E.length?E.map(e=>`<div style="margin-top:8px"><b>${sayW(e[0])}</b> <span class="gl">${esc(e[1])}</span><div>${esc(e[2])}</div></div>`).join(''):'<div class="m">Нет в словаре OpenRussian (часто это причастие, деепричастие или имя).</div>'}
+ <div class="m" style="margin-top:10px"><a style="color:#e6b94f" target="_blank" rel="noopener" href="${wl(E[0]?E[0][0]:raw)}">Wiktionary →</a> · OpenRussian, CC BY-SA 4.0</div></div>`}
+document.addEventListener('click',e=>{const w=e.target.closest('span.w');if(w){showW(w);return}if(!e.target.closest('#sheet'))closeW()});
+/* Supabase (shares login with Daily Discipline; own table rus_snapshots, own storage keys) */
+const SB='https://hrhlgscfgqjqslejlpqa.supabase.co',KEY='sb_publishable_GeOYErBznt6Y60TeU9oJcA_hK_Ugwyy';
+let AU=null,SYT='Не в сети';try{AU=JSON.parse(localStorage.getItem('rus_auth'));if(AU)SYT='…'}catch(e){}
+const saveAU=()=>{try{AU?localStorage.setItem('rus_auth',JSON.stringify(AU)):localStorage.removeItem('rus_auth')}catch(e){}};
+async function auth(b,g){const r=await fetch(SB+'/auth/v1/token?grant_type='+g,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(b)}),j=await r.json();if(!r.ok)throw new Error(j.error_description||j.msg||'Ошибка входа');AU={at:j.access_token,rt:j.refresh_token,exp:Date.now()+j.expires_in*1000,uid:j.user.id,em:j.user.email};saveAU()}
+async function sb(p,o={}){if(AU.exp-30000<Date.now())await auth({refresh_token:AU.rt},'refresh_token');const r=await fetch(SB+'/rest/v1/'+p,{...o,headers:{apikey:KEY,Authorization:'Bearer '+AU.at,'Content-Type':'application/json',...(o.headers||{})}});const t=await r.text();if(!r.ok)throw new Error('HTTP '+r.status+' '+t.slice(0,120));return t?JSON.parse(t):[]}
+function merge(o){for(const[i,c]of Object.entries(o.cards||{})){const m=S.cards[i];if(!m||(c.t||0)>(m.t||0))S.cards[i]=c}
+ for(const[k,v]of Object.entries(o.tg||{})){const m=S.tg[k]||[0,0];S.tg[k]=[Math.max(m[0],v[0]),Math.max(m[1],v[1])]}
+ for(const[k,v]of Object.entries(o.days||{}))S.days[k]=Math.max(S.days[k]||0,v);
+ for(const[k,v]of Object.entries(o.sus||{}))S.sus[k]=v;
+ S.rd=S.rd||{};for(const[k,v]of Object.entries(o.rd||{}))if(!S.rd[k]||(v.t||0)>(S.rd[k].t||0))S.rd[k]=v;
+ if(o.set&&!S.setT)S.set={...S.set,...o.set,d:{...S.set.d,...(o.set.d||{})}};
+ const seen=new Set(S.log.map(x=>x.t));(o.log||[]).forEach(x=>{if(!seen.has(x.t))S.log.push(x)});S.log=S.log.sort((a,b)=>a.t-b.t).slice(-200)}
+async function sync(){if(!AU)return;try{const r=await sb('rus_snapshots?select=data');if(r[0])merge(r[0].data);S.setT=1;persist();
+ await sb('rus_snapshots?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:AU.uid,data:{cards:S.cards,tg:S.tg,log:S.log,days:S.days,sus:S.sus,set:S.set,rd:S.rd},updated_at:new Date().toISOString()})});SYT='Синхронизировано '+new Date().toTimeString().slice(0,5);if(tab!=='drill'&&tab!=='dict'&&!document.body.classList.contains('reading'))render()}catch(e){SYT=(/42501/.test(e.message)?'Нет прав на таблицу rus_snapshots. Запустите schema.sql в Supabase → SQL editor. ':'')+'Ошибка: '+e.message.slice(0,300);if(tab==='stats')render()}}
+async function signIn(){try{await auth({email:document.getElementById('em').value.trim(),password:document.getElementById('pw').value},'password');await sync();render()}catch(e){SYT=e.message;render()}}
+const signOut=()=>{AU=null;saveAU();SYT='Не в сети';render()};
+const cloud=()=>AU?`<div class="k"><h3>Облако</h3><div class="m">${esc(AU.em)}</div><div class="m">${esc(SYT)}</div><button class="btn" onclick="sync()">Синхронизировать</button><button class="btn g" onclick="signOut()">Выйти</button></div>`:`<div class="k"><h3>Облако</h3><div class="m">Тот же email и пароль, что в Daily Discipline.</div><input id="em" type="email" autocomplete="username" placeholder="Email"><input id="pw" type="password" autocomplete="current-password" placeholder="Пароль"><button class="btn" onclick="signIn()">Войти</button><div class="m" style="margin-top:6px">${esc(SYT)}</div></div>`;
+/* DAILY REMINDER: push once a day at a chosen hour (sent by the rus-daily function on Supabase) */
+const VAPID='BFw7hA53iH9H9zRBVQL5qh8s6KedW8StMUkoXKnJMm80czUrsh043-mYqa5tL4mFZaT6kpvHUezoIJ3Wtx52TJk';
+const CAN_PUSH=()=>'serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
+const STANDALONE=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(/Macintosh/.test(navigator.userAgent)&&navigator.maxTouchPoints>1);
+let REM=S.rem??null,REMT='';
+async function remSet(h){REMT='…';render();try{
+ const reg=await navigator.serviceWorker.register('sw.js');await navigator.serviceWorker.ready;
+ if(h===null){const s=await reg.pushManager.getSubscription();if(s){await sb('rus_push?endpoint=eq.'+encodeURIComponent(s.endpoint),{method:'DELETE'});await s.unsubscribe()}REM=null;REMT='Напоминания выключены.'}
+ else{if(await Notification.requestPermission()!=='granted'){REMT='Телефон не разрешил уведомления. Включите их: Настройки → Уведомления → Глаголы.';return render()}
+  let s=await reg.pushManager.getSubscription();if(!s){const u=VAPID.replace(/-/g,'+').replace(/_/g,'/'),raw=atob(u+'='.repeat((4-u.length%4)%4));s=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:Uint8Array.from(raw,c=>c.charCodeAt(0))})}
+  await sb('rus_push?on_conflict=endpoint',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({endpoint:s.endpoint,user_id:AU.uid,sub:s.toJSON(),hour:h,tz:Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC'})});
+  REM=h;REMT=`Каждый день в ${h}:00, если смена ещё не сделана.`}
+ S.rem=REM;persist()}catch(e){REMT='Ошибка: '+e.message.slice(0,160)}render()}
+function remCard(){let b;
+ if(!AU)b='<div class="m">Войдите в облако (вкладка «Итоги»), и телефон будет напоминать о смене раз в день.</div>';
+ else if(!CAN_PUSH())b=IOS&&!STANDALONE()?'<div class="m">Сначала добавьте приложение на экран «Домой»: Поделиться → На экран «Домой». Потом откройте его оттуда.</div>':'<div class="m">Этот браузер не умеет присылать уведомления.</div>';
+ else b=`<div class="m">${REM==null?'Раз в день, в выбранный час. Если смена уже сделана, телефон промолчит.':'Каждый день в '+REM+':00, если смена ещё не сделана.'}</div><div class="chips">${[8,12,18,21].map(h=>`<button class="chip ${REM===h?'on':''}" onclick="remSet(${h})">${h}:00</button>`).join('')}${REM!=null?'<button class="chip" onclick="remSet(null)">Выкл.</button>':''}</div>${REMT?`<div class="m" style="margin-top:8px">${esc(REMT)}</div>`:''}`;
+ return`<div class="k rem"><h3>Напоминание</h3>${b}</div>`}
+/* BOOKS: distraction-free reader. Texts and the word list (books/*.json) are stored on the phone by the service worker, so reading, translations and the phone's voice all work offline. */
+const BOOKS=[['bible-nt','Библия. Новый Завет','Синодальный перевод',1876],['bible-ot','Библия. Ветхий Завет','Синодальный перевод',1876],['uchenie','Учение Христа, изложенное для детей','Л. Н. Толстой',1908],['dama','Дама с собачкой','А. П. Чехов',1899],['karamazov','Братья Карамазовы','Ф. М. Достоевский',1880]];
+const BF=['books/dict.json'].concat(BOOKS.map(b=>'books/'+b[0]+'.json')),$=i=>document.getElementById(i);
+S.rd=S.rd||{};let LIB=!S.rb,RB=null,BK=null,DICT=null,dictP=null,OFF=null,SELR=null,rsT=0,rdT=0,lastY=0,grabbing=false;
+const getJ=u=>fetch(u).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()});
+const dictL=()=>dictP||(dictP=getJ('books/dict.json').then(d=>DICT=d).catch(e=>{dictP=null;throw e}));
+async function offState(){try{const c=await caches.open('rusbooks-2'),r=await Promise.all(BF.map(u=>c.match(u)));OFF=r.every(Boolean)?2:r.some(Boolean)?1:0}catch(e){OFF=null}return OFF}
+async function grab(){if(grabbing)return;grabbing=true;const was=OFF;await offState();
+ if(OFF!==2&&navigator.onLine!==false){OFF=1;await Promise.all(BF.map(u=>fetch(u).then(r=>r.ok&&r.arrayBuffer()).catch(()=>{})));await offState()}
+ grabbing=false;if(tab==='books'&&LIB&&OFF!==was)render()}
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+function goBooks(){if(tab==='books')LIB=S.rb?!LIB:true;else LIB=!S.rb;tab='books';render();scrollTo(0,0)}
+function openBook(id){S.rb=id;LIB=false;persist();render()}
+/* Contents for the Bible: pick a book, then a chapter, and the reader opens right there. */
+let TOCB=null;
+async function tocOpen(id,open){const el=$('btoc');el.style.display='block';el.innerHTML='<div class="tw"><div class="rdl">…</div></div>';document.body.classList.add('tocon');
+ let b;try{b=await getJ('books/'+id+'.json')}catch(e){el.innerHTML='<div class="tw"><div class="rdl">Нужен интернет, чтобы загрузить книгу в первый раз.</div><button class="tx" onclick="tocClose()">Закрыть</button></div>';return}
+ TOCB={id,toc:b.toc};const r=S.rd[id],cur=r?r.c:-1;
+ el.innerHTML=`<div class="tw"><div class="th"><b>${esc(b.t)}</b><button class="tx" onclick="tocClose()" aria-label="Закрыть">✕</button></div>`+b.toc.map(([n,c0,k],i)=>{const here=cur>=c0&&cur<c0+k;
+  return`<details${(open===i||(open==null&&here))?' open':''}><summary>${esc(n)}${here?' <span class="here">• здесь</span>':''}<small>${k}</small></summary><div class="cg">${Array.from({length:k},(_,j)=>`<button class="${cur===c0+j?'on':''}" onclick="tocGo(${c0+j})">${j+1}</button>`).join('')}</div></details>`}).join('')+'</div>';
+ const o=el.querySelector('details[open]');if(o)o.scrollIntoView({block:'center'})}
+function tocClose(){$('btoc').style.display='none';document.body.classList.remove('tocon')}
+function tocGo(c){const id=TOCB.id;S.rd[id]={...(S.rd[id]||{}),c,p:0,f:0,t:Date.now()};tocClose();const same=RB===id;openBook(id);if(same)requestAnimationFrame(restore)}
+function books(){if(OFF==null||OFF<2)setTimeout(grab,300);
+ return`<div class="b o"><span>★ Книги</span><span>${OFF===2?'✓ Офлайн':''}</span></div>`+BOOKS.map(([id,t,a,y])=>{const r=S.rd[id],p=r?r.pc||0:0;
+  return`<div class="k bkc" onclick="openBook('${id}')"><h3>${esc(a)} · ${y}</h3><div class="bt">${esc(t)}</div><div class="t"><i style="width:${p*100}%"></i></div><div class="m">${r?(p>=.999?'Прочитано':Math.floor(p*100)+'% прочитано'):'Не начата'}${S.rb===id?' · читаю сейчас':''}${id.startsWith('bible')?` · <a class="toc" onclick="event.stopPropagation();tocOpen('${id}')">Содержание ›</a>`:''}</div></div>`}).join('')
+ +`<div class="k"><h3>Как читать</h3><div class="m">Нажмите на слово — перевод и произношение. Ещё раз на то же слово — прозвучит вся фраза. Потяните текст вниз — появится меню; кнопка «Книги» вернёт сюда. Место в книге сохраняется само.</div>
+ <div class="m" style="margin-top:8px">${OFF===2?'✓ Книги, словарь и голос работают без интернета — можно читать в самолёте.':OFF===1?'Сохраняю книги и словарь на телефон…':OFF===0?'Книги ещё не сохранены на телефон: откройте эту вкладку при интернете.':''}</div></div>
+ <div class="k"><h3>Источники</h3><div class="m">Тексты в общественном достоянии. Толстой — ПСС, т. 37 (1956), по изданию Tolstoy Digital (github.com/tolstoydigital/TEI). Чехов, Достоевский — github.com/d0rj/RusLit. Библия — Синодальный перевод (1876), по изданию eBible.org (russyn). Перевод слов: OpenRussian (CC BY-SA 4.0); формы слов: pymorphy3.</div></div>`}
+function readMode(){const on=tab==='books'&&!LIB&&!!S.rb;document.body.classList.toggle('reading',on);if(!on){closeR();document.body.classList.remove('navh');return}
+ if(RB!==S.rb)loadBook(S.rb);dictL().catch(()=>{})}
+async function loadBook(id){const rd=$('rd');RB=id;BK=null;rd.innerHTML='<div class="rdl">…</div>';let b;
+ try{b=await getJ('books/'+id+'.json')}catch(e){rd.innerHTML='<div class="rdl">Книга не загрузилась. В первый раз нужен интернет.</div>';RB=null;return}
+ if(RB!==id)return;let o=0,pk='',h=`<header class="rdh"><div>${esc(b.a)}</div><h1>${esc(b.t)}</h1></header>`;
+ b.ch.forEach((c,i)=>{h+=`<section data-c="${i}">`;if(c[0]&&c[0]!==pk)h+=`<div class="kk">${esc(c[0])}</div>`;pk=c[0]||pk;if(c[1])h+=`<h2>${esc(c[1])}</h2>`;
+  c[2].forEach((p,j)=>{const v=p[0]==='~',t=v?p.slice(1):p;let x=esc(t).replace(/\[(\d+)\]/g,(m,n)=>b.n&&b.n[n]?`<sup class="fn" data-n="${n}">${n}</sup>`:m);if(b.vn)x=x.replace(/^(\d+) /,'<span class="vn">$1</span>');h+=`<p data-c="${i}" data-p="${j}" data-o="${o}"${v?' class="v"':''}>${x}</p>`;o+=t.length});h+='</section>'});
+ BK=b;BK.len=o;rd.classList.toggle('vns',!!b.vn);rd.innerHTML=h+'<div class="fin">❧</div>';requestAnimationFrame(restore)}
+function restore(){const r=S.rd[RB],rd=$('rd');rd.scrollTop=0;if(r){const el=rd.querySelector(`p[data-c="${r.c}"][data-p="${r.p}"]`);if(el){el.scrollIntoView({block:'start'});rd.scrollTop+=Math.round((r.f||0)*el.offsetHeight)}}lastY=rd.scrollTop;setTimeout(()=>updBar(1),60)}
+function updBar(quiet){if(!BK||!document.body.classList.contains('reading'))return;const rd=$('rd');let el=null;
+ for(const y of [6,40,90,150,240,340]){const e=document.elementFromPoint(innerWidth/2,y);el=e&&e.closest&&e.closest('#rd p[data-o]');if(el)break}
+ let pc,c,p,f=0;if(el){const r=el.getBoundingClientRect();f=Math.max(0,Math.min(1,-r.top/r.height));pc=(+el.dataset.o+f*el.textContent.length)/BK.len;c=+el.dataset.c;p=+el.dataset.p}
+ if(rd.scrollTop+rd.clientHeight>=rd.scrollHeight-4)pc=1;if(pc==null)return;pc=Math.min(1,pc);
+ $('rbar').firstChild.style.width=(pc*100)+'%';if(quiet===1&&S.rd[RB])return;
+ const o=S.rd[RB]||{};S.rd[RB]={c:c??o.c??0,p:p??o.p??0,f:el?f:(o.f||0),pc,t:Date.now()};clearTimeout(rsT);rsT=setTimeout(persist,500)}
+function onRdScroll(){const y=$('rd').scrollTop,d=y-lastY;if(Math.abs(d)>14){document.body.classList.toggle('navh',d>0&&y>80);lastY=y}if(SELR)closeR();if(!rdT)rdT=requestAnimationFrame(()=>{rdT=0;updBar()})}
+const caretAt=(x,y)=>{try{if(document.caretPositionFromPoint){const p=document.caretPositionFromPoint(x,y);return p&&{node:p.offsetNode,offset:p.offset}}if(document.caretRangeFromPoint){const r=document.caretRangeFromPoint(x,y);return r&&{node:r.startContainer,offset:r.startOffset}}}catch(e){}return null};
+const LET=/[А-Яа-яЁёA-Za-z]/,WCH=/[А-Яа-яЁёA-Za-ź-]/;
+function rdTap(e){const fn=e.target.closest('sup.fn');if(fn){showNote(fn);return}
+ if(e.target.closest('#rpop'))return;
+ const pos=caretAt(e.clientX,e.clientY),blank=()=>{if(SELR)closeR();else document.body.classList.toggle('navh')};
+ if(!pos||pos.node.nodeType!==3||!pos.node.parentNode.closest('#rd p,#rd h2,#rd h1'))return blank();
+ const t=pos.node.data;let i=pos.offset;if(!(i<t.length&&LET.test(t[i]))){if(i>0&&LET.test(t[i-1]))i--;else return blank()}
+ let a=i,b=i+1;while(a>0&&WCH.test(t[a-1]))a--;while(b<t.length&&WCH.test(t[b]))b++;while(t[a]==='-')a++;while(b>a&&t[b-1]==='-')b--;
+ let pa=i,pb=i+1;while(pa>a&&t[pa-1]!=='-')pa--;while(pb<b&&t[pb]!=='-')pb++;
+ const rg=document.createRange();rg.setStart(pos.node,a);rg.setEnd(pos.node,b);const R=[...rg.getClientRects()].find(r=>e.clientX>=r.left-6&&e.clientX<=r.right+6&&e.clientY>=r.top-6&&e.clientY<=r.bottom+6);
+ if(!R)return blank();   // tapped the margin or between lines; R = the piece of the word under the finger (it may be split by a hyphen)
+ if(SELR&&SELR.node===pos.node&&SELR.a===a){saySent(pos.node,a);return}
+ SELR={node:pos.node,a};showR(t.slice(a,b),t.slice(pa,pb),R)}
+function hlAt(R){const h=$('hl');h.style.cssText=`display:block;left:${R.left-2}px;top:${R.top-1}px;width:${R.width+4}px;height:${R.height+2}px`}
+const nk=s=>s.replace(/́/g,'').toLowerCase().replace(/ё/g,'е');
+async function showR(w,part,R){hlAt(R);const pop=$('rpop');pop.style.display='block';if(S.set.au!==0)say(w);
+ if(!DICT){pop.innerHTML='<div class="gr">…</div>';try{await dictL()}catch(e){pop.innerHTML='<div class="gr">Словарь ещё не сохранён — нужен интернет.</div>';return}}
+ if(!SELR)return;const E=DICT.F[nk(w)]||DICT.F[nk(part)]||[],shown=E[0]&&E[0][2]||w;
+ pop.dataset.t=w;pop.innerHTML=`<div class="rw">${st(esc(shown))}</div>`+(E.length?E.map(([li,lab])=>{const L=DICT.L[li];return`<div class="re"><b>${esc(L[0])}</b> <span class="gr">${esc(lab)}</span>${L[1]?`<div class="tr">${esc(L[1])}</div>`:''}</div>`}).join(''):'<div class="re gr">Нет в словаре.</div>')}
+function showNote(el){closeR();SELR={node:el,a:-1};hlAt(el.getBoundingClientRect());const pop=$('rpop');pop.dataset.t='';pop.style.display='block';pop.innerHTML=`<div class="gr">Примечание ${esc(el.dataset.n)}</div><div class="re tr">${esc(BK.n[el.dataset.n])}</div>`}
+function closeR(){SELR=null;$('hl').style.display='none';$('rpop').style.display='none'}
+function saySent(node,a){const p=node.parentNode.closest('p,h2,h1');let off=0;const w=document.createTreeWalker(p,NodeFilter.SHOW_TEXT);let n;while((n=w.nextNode())&&n!==node)off+=n.data.length;off+=a;
+ const T=p.textContent;let s=off,e=off;while(s>0&&!/[.!?…]/.test(T[s-1]))s--;while(e<T.length&&!/[.!?…]/.test(T[e]))e++;while(e<T.length&&/[.!?…»"]/.test(T[e]))e++;say(T.slice(s,e).trim())}
+$('rpop').addEventListener('click',e=>{e.stopPropagation();const t=$('rpop').dataset.t;if(t)say(t)});
+$('rd').addEventListener('scroll',onRdScroll,{passive:true});$('rd').addEventListener('click',rdTap);
+addEventListener('resize',()=>{if(SELR)closeR()});
+const TABS={home:['Смена',home],drill:['Упражнение',drill],books:['Книги',books],rules:['Правила',rules],dict:['Словарь',dict],stats:['Итоги',stats]};
+function render(){closeW();document.getElementById('app').innerHTML=TABS[tab][1]();document.getElementById('nav').innerHTML=Object.entries(TABS).map(([k,v])=>`<button class="${tab===k?'on':''}" onclick="${k==='books'?'goBooks()':`tab='${k}';${k==='drill'?'if(!Q.length)start();else ':''}render();scrollTo(0,0)`}">${v[0]}</button>`).join('');const a=document.getElementById('a');if(a&&!fb)a.focus();readMode()}
+render();if(AU)sync();document.addEventListener('visibilitychange',()=>{if(AU&&!document.hidden)sync()});
+try{if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js')}catch(e){}
 </script></body></html>

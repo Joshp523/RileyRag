@@ -1,28 +1,37 @@
-<p align="center"><img src="icon-512.png" width="110" alt=""></p>
+<p align="center"><img src="icon-192.png" width="110" alt=""></p>
 
-<h1 align="center">The Riley Rag</h1>
-<p align="center"><em>The family newspaper, delivered to everyone's phone.</em></p>
-<p align="center"><a href="https://joshp523.github.io/RileyRag/"><b>▶ Open the app</b></a></p>
+<h1 align="center">Глаголы</h1>
+<h3 align="center">Russian verbs, finally conquered. And now, the Bible in your pocket.</h3>
+<p align="center"><a href="https://joshp523.github.io/russian/"><b>▶ Open the app</b></a></p>
 
-<p align="center"><img src="readme-showcase.jpg" alt="The Riley Rag on a phone"></p>
+<table><tr>
+<td align="center"><img src="readme-home.jpg" width="180"><br><sub><b>Daily shift</b></sub></td>
+<td align="center"><img src="readme-library.jpg" width="180"><br><sub><b>The library</b></sub></td>
+<td align="center"><img src="readme-toc.jpg" width="180"><br><sub><b>Any book, any chapter</b></sub></td>
+<td align="center"><img src="readme-tap.jpg" width="180"><br><sub><b>Tap any word</b></sub></td>
+<td align="center"><img src="readme-dict.jpg" width="180"><br><sub><b>Verb dictionary</b></sub></td>
+</tr></table>
 
-The Riley Rag is a private newspaper for the Riley family and friends. Every edition lands in one place, and everyone can react, comment, play, and write in, from Brussels to wherever Grandma is reading.
+## ✦ New: the Russian Bible
+**All 66 books of the Synodal Translation.** The classic 1876 text, faithful and public domain, laid out as a calm, beautiful book.
 
-## What's inside
+**Tap any word.** Its meaning, its grammar and its stress appear instantly, and your phone says it aloud. Tap again to hear the whole sentence.
 
-- **Highlights:** every issue, newest first. Tap to read, leave a comment, or react with one of five hand-drawn stickers (*Love it*, *Silly!*, *Tell me more*, *So sleepy*, *I object*).
-- **Games:** *Riled Up*, a daily guess-the-word game with a family leaderboard, plus links to QuipRash and Word Games.
-- **Ask Peter:** write to the family's advice columnist. He replies in his own time.
-- **Recipes:** the family recipe cards, kept in one tidy box.
-- **Us:** the family charter, the shared photo gallery, and the other apps in the Riley collection.
+**Even the old words.** *Дщерь, вопиять, сей, дабы, Израилев.* A hand-made glossary covers the archaic Synodal vocabulary and over a hundred biblical names.
 
-<table><tr><td align="center" valign="top"><img src="readme-screen-1.jpg" width="230" alt="Games and the leaderboard"><br><sub>Games and the leaderboard</sub></td><td align="center" valign="top"><img src="readme-screen-2.jpg" width="230" alt="Ask Peter"><br><sub>Ask Peter</sub></td><td align="center" valign="top"><img src="readme-screen-3.jpg" width="230" alt="Us: charter, gallery and apps"><br><sub>Us: charter, gallery and apps</sub></td></tr></table>
-## Why it's worth a look
+**Jump anywhere.** Open the contents, pick a book, tap a chapter. Verse numbers sit quietly in the margin.
 
-- **Cool:** It's a real broadsheet, with blackletter masthead, gilt lettering and leather, that lives in your pocket.
-- **Innovative:** Most family news gets lost in group chats. The Rag turns it into an *edition*: something to look forward to, save, and talk back to.
-- **Impressive:** Members, comments, reactions, a daily word game, an advice column, recipes and an email-the-family button, all in one private app that Josh built and runs himself for free.
-- **Useful:** One link for the whole family. Nobody needs to install anything, and Grandma can join in as easily as the grandkids.
+**Completely offline.** Text, dictionary and voice all live on your phone. Read on a plane, in a monastery, in a tunnel.
+
+## ✦ The verb trainer
+**Verbs of motion, tamed.** Daily shifts of spaced-repetition cards with real sentences from Tolstoy, Dostoevsky, Chekhov and more.
+
+**Weak spots, found.** The app learns where you stumble and brings those verbs back.
+
+**A full verb dictionary.** Every form, every stress, every aspect pair.
+
+## ✦ The library
+The Bible, plus Tolstoy, Chekhov and *The Brothers Karamazov.* All with tap-to-translate, your place saved automatically, and nothing to distract you.
 
 ---
 
@@ -30,6 +39,6 @@ The Riley Rag is a private newspaper for the Riley family and friends. Every edi
 Open the link in Safari (iPhone/iPad) or Chrome (Android), then choose **Share → Add to Home Screen**. It gets its own icon and opens full-screen, just like an app from the store.
 
 ### More apps by Josh Riley
-[QuipRash](https://joshp523.github.io/Quip-game-app/) · [Word Games](https://joshp523.github.io/Word-Games/) · [Russian Verbs](https://joshp523.github.io/russian/) · [Riley Rangers](https://joshp523.github.io/Rangers-app/) · [Habits: Josh](https://joshp523.github.io/daily-discipline/) · [Habits: Meishe](https://joshp523.github.io/Habit-tracker-app-Meishe/) · [Habits: Grandma](https://joshp523.github.io/wendys-app/) · [Writing](https://joshp523.github.io/writing-app/)
+[The Riley Rag](https://joshp523.github.io/RileyRag/) · [QuipRash](https://joshp523.github.io/Quip-game-app/) · [Word Games](https://joshp523.github.io/Word-Games/) · [Riley Rangers](https://joshp523.github.io/Rangers-app/) · [Habits: Josh](https://joshp523.github.io/daily-discipline/) · [Habits: Meishe](https://joshp523.github.io/Habit-tracker-app-Meishe/) · [Habits: Grandma](https://joshp523.github.io/wendys-app/) · [Writing](https://joshp523.github.io/writing-app/)
 
 <sub>Built by Josh Riley. Setup notes for whoever maintains it are in [SETUP.md](SETUP.md).</sub>
