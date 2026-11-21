@@ -6,15 +6,17 @@
 
 <table><tr>
 <td align="center"><img src="readme-map.jpg" width="190"><br><sub><b>The Map</b></sub></td>
-<td align="center"><img src="readme-map-tap.jpg" width="190"><br><sub><b>Tap a roll, read the issue</b></sub></td>
-<td align="center"><img src="readme-peter-reader.jpg" width="190"><br><sub><b>Ask Peter</b></sub></td>
+<td align="center"><img src="readme-map-tap.jpg" width="190"><br><sub><b>Tap a medallion</b></sub></td>
+<td align="center"><img src="readme-xmas.jpg" width="190"><br><sub><b>Christmas theme</b></sub></td>
 <td align="center"><img src="readme-us.jpg" width="190"><br><sub><b>Us</b></sub></td>
 </tr></table>
 
 ## ✦ Introducing the Map
-**Every issue, on a map of the world.** Hand-tuned brown and gold, true coastlines, not a word of text. Just a little rolled-up newspaper wherever the Rag went to press.
+<p align="center"><img src="readme-map-desktop.jpg" width="720"></p>
 
-**Tap a roll, read the issue.** Pinch to zoom, drag to explore. Several issues from one city share a roll, with a gold count.
+**Every issue, on a map of the world.** Edge to edge, deep-blue oceans, green and sandy continents, true coastlines, and not a single word. Just a Riley Rag medallion wherever the Rag went to press.
+
+**Tap a medallion, read the issue.** Pinch to zoom, drag to explore. Several issues from one city share a medallion, with a gold count.
 
 **It fills itself in.** Publish from Rag Press and the issue lands on the map automatically, placed from the address on the masthead.
 
@@ -24,6 +26,9 @@
 **Your letters, your business.** Readers see only their own letters. Edit one until Peter gets to it, and see the moment he does: *“Peter answered in issue № 7.”* Your phone tells you, too.
 
 **An editor's mailbag.** Editors see every letter, mark it answered with the issue number, or bin it.
+
+## ✦ Dressed for the season
+**Themes, chosen by the editors.** Classic leather all year. Then, for December, a cosy knitted Christmas sweater with the paper on pine green. One tap changes it for every reader.
 
 ## ✦ Everything else you love
 - **Every issue,** a tap away, with reactions and comments.
