@@ -66,11 +66,21 @@ input,textarea{width:100%;padding:10px;border-radius:2px;border:1px solid #5a402
 .btn.goldbtn:hover{background:linear-gradient(180deg,#f7e4a6,#d6b25c);color:#1c1008}
 /* Map: full screen, no words until a medallion is tapped */
 body.mapfull{overflow:hidden}body.mapfull header,body.mapfull #hint{display:none}body.mapfull main{max-width:none;padding:0}
-#mapfs{position:fixed;inset:0;z-index:20;background:#071a30;touch-action:none;user-select:none;-webkit-user-select:none}
-#msvg{display:block;width:100%;height:100%;cursor:grab}#msvg:active{cursor:grabbing}
-#mland{fill:url(#mlandg);stroke:#e7d7a8;stroke-linejoin:round}#mbord{fill:none;stroke:#f3e6bf;opacity:.42}#mgrat{fill:none;stroke:#9cc3e6;opacity:.13}
-.pin{cursor:pointer;outline:none}.pin image,.pin .ring{transition:transform .15s}.pin:hover image,.pin.on image,.pin:focus image,.pin:hover .ring,.pin.on .ring,.pin:focus .ring{transform:scale(1.3)}
-.pin .ring{opacity:0}.pin.on .ring,.pin:focus .ring{opacity:1}
+#mapfs{position:fixed;inset:0;z-index:20;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;
+ background:radial-gradient(ellipse at 50% 42%,#16406b,#0d2b4c 60%,#071a30)}
+#mapfs:active{cursor:grabbing}
+#mlayer{position:absolute;left:0;top:0;transform-origin:0 0}
+#mapfs.moving #mlayer{will-change:transform}
+#msvg{display:block;overflow:visible}
+#mland{fill:url(#mlandg);stroke:#e7d7a8;stroke-width:.8px;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+#mbord{fill:none;stroke:#f3e6bf;stroke-width:.5px;opacity:.42;vector-effect:non-scaling-stroke}
+#mgrat{fill:none;stroke:#9cc3e6;stroke-width:.5px;opacity:.13;vector-effect:non-scaling-stroke}
+#mpins{position:absolute;inset:0;pointer-events:none}
+.mpin{position:absolute;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;padding:0;border:0;background:none;cursor:pointer;pointer-events:auto;will-change:transform}
+.mpin img{position:absolute;left:7px;top:7px;width:30px;height:30px;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.55);transition:transform .15s}
+.mpin:hover img,.mpin:focus-visible img,.mpin.on img{transform:scale(1.25);box-shadow:0 0 0 2px #f1d88a,0 3px 10px rgba(0,0,0,.6)}
+.mpin b{position:absolute;right:0;top:1px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:#c9a24a;border:1.5px solid #0b1d33;color:#0b1d33;font:700 11px/15px Tinos,serif;text-align:center;box-sizing:border-box}
+@media (min-width:900px){.mpin img{left:5px;top:5px;width:34px;height:34px}}
 .mbtn{position:absolute;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:rgba(7,26,48,.72);border:1px solid rgba(241,216,138,.55);color:#f1d88a;cursor:pointer;padding:0;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 16px rgba(0,0,0,.35)}
 .mbtn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.mbtn:hover{background:rgba(22,64,107,.85)}
 .mback{left:max(14px,env(safe-area-inset-left));top:max(14px,env(safe-area-inset-top))}.medit{right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top))}
@@ -592,69 +602,74 @@ const NE = (lng, lat) => { const l = lng*Math.PI/180, f = lat*Math.PI/180, f2 = 
  return [MAPD.tx + MAPD.k * l * (0.8707 - 0.131979*f2 + f4*(-0.013791 + f4*(0.003971*f2 - 0.001529*f4))),
          MAPD.ty - MAPD.k * f * (1.007226 + f2*(0.015085 + f4*(-0.044475 + 0.028874*f2 - 0.005916*f4)))]; };
 // a Riley Rag medallion marks each place; a gold count shows when several issues share it
-const PIN = n => `<circle r="13.5" cy="1.5" fill="rgba(0,0,0,.45)"/><image href="map-pin.png" x="-13" y="-13" width="26" height="26"/><circle class="ring" r="13.2" fill="none" stroke="#f1d88a" stroke-width="1.4"/>${n > 1 ? `<circle cx="11" cy="-10" r="6.4" fill="#c9a24a" stroke="#0b1d33" stroke-width="1.2"/><text x="11" y="-7.3" text-anchor="middle" font-size="8" font-weight="700" fill="#0b1d33" font-family="Tinos,serif">${n}</text>` : ''}<circle r="18" fill="transparent"/>`;
 const MICO = {back:'<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>', plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>', minus:'<svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>',
  pin:'<svg viewBox="0 0 24 24"><path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg>', x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>', home:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c3 3.2 3 13.8 0 17M12 3.5c-3 3.2-3 13.8 0 17"/></svg>'};
 // The map fills the whole screen with no words on it: just the world, the medallions, and a few round buttons.
+// Speed: the world is drawn once; panning and zooming only move that picture (a GPU transform), and it is
+// redrawn sharp when the gesture ends. Medallions are small HTML buttons placed on top. Ones that would
+// overlap on screen merge into one, with a count, and split apart again as you zoom in.
 async function mapView(){
  const ed = me.is_editor; document.body.classList.add('mapfull');
- app.innerHTML = `<div id="mapfs"><svg id="msvg" role="img" aria-label="World map of Riley Rag issues"><defs><radialGradient id="msea" cx="50%" cy="42%" r="75%"><stop offset="0" stop-color="#16406b"/><stop offset=".6" stop-color="#0d2b4c"/><stop offset="1" stop-color="#071a30"/></radialGradient>
-  <linearGradient id="mlandg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7f9a5e"/><stop offset=".33" stop-color="#93a566"/><stop offset=".45" stop-color="#c8b27c"/><stop offset=".58" stop-color="#b9a571"/><stop offset=".7" stop-color="#7f9a5e"/><stop offset="1" stop-color="#6f8a54"/></linearGradient>
-  <filter id="mglow" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6"/><feOffset dy="1"/><feComponentTransfer><feFuncA type="linear" slope=".55"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-  <rect id="msear" fill="url(#msea)"/><g id="mg"><path id="mgrat"/><path id="mland" filter="url(#mglow)"/><path id="mbord"/><g id="pins"></g></g></svg>
+ app.innerHTML = `<div id="mapfs"><div id="mlayer"><svg id="msvg" aria-hidden="true"><defs><linearGradient id="mlandg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="446"><stop offset="0" stop-color="#7f9a5e"/><stop offset=".33" stop-color="#93a566"/><stop offset=".45" stop-color="#c8b27c"/><stop offset=".58" stop-color="#b9a571"/><stop offset=".7" stop-color="#7f9a5e"/><stop offset="1" stop-color="#6f8a54"/></linearGradient></defs><path id="mgrat"/><path id="mland"/><path id="mbord"/></svg></div><div id="mpins"></div>
   <a class="mbtn mback" href="#highlights" aria-label="Back to the Rag">${MICO.back}</a>
   <div class="mz"><button class="mbtn" id="mzi" aria-label="Zoom in">${MICO.plus}</button><button class="mbtn" id="mzo" aria-label="Zoom out">${MICO.minus}</button><button class="mbtn" id="mzw" aria-label="Whole world">${MICO.home}</button></div>
   ${ed ? `<button class="mbtn medit" id="medit" aria-label="Put issues on the map">${MICO.pin}</button>` : ''}
   <div id="mpop" aria-live="polite"></div></div>`;
  const [md, res] = await Promise.all([MAPD ? Promise.resolve(MAPD) : fetch('map.json').then(r => r.json()), sb.from('issues').select('id,number,issue_date,img_path,pdf_path,place,lat,lng').order('number')]);
- MAPD = md; const svg = $('#msvg'); if(!svg) return; const g = $('#mg');
+ MAPD = md; const fs = $('#mapfs'), layer = $('#mlayer'), svg = $('#msvg'), pinsEl = $('#mpins'); if(!fs) return;
+ const W = md.w, H = md.h; svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', W); svg.setAttribute('height', H);
  $('#mland').setAttribute('d', md.land); $('#mbord').setAttribute('d', md.borders);
- // faint lines of latitude and longitude
  let gr = ''; for(let lat = -40; lat <= 80; lat += 20){ let s = ''; for(let lng = -180; lng <= 180; lng += 5){ const [x, y] = NE(lng, lat); s += (s ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); } gr += s; }
  for(let lng = -150; lng <= 180; lng += 30){ let s = ''; for(let lat = -58; lat <= 85; lat += 4){ const [x, y] = NE(lng, lat); s += (s ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); } gr += s; }
  $('#mgrat').setAttribute('d', gr);
- const all = res.error ? [] : (res.data || []), placed = all.filter(i => i.lat != null && i.lng != null);
- const spots = {}; placed.forEach(i => { const k = i.lat.toFixed(2)+','+i.lng.toFixed(2); (spots[k] = spots[k] || []).push(i); });
- const S = Object.values(spots), W = md.w, H = md.h; let VW = W, VH = H, z = 1, px = 0, py = 0;
- $('#pins').innerHTML = S.map((L, n) => { const [x, y] = NE(L[0].lng, L[0].lat);
-  return `<g class="pin" data-k="${n}" data-x="${x.toFixed(1)}" data-y="${y.toFixed(1)}" tabindex="0" role="button" aria-label="${esc(L[0].place || 'Issue')}: ${L.length} issue${L.length > 1 ? 's' : ''}">${PIN(L.length)}</g>`; }).join('');
- // the view always matches the screen's shape; the ocean runs to every edge
- const size = () => { const r = svg.getBoundingClientRect(); VW = W; VH = W * (r.height || 1) / (r.width || 1); svg.setAttribute('viewBox', `0 0 ${VW} ${VH}`); const s = $('#msear'); s.setAttribute('width', VW); s.setAttribute('height', VH); };
- const zmin = () => Math.min(1, Math.max(VW / W, VH / H) > 1.6 ? 1 : Math.max(VW / W, VH / H));
- const clampV = () => { z = Math.min(16, Math.max(zmin(), z));
+ const all = res.error ? [] : (res.data || []), placed = all.filter(i => i.lat != null && i.lng != null).map(i => ({...i, xy: NE(i.lng, i.lat)}));
+ // view state, in map units: screen = (p + map*z) * u, where u = screen pixels per unit at z = 1
+ let SW = 1, SH = 1, u = 1, z = 1, px = 0, py = 0, VW = W, VH = H;
+ const size = () => { SW = fs.clientWidth || innerWidth; SH = fs.clientHeight || innerHeight; u = SW / W; VW = W; VH = SH / u; };
+ const zmin = () => Math.min(1, Math.max(VW / W, VH / H));
+ const clampV = () => { z = Math.min(18, Math.max(zmin(), z));
   px = W*z <= VW ? (VW - W*z) / 2 : Math.min(0, Math.max(VW - W*z, px)); py = H*z <= VH ? (VH - H*z) / 2 : Math.min(0, Math.max(VH - H*z, py)); };
- const draw = () => { clampV(); g.setAttribute('transform', `translate(${px} ${py}) scale(${z})`);
-  $('#mbord').style.strokeWidth = .5/z; $('#mland').style.strokeWidth = .8/z; $('#mgrat').style.strokeWidth = .45/z;
-  const u = VW / (svg.getBoundingClientRect().width || VW), ps = Math.min(2.6, u * (innerWidth >= 900 ? 1.25 : 1)) / z;
-  g.querySelectorAll('.pin').forEach(p => p.setAttribute('transform', `translate(${p.dataset.x} ${p.dataset.y}) scale(${ps})`)); };
- const zoomAt = (f, cx, cy) => { const nz = Math.min(16, Math.max(zmin(), z*f)); px = cx - (cx - px) * nz / z; py = cy - (cy - py) * nz / z; z = nz; draw(); };
- const toSvg = (cx, cy) => { const r = svg.getBoundingClientRect(); return [(cx - r.left) * VW / r.width, (cy - r.top) * VH / r.height]; };
- const frame = (pts, pad) => { const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]); const bw = Math.max(160, Math.max(...xs) - Math.min(...xs)) * pad, bh = Math.max(100, Math.max(...ys) - Math.min(...ys)) * pad;
-  z = Math.min(7, Math.max(zmin(), tall(), Math.min(VW / bw, VH / bh))); const cx = (Math.max(...xs) + Math.min(...xs)) / 2, cy = (Math.max(...ys) + Math.min(...ys)) / 2; px = VW/2 - cx*z; py = VH/2 - cy*z; draw(); };
- const tall = () => VH > VW * 1.2 ? VH * .5 / H : 0;   // on a phone held upright, the land takes half the screen
- const world = () => { if(tall()){ const c = placed.length ? placed.map(i => NE(i.lng, i.lat)) : [[W*.52, H*.38]]; z = tall(); const cx = c.reduce((a, p) => a + p[0], 0) / c.length, cy = c.reduce((a, p) => a + p[1], 0) / c.length; px = VW/2 - cx*z; py = VH/2 - cy*z; return draw(); } z = Math.max(zmin(), Math.min(VW / W, VH / H) * (innerWidth > innerHeight ? Math.max(VW / W, VH / H) / Math.min(VW / W, VH / H) : 1)); px = 0; py = 0; draw(); };
- size();
+ // medallions: cluster by distance on screen, then place
+ let CL = [], clZ = -1, open = null;
+ const cluster = () => { CL = []; const r = 34 / (u * z);   // 34 screen pixels, in map units
+  for(const i of placed.slice().sort((a, b) => b.number - a.number)){ const c = CL.find(c => Math.hypot(c.x - i.xy[0], c.y - i.xy[1]) < r);
+   if(c){ c.L.push(i); c.x = c.L.reduce((a, j) => a + j.xy[0], 0) / c.L.length; c.y = c.L.reduce((a, j) => a + j.xy[1], 0) / c.L.length; } else CL.push({x:i.xy[0], y:i.xy[1], L:[i]}); }
+  pinsEl.innerHTML = CL.map((c, n) => `<button class="mpin${open && c.L.some(i => open.includes(i.id)) ? ' on' : ''}" data-k="${n}" aria-label="${esc([...new Set(c.L.map(i => i.place).filter(Boolean))].join(', ') || 'Issues')}: ${c.L.length} issue${c.L.length > 1 ? 's' : ''}"><img src="map-pin.png" alt="">${c.L.length > 1 ? `<b>${c.L.length}</b>` : ''}</button>`).join('');
+  pinsEl.querySelectorAll('.mpin').forEach(b => b.onclick = () => { if(moved > 8) return; pinsEl.querySelectorAll('.mpin').forEach(q => q.classList.toggle('on', q === b)); pop(CL[+b.dataset.k].L); });
+  clZ = z; };
+ const place = () => { const els = pinsEl.children; for(let n = 0; n < els.length; n++){ const c = CL[n]; els[n].style.transform = `translate3d(${((px + c.x*z) * u).toFixed(1)}px,${((py + c.y*z) * u).toFixed(1)}px,0)`; } };
+ let raf = 0, settleT = 0;
+ const draw = () => { clampV(); layer.style.transform = `translate3d(${px*u}px,${py*u}px,0) scale(${z*u})`; if(Math.abs(Math.log(z / (clZ || 1))) > .18 || clZ < 0) cluster(); place(); };
+ const frame = () => { if(raf) return; raf = requestAnimationFrame(() => { raf = 0; draw(); }); };
+ // while moving, let the GPU slide the picture; afterwards, redraw it crisply and re-merge the medallions
+ const moving = () => { fs.classList.add('moving'); clearTimeout(settleT); settleT = setTimeout(() => { fs.classList.remove('moving'); cluster(); place(); }, 180); };
+ const zoomAt = (f, cx, cy) => { const nz = Math.min(18, Math.max(zmin(), z*f)); px = cx - (cx - px) * nz / z; py = cy - (cy - py) * nz / z; z = nz; moving(); frame(); };
+ const toUnits = (cx, cy) => { const r = fs.getBoundingClientRect(); return [(cx - r.left) / u, (cy - r.top) / u]; };
+ const tall = () => VH > VW * 1.2 ? VH * .5 / H : 0;
+ const fit = (pts, pad) => { const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]); const bw = Math.max(160, Math.max(...xs) - Math.min(...xs)) * pad, bh = Math.max(100, Math.max(...ys) - Math.min(...ys)) * pad;
+  z = Math.min(7, Math.max(zmin(), tall(), Math.min(VW / bw, VH / bh))); const cx = (Math.max(...xs) + Math.min(...xs)) / 2, cy = (Math.max(...ys) + Math.min(...ys)) / 2; px = VW/2 - cx*z; py = VH/2 - cy*z; clZ = -1; draw(); };
+ const world = () => { if(tall()) return fit(placed.length ? placed.map(i => i.xy) : [[W*.52, H*.38]], 1); z = Math.max(zmin(), Math.min(VW / W, VH / H)); px = 0; py = 0; clZ = -1; draw(); };
  const fmt = d => new Date(d+'T00:00').toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
- const pop = L => { const el = $('#mpop'); el.innerHTML = `<div class="mcard"><button class="mbtn mx" aria-label="Close">${MICO.x}</button>${L[0].place ? `<div class="mplace">${esc(L[0].place)}</div>` : ''}${L.slice().reverse().map(i => `<button class="mis" data-id="${i.id}"><img src="${pub(i.img_path)}" alt=""><span><b>Issue № ${i.number}</b><small>${fmt(i.issue_date)}</small></span></button>`).join('')}</div>`;
-  el.classList.add('on'); $('#mapfs').classList.add('popon'); el.querySelector('.mx').onclick = () => { el.classList.remove('on'); $('#mapfs').classList.remove('popon'); g.querySelectorAll('.pin').forEach(q => q.classList.remove('on')); };
+ const pop = L => { open = L.map(i => i.id); const el = $('#mpop'), places = [...new Set(L.map(i => i.place).filter(Boolean))];
+  el.innerHTML = `<div class="mcard"><button class="mbtn mx" aria-label="Close">${MICO.x}</button>${places.length ? `<div class="mplace">${esc(places.join(' · '))}</div>` : ''}${L.slice().sort((a, b) => b.number - a.number).map(i => `<button class="mis" data-id="${i.id}"><img src="${pub(i.img_path)}" alt="" loading="lazy"><span><b>Issue № ${i.number}</b><small>${fmt(i.issue_date)}${places.length > 1 && i.place ? ' · ' + esc(i.place) : ''}</small></span></button>`).join('')}</div>`;
+  el.classList.add('on'); fs.classList.add('popon');
+  el.querySelector('.mx').onclick = () => { el.classList.remove('on'); fs.classList.remove('popon'); open = null; pinsEl.querySelectorAll('.mpin').forEach(q => q.classList.remove('on')); };
   el.querySelectorAll('.mis').forEach(b => b.onclick = () => { const is = L.find(i => i.id == b.dataset.id); $('#lbimg').src = pub(is.img_path); $('#lbpdf').href = pub(is.pdf_path); $('#lb').classList.add('on'); if(!me.is_editor){ sb.rpc('saw_issue', {iid:is.id}).then(() => {}, () => {}); act('read', {key:is.id, n:is.number}); } }); };
- g.querySelectorAll('.pin').forEach(p => { const go = () => { g.querySelectorAll('.pin').forEach(q => q.classList.toggle('on', q === p)); pop(S[+p.dataset.k]); }; p.addEventListener('open', go); p.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') go(); }); });
- // drag to pan, pinch to zoom; a short tap on a medallion opens it
+ // drag to pan, pinch to zoom
  const P = new Map(); let pinch = null, moved = 0;
- svg.addEventListener('pointerdown', e => { P.set(e.pointerId, [e.clientX, e.clientY]); if(P.size === 1) moved = 0; if(P.size === 2){ const [a, b] = [...P.values()]; pinch = {d: Math.hypot(a[0]-b[0], a[1]-b[1]), z}; } });
+ fs.addEventListener('pointerdown', e => { if(e.target.closest('.mbtn,#mpop')) return; P.set(e.pointerId, [e.clientX, e.clientY]); if(P.size === 1) moved = 0; if(P.size === 2){ const [a, b] = [...P.values()]; pinch = {d: Math.hypot(a[0]-b[0], a[1]-b[1]), z}; } });
  const mv = e => { if(!P.has(e.pointerId)) return; const old = P.get(e.pointerId); P.set(e.pointerId, [e.clientX, e.clientY]);
-  if(P.size === 2 && pinch){ const [a, b] = [...P.values()], d = Math.hypot(a[0]-b[0], a[1]-b[1]), [cx, cy] = toSvg((a[0]+b[0])/2, (a[1]+b[1])/2); zoomAt(pinch.z * d / pinch.d / z, cx, cy); moved = 99; return; }
-  const r = svg.getBoundingClientRect(), dx = (e.clientX - old[0]) * VW / r.width, dy = (e.clientY - old[1]) * VH / r.height; moved += Math.abs(e.clientX - old[0]) + Math.abs(e.clientY - old[1]); px += dx; py += dy; draw(); };
- const up = e => { if(!P.has(e.pointerId)) return; P.delete(e.pointerId); if(P.size < 2) pinch = null;
-  if(!P.size && moved < 8){ const pin = e.target.closest && e.target.closest('.pin'); if(pin) pin.dispatchEvent(new Event('open')); } };
- const rs = () => { if(!$('#msvg')) return; const cx = (VW/2 - px) / z, cy = (VH/2 - py) / z; size(); px = VW/2 - cx*z; py = VH/2 - cy*z; draw(); };
- if(window.mapOff) mapOff(); addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', up); addEventListener('resize', rs);
+  if(P.size === 2 && pinch){ const [a, b] = [...P.values()], d = Math.hypot(a[0]-b[0], a[1]-b[1]), [cx, cy] = toUnits((a[0]+b[0])/2, (a[1]+b[1])/2); zoomAt(pinch.z * d / pinch.d / z, cx, cy); moved = 99; return; }
+  moved += Math.abs(e.clientX - old[0]) + Math.abs(e.clientY - old[1]); px += (e.clientX - old[0]) / u; py += (e.clientY - old[1]) / u; moving(); frame(); };
+ const up = e => { if(!P.has(e.pointerId)) return; P.delete(e.pointerId); if(P.size < 2) pinch = null; };
+ const rs = () => { if(!$('#mapfs')) return; const cx = (VW/2 - px) / z, cy = (VH/2 - py) / z; size(); px = VW/2 - cx*z; py = VH/2 - cy*z; clZ = -1; draw(); };
+ if(window.mapOff) mapOff(); addEventListener('pointermove', mv, {passive:true}); addEventListener('pointerup', up); addEventListener('pointercancel', up); addEventListener('resize', rs);
  window.mapOff = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); removeEventListener('resize', rs); document.body.classList.remove('mapfull'); };
- svg.addEventListener('wheel', e => { e.preventDefault(); const [cx, cy] = toSvg(e.clientX, e.clientY); zoomAt(Math.exp(-Math.max(-60, Math.min(60, e.deltaY)) * .006), cx, cy); }, {passive:false});
- svg.addEventListener('dblclick', e => { const [cx, cy] = toSvg(e.clientX, e.clientY); zoomAt(2, cx, cy); });
- $('#mzi').onclick = () => zoomAt(1.8, VW/2, VH/2); $('#mzo').onclick = () => zoomAt(1/1.8, VW/2, VH/2); $('#mzw').onclick = world;
+ fs.addEventListener('wheel', e => { if(e.target.closest('#mpop')) return; e.preventDefault(); const [cx, cy] = toUnits(e.clientX, e.clientY); zoomAt(Math.exp(-Math.max(-60, Math.min(60, e.deltaY)) * .006), cx, cy); }, {passive:false});
+ fs.addEventListener('dblclick', e => { if(e.target.closest('.mbtn,#mpop,.mpin')) return; const [cx, cy] = toUnits(e.clientX, e.clientY); zoomAt(2, cx, cy); });
+ $('#mzi').onclick = () => zoomAt(1.8, VW/2, VH/2); $('#mzo').onclick = () => zoomAt(1/1.8, VW/2, VH/2); $('#mzw').onclick = () => { moving(); world(); };
  if(ed) $('#medit').onclick = () => mapPlaces(all, res.error);
- if(placed.length) frame(placed.map(i => NE(i.lng, i.lat)), 2.4); else world();
+ size(); if(placed.length) fit(placed.map(i => i.xy), 2.4); else world();
 }
 // Editors: put issues on the map (new issues from Rag Press arrive with their place already set).
 function mapPlaces(all, err){
