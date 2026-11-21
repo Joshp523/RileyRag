@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head>
+<script>try{var t=localStorage.getItem('rr_theme');if(t&&t!=='leather')document.documentElement.className+=' th-'+t}catch(e){}</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#120a06">
@@ -63,16 +64,26 @@ input,textarea{width:100%;padding:10px;border-radius:2px;border:1px solid #5a402
 .bar.stack{flex-direction:column}.bar.stack .btn{min-width:220px;text-align:center}
 .btn.goldbtn{background:linear-gradient(180deg,#f1d88a,#c9a24a);color:#1c1008;border-color:#f1d88a;font-weight:700;box-shadow:0 0 0 1px #8f6c24,0 4px 18px rgba(201,162,74,.35)}
 .btn.goldbtn:hover{background:linear-gradient(180deg,#f7e4a6,#d6b25c);color:#1c1008}
-/* Map */
-.mapbox{position:relative;border:1px solid var(--g3);outline:1px solid rgba(201,162,74,.25);outline-offset:3px;background:radial-gradient(ellipse at 50% 40%,#1d120b,#0d0704 75%);border-radius:2px;overflow:hidden;margin:8px 0 14px}
-#msvg{display:block;width:100%;height:auto;min-height:200px;touch-action:none;cursor:grab;user-select:none}#msvg:active{cursor:grabbing}
-#mland{fill:#3a2614;stroke:#c9a24a;stroke-linejoin:round}#mbord{fill:none;stroke:#8f6c24;opacity:.55}
-.pin{cursor:pointer;outline:none}.pin .roll{transition:transform .15s}.pin:hover .roll,.pin.on .roll,.pin:focus .roll{transform:scale(1.35)}
-.pin.on .roll rect:first-of-type{fill:#fff4d6}
-.mz{position:absolute;right:8px;bottom:8px;display:flex;flex-direction:column;gap:6px}.mz .btn{width:36px;height:36px;padding:0;font-size:20px;line-height:1;background:rgba(18,10,6,.75)}
-.mcard{padding:12px 14px}.mplace{font-style:italic;color:var(--g2);margin-bottom:8px}
+/* Map: full screen, no words until a medallion is tapped */
+body.mapfull{overflow:hidden}body.mapfull header,body.mapfull #hint{display:none}body.mapfull main{max-width:none;padding:0}
+#mapfs{position:fixed;inset:0;z-index:20;background:#071a30;touch-action:none;user-select:none;-webkit-user-select:none}
+#msvg{display:block;width:100%;height:100%;cursor:grab}#msvg:active{cursor:grabbing}
+#mland{fill:url(#mlandg);stroke:#e7d7a8;stroke-linejoin:round}#mbord{fill:none;stroke:#f3e6bf;opacity:.42}#mgrat{fill:none;stroke:#9cc3e6;opacity:.13}
+.pin{cursor:pointer;outline:none}.pin image,.pin .ring{transition:transform .15s}.pin:hover image,.pin.on image,.pin:focus image,.pin:hover .ring,.pin.on .ring,.pin:focus .ring{transform:scale(1.3)}
+.pin .ring{opacity:0}.pin.on .ring,.pin:focus .ring{opacity:1}
+.mbtn{position:absolute;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:rgba(7,26,48,.72);border:1px solid rgba(241,216,138,.55);color:#f1d88a;cursor:pointer;padding:0;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);box-shadow:0 4px 16px rgba(0,0,0,.35)}
+.mbtn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.mbtn:hover{background:rgba(22,64,107,.85)}
+.mback{left:max(14px,env(safe-area-inset-left));top:max(14px,env(safe-area-inset-top))}.medit{right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top))}
+.mz{position:absolute;right:max(14px,env(safe-area-inset-right));bottom:max(18px,calc(env(safe-area-inset-bottom) + 10px));display:flex;flex-direction:column;gap:10px}.mz .mbtn{position:static}
+#mpop{position:absolute;left:0;right:0;bottom:0;padding:0 12px max(12px,env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .28s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+#mpop.on{transform:none;pointer-events:auto}
+@media (max-width:899px){#mapfs.popon .mz{opacity:0;pointer-events:none}}.mz{transition:opacity .2s}
+.mcard{position:relative;max-width:520px;margin:0 auto;max-height:46vh;overflow:auto;background:rgba(12,6,3,.94);border:1px solid var(--g3);outline:1px solid rgba(201,162,74,.3);outline-offset:3px;padding:14px 16px 8px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.mcard .mx{top:8px;right:8px;width:34px;height:34px}.mcard .mx svg{width:16px;height:16px}
+.mplace{font-style:italic;color:var(--g2);margin:0 44px 6px 0}
 .mis{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;border-top:1px solid rgba(143,108,36,.4);padding:10px 2px;color:var(--g1);text-align:left;cursor:pointer;font:inherit}
 .mis:first-of-type{border-top:0}.mis img{width:46px;height:62px;object-fit:cover;border:1px solid var(--g3)}.mis small{display:block;opacity:.75}
+@media (min-width:900px){#mpop{left:auto;right:84px;top:max(18px,env(safe-area-inset-top));bottom:auto;width:360px;padding:0;transform:translateX(130%)}#mpop.on{transform:none}.mcard{max-height:calc(100vh - 40px)}}
 .mrow{display:grid;grid-template-columns:auto 1fr auto;gap:6px 10px;align-items:center;padding:8px 0;border-top:1px solid rgba(143,108,36,.35)}.mrow small{grid-column:2/4;opacity:.7}
 .cm b{color:var(--g1);font-weight:700}.cm small{opacity:.55;margin-left:8px}
 .cm .del{float:right;background:none;border:0;color:#c88;cursor:pointer}
@@ -100,7 +111,23 @@ nav a:hover{color:var(--g2)}nav a[aria-current=page]{color:var(--g1);border-colo
 .k.g{background:#5f7f4d;color:#f4efd8}.k.y{background:var(--g2);color:#1a0f08}.k.b{opacity:.3}
 .lbt{width:100%;border-collapse:collapse}.lbt td{padding:7px 4px;border-bottom:1px solid #3a2a16}.lbt .r{width:2em;color:var(--g3)}.lbt .n{text-align:right;color:var(--g1)}
 .pv{background:#0b0603;border:1px solid #3a2a16;padding:12px 14px;margin:8px 0 14px;font-size:16px}.pv p{margin:0 0 10px}.pv p:last-child{margin:0}.pv a{color:#8fb4ff}
-.bar.ed{flex-wrap:nowrap;gap:4px}.bar.ed .btn{white-space:nowrap;padding:8px clamp(6px,2.2vw,16px);font-size:clamp(12px,3.8vw,18px)}
+.bar.ed{flex-wrap:wrap;gap:4px;justify-content:center}
+/* Christmas: the knitted sweater shows everywhere. Pine green sits only behind buttons, Ask Peter letters and the charter;
+   everything else gets a soft dark shadow so the gold reads against the knit. */
+html.th-xmas{background:#5b1218}
+html.th-xmas body::before{background:url(bg-xmas.jpg) center top/cover #5b1218}
+html.th-xmas body{text-shadow:0 1px 2px rgba(0,0,0,.95),0 0 10px rgba(30,4,6,.85)}
+html.th-xmas .gilt,html.th-xmas header h1 img,html.th-xmas header .emb{filter:drop-shadow(0 1px 2px rgba(0,0,0,.95)) drop-shadow(0 0 8px rgba(30,4,6,.8))}
+html.th-xmas .gilt,html.th-xmas .goldbtn{text-shadow:none}
+html.th-xmas .panel{background:transparent;border-color:transparent}
+html.th-xmas nav a{color:var(--g1)}
+html.th-xmas .btn:not(.goldbtn){background:rgba(16,48,29,.92);border-color:var(--g3);color:var(--g1);text-shadow:none}
+html.th-xmas .btn:not(.goldbtn):hover{background:rgba(24,66,40,.96)}
+html.th-xmas .letter,html.th-xmas .charter{background:rgba(16,48,29,.93);border:1px solid var(--g3);padding:14px 16px;text-shadow:none}
+html.th-xmas .letter{border-left-width:1px}
+html.th-xmas .foot{border-top-color:rgba(241,216,138,.35)}
+html.th-xmas hr.stitch{opacity:.8}
+body.mapfull #lb{z-index:40}.bar.ed .btn{white-space:nowrap;padding:8px clamp(6px,2.2vw,16px);font-size:clamp(12px,3.8vw,18px)}
 a.btn{display:inline-block;text-decoration:none}.charter{white-space:pre-wrap;font-size:19px;line-height:1.7;margin:0 0 18px}
 .apps{display:flex;justify-content:center;gap:clamp(28px,10vw,64px);margin:6px 0 30px}
 .app{display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;color:var(--g1);font:400 21px 'Tinos','Times New Roman',serif;font-variant:all-small-caps;letter-spacing:.06em;transition:transform .15s}
@@ -143,6 +170,15 @@ const SUPABASE_ANON_KEY = 'sb_publishable_0WwmJLwgxP4uSQF8TDdaOw_vrL-XU6x';
 const recoveryAtLoad = /type=recovery/.test(location.hash);
 // Own sign-in slot: other apps on joshp523.github.io use this Supabase project too, and must not overwrite the Rag's login.
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { storageKey: 'riley-rag-auth' } });
+// ---------- themes: the editors pick one look for everybody (stored in rr_settings) ----------
+const THEMES = [['leather','Classic leather'],['xmas','Christmas']];
+let THEME = (() => { try { return localStorage.getItem('rr_theme') || 'leather'; } catch(e){ return 'leather'; } })();
+function applyTheme(t){ if(!THEMES.some(x => x[0] === t)) t = 'leather'; THEME = t; const h = document.documentElement;
+ THEMES.forEach(([k]) => h.classList.toggle('th-' + k, k === t && k !== 'leather')); try{ localStorage.setItem('rr_theme', t); }catch(e){}
+ const b = document.getElementById('thb'); if(b) b.textContent = 'Theme: ' + THEMES.find(x => x[0] === t)[1]; }
+sb.from('rr_settings').select('value').eq('key','theme').maybeSingle().then(({data}) => { if(data && data.value) applyTheme(data.value); }, () => {});
+async function nextTheme(){ const i = THEMES.findIndex(x => x[0] === THEME), t = THEMES[(i + 1) % THEMES.length][0]; applyTheme(t);
+ const {error} = await sb.from('rr_settings').upsert({key:'theme', value:t}); if(error) alert('Couldn’t save the theme for everyone: ' + error.message); }
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 const $ = s => document.querySelector(s), app = $('#app');
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -307,10 +343,10 @@ function authView(msg){
 
 async function feedView(){
  const hello = !greeted; greeted = true;
- app.innerHTML = `${hello?`<p class="hi" id="hi">Welcome, ${esc(me.name)}</p>`:''}${me.is_editor?'<div class="bar ed"><button class="btn ghost" id="eb">Email draft</button><button class="btn ghost" id="mb">Members</button></div>':''}<div id="tools"></div><div id="feed">Loading issues…</div><div class="foot"><button class="btn ghost" id="so">Not ${esc(me.name)}? Switch reader</button></div>`;
+ app.innerHTML = `${hello?`<p class="hi" id="hi">Welcome, ${esc(me.name)}</p>`:''}${me.is_editor?'<div class="bar ed"><button class="btn ghost" id="eb">Email draft</button><button class="btn ghost" id="mb">Members</button><button class="btn ghost" id="thb">Theme</button></div>':''}<div id="tools"></div><div id="feed">Loading issues…</div><div class="foot"><button class="btn ghost" id="so">Not ${esc(me.name)}? Switch reader</button></div>`;
  if(hello) setTimeout(() => $('#hi')?.classList.add('off'), 3500);
  $('#so').onclick = () => { if(!confirm('Sign out so someone else can read here?')) return; switching = true; forgetWho(); sb.auth.signOut(); };
- if(me.is_editor){ $('#mb').onclick = () => $('#mp') ? closeMembers() : members(); $('#eb').onclick = () => emailDraft(); memberCount(); }
+ if(me.is_editor){ $('#thb').onclick = nextTheme; applyTheme(THEME); $('#mb').onclick = () => $('#mp') ? closeMembers() : members(); $('#eb').onclick = () => emailDraft(); memberCount(); }
  const [i,c,r] = await Promise.all([
   sb.from('issues').select('*').order('issue_date',{ascending:false}).order('number',{ascending:false}),
   sb.from('comments').select('*,profiles(name)').order('created_at'),
@@ -437,6 +473,7 @@ async function members(){
 }
 function route(){
  const h = location.hash || '#highlights';
+ if(h !== '#map' && window.mapOff) mapOff();
  document.querySelectorAll('#nav a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href')===h ? 'page' : 'false'));
  ({'#games':gamesView,'#peter':peterView,'#recipes':recipesView,'#map':mapView,'#charter':charterView}[h] || feedView)(); scrollTo(0,0);
 }
@@ -554,67 +591,82 @@ let MAPD = null;
 const NE = (lng, lat) => { const l = lng*Math.PI/180, f = lat*Math.PI/180, f2 = f*f, f4 = f2*f2;
  return [MAPD.tx + MAPD.k * l * (0.8707 - 0.131979*f2 + f4*(-0.013791 + f4*(0.003971*f2 - 0.001529*f4))),
          MAPD.ty - MAPD.k * f * (1.007226 + f2*(0.015085 + f4*(-0.044475 + 0.028874*f2 - 0.005916*f4)))]; };
-const ROLL = `<g class="roll"><ellipse cx="0" cy="9" rx="10" ry="2.6" fill="rgba(0,0,0,.45)"/><g transform="rotate(-24)"><rect x="-11" y="-4.6" width="22" height="9.2" rx="4.6" fill="#efe2bf" stroke="#3a2614" stroke-width="1.1"/><path d="M-6-2.2h11M-6 0h13M-6 2.2h9" stroke="#8f6c24" stroke-width=".7"/><rect x="-1.6" y="-4.9" width="3.2" height="9.8" fill="#c9a24a" stroke="#3a2614" stroke-width=".8"/><ellipse cx="-11" cy="0" rx="2.2" ry="4.6" fill="#d9c79a" stroke="#3a2614" stroke-width=".9"/><circle cx="-11" cy="0" r=".9" fill="#8f6c24"/></g></g>`;
+// a Riley Rag medallion marks each place; a gold count shows when several issues share it
+const PIN = n => `<circle r="13.5" cy="1.5" fill="rgba(0,0,0,.45)"/><image href="map-pin.png" x="-13" y="-13" width="26" height="26"/><circle class="ring" r="13.2" fill="none" stroke="#f1d88a" stroke-width="1.4"/>${n > 1 ? `<circle cx="11" cy="-10" r="6.4" fill="#c9a24a" stroke="#0b1d33" stroke-width="1.2"/><text x="11" y="-7.3" text-anchor="middle" font-size="8" font-weight="700" fill="#0b1d33" font-family="Tinos,serif">${n}</text>` : ''}<circle r="18" fill="transparent"/>`;
+const MICO = {back:'<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>', plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>', minus:'<svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>',
+ pin:'<svg viewBox="0 0 24 24"><path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg>', x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>', home:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c3 3.2 3 13.8 0 17M12 3.5c-3 3.2-3 13.8 0 17"/></svg>'};
+// The map fills the whole screen with no words on it: just the world, the medallions, and a few round buttons.
 async function mapView(){
- const ed = me.is_editor;
- app.innerHTML = `<h2 class="hd gilt ph">Map</h2><p style="text-align:center;font-style:italic">Wherever the Rag goes to press. Tap a roll to read that issue.</p>
- <div class="mapbox" id="mb"><svg id="msvg" aria-label="World map of Riley Rag issues"><g id="mg"><path id="mland"/><path id="mbord"/><g id="pins"></g></g></svg>
- <div class="mz"><button class="btn" id="mzi" aria-label="Zoom in">+</button><button class="btn" id="mzo" aria-label="Zoom out">−</button></div></div>
- <div id="mpop"></div>${ed ? '<div id="mplaces"></div>' : ''}`;
+ const ed = me.is_editor; document.body.classList.add('mapfull');
+ app.innerHTML = `<div id="mapfs"><svg id="msvg" role="img" aria-label="World map of Riley Rag issues"><defs><radialGradient id="msea" cx="50%" cy="42%" r="75%"><stop offset="0" stop-color="#16406b"/><stop offset=".6" stop-color="#0d2b4c"/><stop offset="1" stop-color="#071a30"/></radialGradient>
+  <linearGradient id="mlandg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7f9a5e"/><stop offset=".33" stop-color="#93a566"/><stop offset=".45" stop-color="#c8b27c"/><stop offset=".58" stop-color="#b9a571"/><stop offset=".7" stop-color="#7f9a5e"/><stop offset="1" stop-color="#6f8a54"/></linearGradient>
+  <filter id="mglow" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur in="SourceAlpha" stdDeviation="1.6"/><feOffset dy="1"/><feComponentTransfer><feFuncA type="linear" slope=".55"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+  <rect id="msear" fill="url(#msea)"/><g id="mg"><path id="mgrat"/><path id="mland" filter="url(#mglow)"/><path id="mbord"/><g id="pins"></g></g></svg>
+  <a class="mbtn mback" href="#highlights" aria-label="Back to the Rag">${MICO.back}</a>
+  <div class="mz"><button class="mbtn" id="mzi" aria-label="Zoom in">${MICO.plus}</button><button class="mbtn" id="mzo" aria-label="Zoom out">${MICO.minus}</button><button class="mbtn" id="mzw" aria-label="Whole world">${MICO.home}</button></div>
+  ${ed ? `<button class="mbtn medit" id="medit" aria-label="Put issues on the map">${MICO.pin}</button>` : ''}
+  <div id="mpop" aria-live="polite"></div></div>`;
  const [md, res] = await Promise.all([MAPD ? Promise.resolve(MAPD) : fetch('map.json').then(r => r.json()), sb.from('issues').select('id,number,issue_date,img_path,pdf_path,place,lat,lng').order('number')]);
- MAPD = md; if(!$('#msvg')) return;
- const svg = $('#msvg'), g = $('#mg'); svg.setAttribute('viewBox', `0 0 ${md.w} ${md.h}`); $('#mland').setAttribute('d', md.land); $('#mbord').setAttribute('d', md.borders);
- if(res.error){ $('#mpop').innerHTML = `<p class="note" style="text-align:center">${ed ? 'Run rr_map.sql in Supabase to switch the map on.' : 'The map isn’t ready yet.'}</p>`; return; }
- const all = res.data || [], placed = all.filter(i => i.lat != null && i.lng != null);
+ MAPD = md; const svg = $('#msvg'); if(!svg) return; const g = $('#mg');
+ $('#mland').setAttribute('d', md.land); $('#mbord').setAttribute('d', md.borders);
+ // faint lines of latitude and longitude
+ let gr = ''; for(let lat = -40; lat <= 80; lat += 20){ let s = ''; for(let lng = -180; lng <= 180; lng += 5){ const [x, y] = NE(lng, lat); s += (s ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); } gr += s; }
+ for(let lng = -150; lng <= 180; lng += 30){ let s = ''; for(let lat = -58; lat <= 85; lat += 4){ const [x, y] = NE(lng, lat); s += (s ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); } gr += s; }
+ $('#mgrat').setAttribute('d', gr);
+ const all = res.error ? [] : (res.data || []), placed = all.filter(i => i.lat != null && i.lng != null);
  const spots = {}; placed.forEach(i => { const k = i.lat.toFixed(2)+','+i.lng.toFixed(2); (spots[k] = spots[k] || []).push(i); });
- // pan & zoom (pinch, drag, wheel, buttons); rolls stay the same size on screen
- let z = 1, px = 0, py = 0; const W = md.w, H = md.h;
- const clampV = () => { z = Math.min(14, Math.max(1, z)); px = Math.min(0, Math.max(W - W*z, px)); py = Math.min(0, Math.max(H - H*z, py)); };
- const draw = () => { clampV(); g.setAttribute('transform', `translate(${px} ${py}) scale(${z})`); $('#mbord').style.strokeWidth = .45/z; $('#mland').style.strokeWidth = .7/z;
-  const u = W / (svg.getBoundingClientRect().width || W), ps = Math.min(2.4, u) / z;   // rolls stay about the same size on screen
+ const S = Object.values(spots), W = md.w, H = md.h; let VW = W, VH = H, z = 1, px = 0, py = 0;
+ $('#pins').innerHTML = S.map((L, n) => { const [x, y] = NE(L[0].lng, L[0].lat);
+  return `<g class="pin" data-k="${n}" data-x="${x.toFixed(1)}" data-y="${y.toFixed(1)}" tabindex="0" role="button" aria-label="${esc(L[0].place || 'Issue')}: ${L.length} issue${L.length > 1 ? 's' : ''}">${PIN(L.length)}</g>`; }).join('');
+ // the view always matches the screen's shape; the ocean runs to every edge
+ const size = () => { const r = svg.getBoundingClientRect(); VW = W; VH = W * (r.height || 1) / (r.width || 1); svg.setAttribute('viewBox', `0 0 ${VW} ${VH}`); const s = $('#msear'); s.setAttribute('width', VW); s.setAttribute('height', VH); };
+ const zmin = () => Math.min(1, Math.max(VW / W, VH / H) > 1.6 ? 1 : Math.max(VW / W, VH / H));
+ const clampV = () => { z = Math.min(16, Math.max(zmin(), z));
+  px = W*z <= VW ? (VW - W*z) / 2 : Math.min(0, Math.max(VW - W*z, px)); py = H*z <= VH ? (VH - H*z) / 2 : Math.min(0, Math.max(VH - H*z, py)); };
+ const draw = () => { clampV(); g.setAttribute('transform', `translate(${px} ${py}) scale(${z})`);
+  $('#mbord').style.strokeWidth = .5/z; $('#mland').style.strokeWidth = .8/z; $('#mgrat').style.strokeWidth = .45/z;
+  const u = VW / (svg.getBoundingClientRect().width || VW), ps = Math.min(2.6, u * (innerWidth >= 900 ? 1.25 : 1)) / z;
   g.querySelectorAll('.pin').forEach(p => p.setAttribute('transform', `translate(${p.dataset.x} ${p.dataset.y}) scale(${ps})`)); };
- const zoomAt = (f, cx, cy) => { const nz = Math.min(14, Math.max(1, z*f)); px = cx - (cx - px) * nz / z; py = cy - (cy - py) * nz / z; z = nz; draw(); };
- const toSvg = (cx, cy) => { const r = svg.getBoundingClientRect(); return [(cx - r.left) * W / r.width, (cy - r.top) * H / r.height]; };
- $('#pins').innerHTML = Object.values(spots).map((L, n) => { const [x, y] = NE(L[0].lng, L[0].lat);
-  return `<g class="pin" data-k="${n}" data-x="${x.toFixed(1)}" data-y="${y.toFixed(1)}" tabindex="0" role="button" aria-label="${L.length} issue${L.length>1?'s':''}">${ROLL}${L.length > 1 ? `<circle cx="9" cy="-8" r="5.2" fill="#c9a24a" stroke="#120a06" stroke-width="1"/><text x="9" y="-5.6" text-anchor="middle" font-size="7" font-weight="700" fill="#120a06">${L.length}</text>` : ''}<circle r="14" fill="transparent"/></g>`; }).join('');
- const S = Object.values(spots);
+ const zoomAt = (f, cx, cy) => { const nz = Math.min(16, Math.max(zmin(), z*f)); px = cx - (cx - px) * nz / z; py = cy - (cy - py) * nz / z; z = nz; draw(); };
+ const toSvg = (cx, cy) => { const r = svg.getBoundingClientRect(); return [(cx - r.left) * VW / r.width, (cy - r.top) * VH / r.height]; };
+ const frame = (pts, pad) => { const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]); const bw = Math.max(160, Math.max(...xs) - Math.min(...xs)) * pad, bh = Math.max(100, Math.max(...ys) - Math.min(...ys)) * pad;
+  z = Math.min(7, Math.max(zmin(), tall(), Math.min(VW / bw, VH / bh))); const cx = (Math.max(...xs) + Math.min(...xs)) / 2, cy = (Math.max(...ys) + Math.min(...ys)) / 2; px = VW/2 - cx*z; py = VH/2 - cy*z; draw(); };
+ const tall = () => VH > VW * 1.2 ? VH * .5 / H : 0;   // on a phone held upright, the land takes half the screen
+ const world = () => { if(tall()){ const c = placed.length ? placed.map(i => NE(i.lng, i.lat)) : [[W*.52, H*.38]]; z = tall(); const cx = c.reduce((a, p) => a + p[0], 0) / c.length, cy = c.reduce((a, p) => a + p[1], 0) / c.length; px = VW/2 - cx*z; py = VH/2 - cy*z; return draw(); } z = Math.max(zmin(), Math.min(VW / W, VH / H) * (innerWidth > innerHeight ? Math.max(VW / W, VH / H) / Math.min(VW / W, VH / H) : 1)); px = 0; py = 0; draw(); };
+ size();
  const fmt = d => new Date(d+'T00:00').toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
- const pop = L => { const el = $('#mpop'); el.innerHTML = `<div class="panel mcard"><div class="mplace">${esc(L[0].place || '')}</div>${L.slice().reverse().map(i => `<button class="mis" data-id="${i.id}"><img src="${pub(i.img_path)}" alt=""><span><b>Issue № ${i.number}</b><small>${fmt(i.issue_date)}</small></span></button>`).join('')}</div>`;
-  el.querySelectorAll('.mis').forEach(b => b.onclick = () => { const is = L.find(i => i.id == b.dataset.id); $('#lbimg').src = pub(is.img_path); $('#lbpdf').href = pub(is.pdf_path); $('#lb').classList.add('on'); if(!me.is_editor){ sb.rpc('saw_issue', {iid:is.id}).then(() => {}, () => {}); act('read', {key:is.id, n:is.number}); } });
-  el.scrollIntoView({behavior:'smooth', block:'nearest'}); };
+ const pop = L => { const el = $('#mpop'); el.innerHTML = `<div class="mcard"><button class="mbtn mx" aria-label="Close">${MICO.x}</button>${L[0].place ? `<div class="mplace">${esc(L[0].place)}</div>` : ''}${L.slice().reverse().map(i => `<button class="mis" data-id="${i.id}"><img src="${pub(i.img_path)}" alt=""><span><b>Issue № ${i.number}</b><small>${fmt(i.issue_date)}</small></span></button>`).join('')}</div>`;
+  el.classList.add('on'); $('#mapfs').classList.add('popon'); el.querySelector('.mx').onclick = () => { el.classList.remove('on'); $('#mapfs').classList.remove('popon'); g.querySelectorAll('.pin').forEach(q => q.classList.remove('on')); };
+  el.querySelectorAll('.mis').forEach(b => b.onclick = () => { const is = L.find(i => i.id == b.dataset.id); $('#lbimg').src = pub(is.img_path); $('#lbpdf').href = pub(is.pdf_path); $('#lb').classList.add('on'); if(!me.is_editor){ sb.rpc('saw_issue', {iid:is.id}).then(() => {}, () => {}); act('read', {key:is.id, n:is.number}); } }); };
  g.querySelectorAll('.pin').forEach(p => { const go = () => { g.querySelectorAll('.pin').forEach(q => q.classList.toggle('on', q === p)); pop(S[+p.dataset.k]); }; p.addEventListener('open', go); p.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') go(); }); });
- // drag to pan, pinch to zoom; a short tap on a roll opens it
+ // drag to pan, pinch to zoom; a short tap on a medallion opens it
  const P = new Map(); let pinch = null, moved = 0;
  svg.addEventListener('pointerdown', e => { P.set(e.pointerId, [e.clientX, e.clientY]); if(P.size === 1) moved = 0; if(P.size === 2){ const [a, b] = [...P.values()]; pinch = {d: Math.hypot(a[0]-b[0], a[1]-b[1]), z}; } });
  const mv = e => { if(!P.has(e.pointerId)) return; const old = P.get(e.pointerId); P.set(e.pointerId, [e.clientX, e.clientY]);
   if(P.size === 2 && pinch){ const [a, b] = [...P.values()], d = Math.hypot(a[0]-b[0], a[1]-b[1]), [cx, cy] = toSvg((a[0]+b[0])/2, (a[1]+b[1])/2); zoomAt(pinch.z * d / pinch.d / z, cx, cy); moved = 99; return; }
-  const r = svg.getBoundingClientRect(), dx = (e.clientX - old[0]) * W / r.width, dy = (e.clientY - old[1]) * H / r.height; moved += Math.abs(e.clientX - old[0]) + Math.abs(e.clientY - old[1]); px += dx; py += dy; draw(); };
+  const r = svg.getBoundingClientRect(), dx = (e.clientX - old[0]) * VW / r.width, dy = (e.clientY - old[1]) * VH / r.height; moved += Math.abs(e.clientX - old[0]) + Math.abs(e.clientY - old[1]); px += dx; py += dy; draw(); };
  const up = e => { if(!P.has(e.pointerId)) return; P.delete(e.pointerId); if(P.size < 2) pinch = null;
   if(!P.size && moved < 8){ const pin = e.target.closest && e.target.closest('.pin'); if(pin) pin.dispatchEvent(new Event('open')); } };
- if(window.mapOff) mapOff(); addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', up);
- window.mapOff = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); };
+ const rs = () => { if(!$('#msvg')) return; const cx = (VW/2 - px) / z, cy = (VH/2 - py) / z; size(); px = VW/2 - cx*z; py = VH/2 - cy*z; draw(); };
+ if(window.mapOff) mapOff(); addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', up); addEventListener('resize', rs);
+ window.mapOff = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); removeEventListener('resize', rs); document.body.classList.remove('mapfull'); };
  svg.addEventListener('wheel', e => { e.preventDefault(); const [cx, cy] = toSvg(e.clientX, e.clientY); zoomAt(Math.exp(-Math.max(-60, Math.min(60, e.deltaY)) * .006), cx, cy); }, {passive:false});
  svg.addEventListener('dblclick', e => { const [cx, cy] = toSvg(e.clientX, e.clientY); zoomAt(2, cx, cy); });
- $('#mzi').onclick = () => zoomAt(1.8, W/2, H/2); $('#mzo').onclick = () => zoomAt(1/1.8, W/2, H/2);
- // start framed on the issues (so a cluster in Europe isn't a speck)
- if(placed.length){ const pts = placed.map(i => NE(i.lng, i.lat)), xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
-  const bw = Math.max(140, Math.max(...xs) - Math.min(...xs)) * 1.8, bh = Math.max(90, Math.max(...ys) - Math.min(...ys)) * 1.8;
-  z = Math.min(6, Math.max(1, Math.min(W / bw, H / bh))); const cx = (Math.max(...xs) + Math.min(...xs)) / 2, cy = (Math.max(...ys) + Math.min(...ys)) / 2; px = W/2 - cx*z; py = H/2 - cy*z; }
- draw();
- if(!placed.length) $('#mpop').innerHTML = `<p class="note" style="text-align:center">No issues are on the map yet.</p>`;
- if(ed) mapPlaces(all);
+ $('#mzi').onclick = () => zoomAt(1.8, VW/2, VH/2); $('#mzo').onclick = () => zoomAt(1/1.8, VW/2, VH/2); $('#mzw').onclick = world;
+ if(ed) $('#medit').onclick = () => mapPlaces(all, res.error);
+ if(placed.length) frame(placed.map(i => NE(i.lng, i.lat)), 2.4); else world();
 }
 // Editors: put issues on the map (new issues from Rag Press arrive with their place already set).
-function mapPlaces(all){
- const el = $('#mplaces'); if(!el) return;
- el.innerHTML = `<h3 class="hd" style="text-align:center;margin-top:28px">Places <small>(editors only)</small></h3><p class="note" style="text-align:center">Type a place for any issue, e.g. “Brussels, Belgium”, then tap Find.</p>
- ${all.slice().reverse().map(i => `<div class="mrow" data-id="${i.id}"><b>№ ${i.number}</b><input value="${esc(i.place || '')}" placeholder="Where was it published?" aria-label="Place for issue ${i.number}"><button class="btn">Find</button><small>${i.lat != null ? '● on the map' : '○ not on the map'}</small></div>`).join('')}`;
- el.querySelectorAll('.mrow').forEach(r => { const b = r.querySelector('button'), inp = r.querySelector('input'), msg = r.querySelector('small');
-  const go = async () => { const q = inp.value.trim(); if(!q){ await sb.from('issues').update({place:null, lat:null, lng:null}).eq('id', r.dataset.id); return mapView(); }
+function mapPlaces(all, err){
+ const d = sheet(`<h3 class="hd" style="text-align:center">Places</h3>${err ? '<p class="note">Run rr_map_peter.sql in Supabase to switch the map on.</p>' : `<p class="note" style="text-align:center">Type where an issue was published, e.g. “Brussels, Belgium”, and tap Find.</p>
+ ${all.slice().reverse().map(i => `<div class="mrow" data-id="${i.id}"><b>№ ${i.number}</b><input value="${esc(i.place || '')}" placeholder="Where was it published?" aria-label="Place for issue ${i.number}"><button class="btn">Find</button><small>${i.lat != null ? '● on the map' : '○ not on the map'}</small></div>`).join('')}`}<div class="bar"><button class="btn ghost" data-x>Done</button></div>`);
+ d.querySelectorAll('.mrow').forEach(r => { const b = r.querySelector('button'), inp = r.querySelector('input'), msg = r.querySelector('small');
+  const go = async () => { const q = inp.value.trim(); if(!q){ await sb.from('issues').update({place:null, lat:null, lng:null}).eq('id', r.dataset.id); msg.textContent = '○ not on the map'; return; }
    b.disabled = true; msg.textContent = 'Looking…'; const hit = await geocode(q); b.disabled = false;
    if(!hit) return msg.textContent = 'Couldn’t find that place. Try adding the country.';
-   const {error} = await sb.from('issues').update({place:q, lat:hit.lat, lng:hit.lng}).eq('id', r.dataset.id); if(error) return msg.textContent = error.message; mapView(); };
+   const {error} = await sb.from('issues').update({place:q, lat:hit.lat, lng:hit.lng}).eq('id', r.dataset.id); msg.textContent = error ? error.message : '● on the map'; };
   b.onclick = go; inp.onkeydown = e => { if(e.key === 'Enter') go(); }; });
+ d.querySelector('.bar [data-x]').addEventListener('click', () => mapView());
 }
 async function geocode(q){   // OpenStreetMap's free place search; used only when an editor sets a place
  try{ const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(q), {headers:{'Accept-Language':'en'}}); const j = await r.json();
