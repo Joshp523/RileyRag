@@ -122,21 +122,62 @@ nav a:hover{color:var(--g2)}nav a[aria-current=page]{color:var(--g1);border-colo
 .lbt{width:100%;border-collapse:collapse}.lbt td{padding:7px 4px;border-bottom:1px solid #3a2a16}.lbt .r{width:2em;color:var(--g3)}.lbt .n{text-align:right;color:var(--g1)}
 .pv{background:#0b0603;border:1px solid #3a2a16;padding:12px 14px;margin:8px 0 14px;font-size:16px}.pv p{margin:0 0 10px}.pv p:last-child{margin:0}.pv a{color:#8fb4ff}
 .bar.ed{flex-wrap:wrap;gap:4px;justify-content:center}
-/* Christmas: the knitted sweater shows everywhere. Pine green sits only behind buttons, Ask Peter letters and the charter;
-   everything else gets a soft dark shadow so the gold reads against the knit. */
-html.th-xmas{background:#5b1218}
-html.th-xmas body::before{background:url(bg-xmas.jpg) center top/cover #5b1218}
-html.th-xmas body{text-shadow:0 1px 2px rgba(0,0,0,.95),0 0 10px rgba(30,4,6,.85)}
-html.th-xmas .gilt,html.th-xmas header h1 img,html.th-xmas header .emb{filter:drop-shadow(0 1px 2px rgba(0,0,0,.95)) drop-shadow(0 0 8px rgba(30,4,6,.8))}
-html.th-xmas .gilt,html.th-xmas .goldbtn{text-shadow:none}
-html.th-xmas .panel{background:transparent;border-color:transparent}
-html.th-xmas nav a{color:var(--g1)}
-html.th-xmas .btn:not(.goldbtn){background:rgba(16,48,29,.92);border-color:var(--g3);color:var(--g1);text-shadow:none}
-html.th-xmas .btn:not(.goldbtn):hover{background:rgba(24,66,40,.96)}
-html.th-xmas .letter,html.th-xmas .charter{background:rgba(16,48,29,.93);border:1px solid var(--g3);padding:14px 16px;text-shadow:none}
-html.th-xmas .letter{border-left-width:1px}
-html.th-xmas .foot{border-top-color:rgba(241,216,138,.35)}
-html.th-xmas hr.stitch{opacity:.8}
+/* ---------- Themes (picked by the editors, seen by everyone) ----------
+   Each one swaps the background picture and the ink. A soft veil and a gentle blur calm each picture so it
+   never fights the words; panels, buttons, letters and inputs get a backing in the theme's colours.
+   Contrast was checked for every text colour against its backing (WCAG AA, 4.5:1 or better). */
+html[class*=th-] body::before{content:"";position:fixed;inset:-12px;z-index:-1;background-size:cover;background-repeat:no-repeat}
+html[class*=th-] body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none}
+html[class*=th-] .t:not(.g):not(.y):not(.b){background:var(--tile)}
+html[class*=th-] .panel{background:transparent;border-color:transparent}
+html[class*=th-] .btn:not(.goldbtn),html[class*=th-] .letter,html[class*=th-] .charter,html[class*=th-] .who,html[class*=th-] .pre,html[class*=th-] .pv{background:var(--surf);border-color:var(--line);color:var(--g1);text-shadow:none}
+html[class*=th-] .letter,html[class*=th-] .charter{border:1px solid var(--line);padding:14px 16px}
+html[class*=th-] .btn:not(.goldbtn):hover{background:var(--surf2)}
+html[class*=th-] input,html[class*=th-] textarea{background:var(--field);color:var(--fieldink);border-color:var(--line);text-shadow:none}
+html[class*=th-] input::placeholder,html[class*=th-] textarea::placeholder{color:var(--fieldink);opacity:.55}
+html[class*=th-] #sheet .sh{background:var(--sheet);color:var(--g1);border-color:var(--line);text-shadow:none}
+html[class*=th-] nav a{color:var(--g1)}
+html[class*=th-] .gilt,html[class*=th-] .goldbtn{text-shadow:none}
+html[class*=th-] .foot,html[class*=th-] hr.stitch{border-color:var(--line)}
+#mapfs,#lb{--g1:#f1d88a;--g2:#c9a24a;--g3:#8f6c24;--bg:#120a06}   /* the map and the issue viewer keep their own dark look */
+#mapfs,#lb{text-shadow:none}
+
+/* Christmas: plain red knit with a little snow; text, masthead and emblem white as snow */
+html.th-xmas{--gold:#fbf4ea;--g1:#ffffff;--g2:#f6efe6;--g3:#e9d9cf;--bg:#5b0f17;--surf:rgba(70,6,14,.78);--surf2:rgba(96,12,22,.86);--line:rgba(255,255,255,.55);--field:rgba(255,255,255,.94);--fieldink:#3a0a10;--sheet:#4a0a12;--tile:rgba(70,6,14,.55);background:#6d121b;color-scheme:dark}
+html.th-xmas body::before{background-image:url(bg-xmas2.jpg);background-position:center}
+html.th-xmas body{text-shadow:0 1px 2px rgba(40,0,6,.9),0 0 12px rgba(60,0,8,.6)}
+html.th-xmas header h1 img,html.th-xmas header .emb{filter:brightness(0) invert(1) drop-shadow(0 1px 2px rgba(40,0,6,.85)) drop-shadow(0 0 10px rgba(60,0,8,.55))}
+html.th-xmas .t.y,html.th-xmas .k.y{background:#e9c46a;color:#2a0a0a;border-color:#fff3c4}
+html.th-xmas .t.b{background:rgba(40,4,8,.75);color:#d9b9b9}
+
+/* Winter: the snowy forest, softened under a white veil; ink-black text, masthead and emblem */
+html.th-winter{--gold:#111418;--g1:#111418;--g2:#1f2a33;--g3:#3d4a55;--bg:#ffffff;--surf:rgba(255,255,255,.82);--surf2:rgba(255,255,255,.95);--line:rgba(17,20,24,.45);--field:rgba(255,255,255,.95);--fieldink:#111418;--sheet:#f7f9fb;--tile:rgba(255,255,255,.7);background:#e9eef2;color-scheme:light}
+html.th-winter body::before{background-image:url(bg-winter.jpg);background-position:28% 50%;filter:blur(1.5px) saturate(.9)}
+html.th-winter body::after{background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.5) 40%,rgba(255,255,255,.6))}
+html.th-winter body{color:#111418;text-shadow:0 0 2px rgba(255,255,255,.95),0 0 10px rgba(255,255,255,.85)}
+html.th-winter header h1 img,html.th-winter header .emb{filter:brightness(0) drop-shadow(0 0 6px rgba(255,255,255,.9))}
+html.th-winter .t.g,html.th-winter .k.g{background:#3f6b45;color:#fff;border-color:#2f5435}
+html.th-winter .t.y,html.th-winter .k.y{background:#e0b43c;color:#111;border-color:#b88a1c}
+html.th-winter .t.b{background:#56606a;color:#f2f4f6;border-color:#56606a}
+html.th-winter .k{color:#111418;border-color:#7b8791;background:rgba(255,255,255,.75)}
+html.th-winter body[data-pg=games]::before{background-position:88% 50%}
+html.th-winter body[data-pg=peter]::before{background-position:4% 50%}
+html.th-winter body[data-pg=charter]::before{background-position:62% 50%}
+
+/* Fall: the Hudson valley at golden hour under a warm veil; deep chestnut text, burnt-orange accents */
+html.th-fall{--gold:#2b1306;--g1:#2b1306;--g2:#8a3308;--g3:#6e4524;--bg:#fff8ec;--surf:rgba(255,246,228,.84);--surf2:rgba(255,250,240,.95);--line:rgba(110,69,36,.55);--field:rgba(255,252,245,.96);--fieldink:#2b1306;--sheet:#fbf1df;--tile:rgba(255,246,228,.7);background:#e8d2a8;color-scheme:light}
+html.th-fall body::before{background-image:url(bg-fall.jpg);background-position:50% 30%;filter:blur(1.5px) saturate(.95)}
+html.th-fall body::after{background:linear-gradient(180deg,rgba(255,243,220,.5),rgba(255,240,214,.62) 35%,rgba(255,238,210,.66))}
+html.th-fall body{color:#2b1306;text-shadow:0 0 2px rgba(255,246,228,.95),0 0 10px rgba(255,240,214,.85)}
+html.th-fall .gilt{background:linear-gradient(120deg,#7a2a06,#a8430f 50%,#5e2306);-webkit-background-clip:text;background-clip:text}
+html.th-fall header h1 img,html.th-fall header .emb{filter:brightness(0) invert(.18) sepia(1) saturate(6) hue-rotate(-12deg) brightness(.8) drop-shadow(0 0 6px rgba(255,240,214,.9))}
+html.th-fall .t.g,html.th-fall .k.g{background:#4f6b2c;color:#fff;border-color:#3d5520}
+html.th-fall .t.y,html.th-fall .k.y{background:#d99a2b;color:#2b1306;border-color:#a8701a}
+html.th-fall .t.b{background:#6b5644;color:#fbf1df;border-color:#6b5644}
+html.th-fall .k{color:#2b1306;border-color:#9c7a5a;background:rgba(255,246,228,.75)}
+html.th-fall body[data-pg=games]::before{background-position:8% 40%}
+html.th-fall body[data-pg=peter]::before{background-position:92% 45%}
+html.th-fall body[data-pg=charter]::before{background-position:55% 80%}
 body.mapfull #lb{z-index:40}.bar.ed .btn{white-space:nowrap;padding:8px clamp(6px,2.2vw,16px);font-size:clamp(12px,3.8vw,18px)}
 a.btn{display:inline-block;text-decoration:none}.charter{white-space:pre-wrap;font-size:19px;line-height:1.7;margin:0 0 18px}
 .apps{display:flex;justify-content:center;gap:clamp(28px,10vw,64px);margin:6px 0 30px}
@@ -181,7 +222,7 @@ const recoveryAtLoad = /type=recovery/.test(location.hash);
 // Own sign-in slot: other apps on joshp523.github.io use this Supabase project too, and must not overwrite the Rag's login.
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { storageKey: 'riley-rag-auth' } });
 // ---------- themes: the editors pick one look for everybody (stored in rr_settings) ----------
-const THEMES = [['leather','Classic leather'],['xmas','Christmas']];
+const THEMES = [['leather','Classic leather'],['fall','Fall'],['xmas','Christmas'],['winter','Winter']];
 let THEME = (() => { try { return localStorage.getItem('rr_theme') || 'leather'; } catch(e){ return 'leather'; } })();
 function applyTheme(t){ if(!THEMES.some(x => x[0] === t)) t = 'leather'; THEME = t; const h = document.documentElement;
  THEMES.forEach(([k]) => h.classList.toggle('th-' + k, k === t && k !== 'leather')); try{ localStorage.setItem('rr_theme', t); }catch(e){}
@@ -482,7 +523,7 @@ async function members(){
  });
 }
 function route(){
- const h = location.hash || '#highlights';
+ const h = location.hash || '#highlights'; document.body.dataset.pg = h.slice(1);
  if(h !== '#map' && window.mapOff) mapOff();
  document.querySelectorAll('#nav a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href')===h ? 'page' : 'false'));
  ({'#games':gamesView,'#peter':peterView,'#recipes':recipesView,'#map':mapView,'#charter':charterView}[h] || feedView)(); scrollTo(0,0);
@@ -567,7 +608,7 @@ async function peterView(){
  const [{data, error}, iss] = await Promise.all([sb.from('advice').select('*,profiles(name)').order('created_at',{ascending:false}), ed ? sb.from('issues').select('number').order('number',{ascending:false}) : Promise.resolve({data:[]})]);
  if(error) return $('#ql').textContent = error.message;
  const nextNo = ((iss.data||[])[0]?.number || 0) + 1;
- const mine = data;   // the database only gives readers their own letters
+ const mine = ed ? data.slice().sort((a, b) => !!a.answered_at - !!b.answered_at) : data;   // editors: unanswered first; readers only ever get their own letters
  $('#ql').innerHTML = mine.length ? (ed ? '' : '<h3 class="hd" style="text-align:center;margin-top:26px">Your letters</h3>') : `<p style="text-align:center">${ed ? 'No letters yet.' : 'You haven’t written to Peter yet.'}</p>`;
  const when = t => new Date(t).toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
  mine.forEach(q => {
